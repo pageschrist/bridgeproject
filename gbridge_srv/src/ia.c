@@ -21,6 +21,7 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best) {
   valeur_t tabval[pique+1];
   couleur_t coulref=aucune;
   carte_t *carte=malloc(sizeof(carte_t));
+  char *affca,*affco;
   int points[pique+1],j,pointsf=79;
   
   couleur_t i;
@@ -30,16 +31,12 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best) {
   int score=l_best->last->best->score;
   //int score=tab_best[*nb_best-1]->score;
   printf("On a %d bons coups\n",*nb_best);
-  /*for (i=*nb_best;i>0;i--) {
-    if(tab_best[i-1]->score==score) {
-      printf("Voici une carte choisie:%s%s\n",affichage(tab_best[i-1]->carte->nocarte,CARTE),affichage(tab_best[i-1]->carte->clcarte,COULEUR) );
-    }
-     
-  } */
 
    while(elem_best) {
      if(elem_best->best->score == score) {
-       printf("Voici la carte%s%s\n", affichage(elem_best->best->carte->nocarte,CARTE),affichage(elem_best->best->carte->clcarte,COULEUR));
+       printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
+       free(affca);
+       free(affco);
        if(elem_best->best->carte->nocarte==2 && elem_best->best->carte->clcarte==0 && score>=4) {
        debug_info();
        }

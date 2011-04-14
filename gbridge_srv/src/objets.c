@@ -72,16 +72,8 @@ void add_list_f(l_best_t *l_best,best_t *best) {
   }
 
 }
-void view_list(l_best_t *l_best) {
-  elem_best_t *elem_best=l_best->first;
-  while(elem_best) {
-    printf("Voici la carte%s%s\n", affichage(elem_best->best->carte->nocarte,CARTE),affichage(elem_best->best->carte->clcarte,CARTE));
-    printf("Voici le score%d\n", elem_best->best->score);
-    elem_best=elem_best->next;
-  }
   
 
-}
 void clear_list(l_best_t *l_list) {
   printf("Nettoyage de liste\n");
   elem_best_t *tmp;
@@ -309,15 +301,20 @@ affiche_tabjeuref (game_t *game,position_t position)
 {
 
   couleur_t couleur;
+  char *affp,*affco,*affca;
   int i;
-  printf ("\n%s ", affichage (position, POSITION));
+  printf ("\n%s ", affp=affichage (position, POSITION));
+  free(affp);
   for (couleur = trefle; couleur < aucune; couleur++)
     {
-      printf ("\n%s ", affichage (couleur, COULEUR));
-      //      printf ("%s", affichage (valeur, CARTE));
+      printf ("\n%s ", affco=affichage (couleur, COULEUR));
+      free(affco);
 /* Prints data in list */
-      for(i=0;i<game->tabjeuref[INDEX (position, couleur)]->nbcrt;i++)
-	  printf ("%s", affichage (game->tabjeuref[INDEX(position,couleur)]->tabcoul[i], CARTE));
+      for(i=0;i<game->tabjeuref[INDEX (position, couleur)]->nbcrt;i++) {
+	  printf ("%s", affca=affichage (game->tabjeuref[INDEX(position,couleur)]->tabcoul[i], CARTE));
+          free(affca);
+
+      }
          
     }
 
