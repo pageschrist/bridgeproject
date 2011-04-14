@@ -170,6 +170,7 @@ int main (int argc, char *argv[])
 {
   struct sigaction sa;
   game_t *game=malloc(sizeof(game_t));
+  memset(game,0,sizeof(game_t));
   int socksrv_id = 0, on = 0, port, status = 0, childpid = 0;
   pli_t *pli=malloc(sizeof(pli_t));
   transfert_t *transfert=NULL;
