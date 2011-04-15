@@ -415,6 +415,7 @@ duplique_pli (void *data)
 void affiche_thread_jeu(thread_jeu_t *thread_jeu) {
   position_t position;
   couleur_t couleur;
+  char *affca,*affco;
   int index;
   for (position=sud;position<est+1;position++) {
     for (couleur=trefle;couleur<pique+1;couleur++) {
@@ -424,8 +425,12 @@ void affiche_thread_jeu(thread_jeu_t *thread_jeu) {
   }
   //affiche_pli(thread_jeu->pli);
   affiche_tabjeu_c(thread_jeu->t_jeu);
-  printf("carte:%s%s\n",affichage(thread_jeu->carte->nocarte,CARTE),affichage(thread_jeu->carte->clcarte,COULEUR));
-  printf("best_cartepot:%s%s\n",affichage(thread_jeu->best_cartepot->nocarte,CARTE),affichage(thread_jeu->best_cartepot->clcarte,COULEUR));
+  printf("carte:%s%s\n",affca=affichage(thread_jeu->carte->nocarte,CARTE),affco=affichage(thread_jeu->carte->clcarte,COULEUR));
+  free(affca);
+  free(affco);
+  printf("best_cartepot:%s%s\n",affca=affichage(thread_jeu->best_cartepot->nocarte,CARTE),affco=affichage(thread_jeu->best_cartepot->clcarte,COULEUR));
+  free(affca);
+  free(affco);
   printf("status=%d score=%d prof=%d prof_max=%d\n",thread_jeu->status,thread_jeu->score,thread_jeu->prof,thread_jeu->prof_max);
 
 }
