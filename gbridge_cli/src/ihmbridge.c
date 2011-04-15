@@ -226,7 +226,6 @@ void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
   gtk_box_pack_start (GTK_BOX (HBox_Other), BNew_Dist, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER(BNew_Dist),Label_text);
   g_signal_connect( G_OBJECT(BNew_Dist), "clicked", G_CALLBACK(new_dist), ihm_pli);
-  gtk_button_box_set_layout (GTK_BOX (HBox_Other), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (Comment_VBox), HBox_Other, FALSE, FALSE, 0);
   for(couleur=trefle;couleur<aucune+1;couleur++) {
     HBox_Encheres[couleur] = gtk_hbox_new (TRUE, 1);

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <glib/gtypes.h>
 #include <glib/gprintf.h>
 #include "objets.h"
@@ -11,8 +12,10 @@ int small_condition(game_t *game,char *s_smallref) {
 
   int i,index,meml=0,memr=0,testcond=0,sum=0;
   couleur_t couleur;
+  char *ptr;
   char *s_sec;
   char *s_small=malloc(sizeof(char)*(strlen(s_smallref)+1));
+  memset (s_small,0,sizeof(char)*(strlen(s_smallref)+1));
   strncpy(s_small,s_smallref,strlen(s_smallref));
   printf("voici s_small:%s\n",s_small);
   switch (s_smallref[0]) {
@@ -50,8 +53,8 @@ int small_condition(game_t *game,char *s_smallref) {
   }
   if(s_smallref[2]<'A') {
 
-    s_sec=strtok(s_small,&s_small[1]);
-    s_sec=strtok(NULL,&s_small[1]);
+    s_sec=strtok_r(s_small,&s_small[1],&ptr);
+    s_sec=strtok_r(NULL,&s_small[1],&ptr);
     memr=atoi(s_sec);
   }
   else {
@@ -148,6 +151,7 @@ void analyse_bid(game_t *game) {
   char bidhomeconf[1024];
   gboolean found=FALSE;
   char *home,tmpstring[2];
+  char *ptr;
   char *s_bidref,*s_newbid,*s_condition;
   char buf[16384];
   home = getenv ("HOME");
@@ -162,9 +166,9 @@ void analyse_bid(game_t *game) {
   while (fgets(buf, 16380, obidhomeconf)) {
     if (!strncmp(buf, game->cur_bid, strlen(game->cur_bid))) {
       buf[strlen(buf)-1] = '\0';
-      s_bidref = strtok(buf, ":,");
-      s_newbid = strtok(NULL, ":,");
-      s_condition = strtok(NULL, ":,");
+      s_bidref = strtok_r(buf, ":",&ptr);
+      s_newbid = strtok_r(NULL, ":",&ptr);
+      s_condition = strtok_r(NULL, ":",&ptr);
       if(test_condition(game,s_condition)) {
         found=TRUE;
         break;
