@@ -205,62 +205,12 @@ evalmain (game_t *game)
     }
 }
 void
-presentation (main_t * mainjoueur)
-{
-  position_t position;
-  int  valeur;
-  couleur_t couleur;
-  int index;
-
-  for (position = sud; position < aucun; position++)
-    {
-      printf ("Voici le jeu de %s\n", affichage (position, POSITION));
-      for (couleur = trefle; couleur < aucune; couleur++)
-	{
-	  printf ("\n%s ", affichage (couleur, COULEUR));
-	  for (valeur = c2; valeur < pdc; valeur++)
-	    {
-	      if (tab_cartes[valeur][couleur].detenteur == position)
-		printf ("%s", affichage (valeur, CARTE));
-
-	    }
-	}
-      printf ("\nValeur de %s :%d\n", affichage (position, POSITION),
-	      mainjoueur[position].nbpoints);
-      for (couleur = trefle; couleur < aucune; couleur++)
-	{
-	  printf ("\nNb de cartes à %s:%d\n", affichage (couleur, COULEUR),
-		  mainjoueur[position].nbcartes[couleur]);
-	}
-      for (couleur = trefle; couleur < aucune; couleur++)
-	{
-	  printf ("\nNb d'honneurs à %s:%d\n", affichage (couleur, COULEUR),
-		  mainjoueur[position].nbpointshonneurs[couleur]);
-	}
-      printf ("Max carte pour %d : %d \n", position,
-	      mainjoueur[position].nbcartesmax);
-    }
-  for (position = sud; position < est + 1; position++)
-    {
-      printf ("\nVerification Tablist de %s\n", affichage (position, POSITION));
-      for (couleur = trefle; couleur < aucune; couleur++)
-	{
-	  index=INDEX(position,couleur);
-	  printf ("\n%s ", affichage (couleur, COULEUR));
-	  if(tabjeu[index]->nbcrt != 0 ){
-	      for (valeur=0;valeur<tabjeu[index]->nbcrt;valeur++) 
-		printf ("%s", affichage (tabjeu[index]->tabcoul[valeur], CARTE));
-
-	  }
-	}
-    }
-}
-void
 envoi_jeu (position_t position, game_t *game)
 {
 
   couleur_t couleur;
   carte_t *carte;
+  char *affca;
   carte=malloc(sizeof(carte_t));
   int  valeur;
   int index;
@@ -270,7 +220,8 @@ envoi_jeu (position_t position, game_t *game)
       carte->clcarte = couleur;
       if(game->tabjeuref[index]->nbcrt != 0 ){
         for (valeur=0;valeur<game->tabjeuref[index]->nbcrt;valeur++) {
-	  printf ("%s", affichage (game->tabjeuref[index]->tabcoul[valeur], CARTE));
+	  printf ("%s", affca=affichage (game->tabjeuref[index]->tabcoul[valeur], CARTE));
+          free(affca);
           carte->nocarte=game->tabjeuref[index]->tabcoul[valeur]; 
           write (game->sockslv_id,  carte, sizeof (carte_t));
 	}

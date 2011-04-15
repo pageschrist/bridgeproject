@@ -325,17 +325,21 @@ void affiche_tabjeu_c (tablist_t **t_jeu)
 
   couleur_t couleur;
   position_t position;
+  char *affca,*affco,*affp;
   int i;
   for (position = sud; position < est+1; position++)
   { 
-    printf ("\n%s ", affichage (position, POSITION));
+    printf ("\n%s ", affp=affichage (position, POSITION));
+    free(affp);
     for (couleur = trefle; couleur < aucune; couleur++)
       {
-        printf ("\n%s ", affichage (couleur, COULEUR));
-      //      printf ("%s", affichage (valeur, CARTE));
+        printf ("\n%s ", affco=affichage (couleur, COULEUR));
+        free(affco);
 /* Prints data in list */
-        for(i=0;i<t_jeu[INDEX (position, couleur)]->nbcrt;i++)
-	  printf ("%s", affichage (t_jeu[INDEX(position,couleur)]->tabcoul[i], CARTE));
+        for(i=0;i<t_jeu[INDEX (position, couleur)]->nbcrt;i++) {
+	  printf ("%s", affca=affichage (t_jeu[INDEX(position,couleur)]->tabcoul[i], CARTE));
+          free(affca);
+        }
         printf(" Nb de cartes:%d\n",t_jeu[INDEX (position, couleur)]->nbcrt);
          
     }
