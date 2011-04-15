@@ -434,6 +434,7 @@ void
 affiche_pli (pli_t * pli)
 {
   position_t i;
+  char *affca,*affco;
   ligne_t j;
   /*return(0); */
   for (i = sud; i < est + 1; i++)
@@ -442,11 +443,10 @@ affiche_pli (pli_t * pli)
       printf("probleme dans affiche_pli pour %d\n",i);
       
       }
-      printf ("pos %d,  %s%s\n", i, affichage (pli->carte[i].nocarte, CARTE),
-	      affichage (pli->carte[i].clcarte, COULEUR));
-//      printf ("pos %d,  %s%s\n", i,
-//	      affichage (pli->defausse[i].nocarte, CARTE),
-//	      affichage (pli->defausse[i].clcarte, COULEUR));
+      printf ("pos %d,  %s%s\n", i, affca=affichage (pli->carte[i].nocarte, CARTE),
+	      affco=affichage (pli->carte[i].clcarte, COULEUR));
+      free(affca);
+      free(affco);
     }
   printf ("Vci  pli.noj %d\n", pli->noj);
   printf ("Vci  pli.phcarte %d\n", pli->phcarte.nocarte);
@@ -461,13 +461,6 @@ affiche_pli (pli_t * pli)
   printf ("Vci  pli.ligne %d\n", pli->ligne);
 
 }
-//void affiche_transfert( transfert_t *transfert) {
-//  printf ("Vci  carte: %s%s\n", affichage(transfer->cartetrans.nocarte,CARTE),affichage(transfer->cartetrans.clcarte,COULEUR));
-//  printf ("Vci  transfer.curposition %d\n", transfer->curposition);
-//  printf ("Vci  transfer.nextposition %d\n", transfer->nextposition);
-//  printf ("Vci  transfer.notour %d\n", transfer->notour);
-
-//}
 
 void
 affiche_carte (carte_t * carte)
@@ -519,13 +512,3 @@ init_pli (pli_t * pli, int maniere)
     }
 }
 
-/*
-void *copy_dep(void *data) {
-	carte_t *newcarte;
-	
-	*newcarte.nocarte=((carte_t *)data)->nocarte;
-	*newcarte.clcarte=((carte_t *)data)->clcarte;
-
-
-}
-*/
