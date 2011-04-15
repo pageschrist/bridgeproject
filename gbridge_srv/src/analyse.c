@@ -12,8 +12,8 @@ int small_condition(game_t *game,char *s_smallref) {
   int i,index,meml=0,memr=0,testcond=0,sum=0;
   couleur_t couleur;
   char *s_sec;
-  char *s_small=malloc(sizeof(char)*strlen(s_smallref));
-  strcpy(s_small,s_smallref);
+  char *s_small=malloc(sizeof(char)*(strlen(s_smallref)+1));
+  strncpy(s_small,s_smallref,strlen(s_smallref));
   printf("voici s_small:%s\n",s_small);
   switch (s_smallref[0]) {
     case 'p':

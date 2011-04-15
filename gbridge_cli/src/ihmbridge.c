@@ -210,10 +210,9 @@ void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
   gtk_entry_set_max_length (GTK_ENTRY (entry_level), 2);
   Label_text = gtk_label_new("level (1-10):");
   gtk_label_set_justify(GTK_LABEL(Label_text), GTK_JUSTIFY_CENTER);
-  //HBox_Other = gtk_hbox_new (FALSE, 0);
-  HBox_Other = gtk_hbutton_box_new ();
+  HBox_Other = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start(GTK_BOX(HBox_Other), Label_text, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (HBox_Other), entry_level, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (HBox_Other), entry_level, FALSE, FALSE, 0);
   entry_random = gtk_entry_new ();
   Label_text = gtk_label_new("Rnd (0-25000):");
   gtk_label_set_justify(GTK_LABEL(Label_text), GTK_JUSTIFY_CENTER);
@@ -221,15 +220,14 @@ void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
   res=snprintf(chaine,MAXCHAR,"%d",DEFAULTRANDOM);
   gtk_entry_set_text (GTK_ENTRY (entry_random), chaine);
   gtk_entry_set_max_length (GTK_ENTRY (entry_random), 5);
-  gtk_box_pack_start (GTK_BOX (HBox_Other), entry_random, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (HBox_Other), entry_random, FALSE, FALSE, 0);
   Label_text = gtk_label_new("New Dist");
   BNew_Dist=gtk_button_new();
-  gtk_box_pack_start (GTK_BOX (HBox_Other), BNew_Dist, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (HBox_Other), BNew_Dist, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER(BNew_Dist),Label_text);
   g_signal_connect( G_OBJECT(BNew_Dist), "clicked", G_CALLBACK(new_dist), ihm_pli);
   gtk_button_box_set_layout (GTK_BOX (HBox_Other), GTK_BUTTONBOX_START);
-  //gtk_button_box_set_child_size (GTK_BUTTON_BOX (BNew_Dist), 20, 20);
-  gtk_box_pack_start (GTK_BOX (Comment_VBox), HBox_Other, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (Comment_VBox), HBox_Other, FALSE, FALSE, 0);
   for(couleur=trefle;couleur<aucune+1;couleur++) {
     HBox_Encheres[couleur] = gtk_hbox_new (TRUE, 1);
     gtk_box_pack_start(GTK_BOX(Comment_VBox),HBox_Encheres[couleur],FALSE, TRUE, 2);
