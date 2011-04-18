@@ -514,5 +514,7 @@ init_pli (pli_t * pli, int maniere)
       pli->lastcarte.nocarte = pdc;
       pli->lastcarte.clcarte = aucune;
     }
+    pli->phcarte.nocarte = pdc;
+    pli->phcarte.clcarte = aucune;
 }
 
