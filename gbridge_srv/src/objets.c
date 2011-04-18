@@ -404,7 +404,7 @@ duplique_pli (void *data)
   plicopie->phcarte.clcarte = ((pli_t *) data)->phcarte.clcarte;
   plicopie->lastcarte.nocarte = ((pli_t *) data)->lastcarte.nocarte;
   plicopie->lastcarte.clcarte = ((pli_t *) data)->lastcarte.clcarte;
-  plicopie->ligne = ((pli_t *) data)->ligne;
+  //plicopie->ligne = ((pli_t *) data)->ligne;
   for (j = ns; j < eo + 1; j++)
     {
       plicopie->nbpli_ligne[j] = ((pli_t *) data)->nbpli_ligne[j];
@@ -463,7 +463,6 @@ affiche_pli (pli_t * pli)
     {
       printf ("Vci pli.nbpli_ligne[%d] %d\n", j, pli->nbpli_ligne[j]);
     }
-  printf ("Vci  pli.ligne %d\n", pli->ligne);
 
 }
 

@@ -164,7 +164,6 @@ void copy_pli (pli_t *ppliori, pli_t *pplicopie)
   pplicopie->nopli = ppliori->nopli;
   pplicopie->phcarte.nocarte = ppliori->phcarte.nocarte;
   pplicopie->phcarte.clcarte = ppliori->phcarte.clcarte;
-  pplicopie->ligne = ppliori->ligne;
   for (j = ns; j < eo + 1; j++)
     {
       pplicopie->nbpli_ligne[j] = ppliori->nbpli_ligne[j];
@@ -189,7 +188,6 @@ void * duplique_pli (void *data)
   (*plicopie).nopli = ((pli_t *) data)->nopli;
   (*plicopie).phcarte.nocarte = ((pli_t *) data)->phcarte.nocarte;
   (*plicopie).phcarte.clcarte = ((pli_t *) data)->phcarte.clcarte;
-  (*plicopie).ligne = ((pli_t *) data)->ligne;
   for (j = ns; j < eo + 1; j++)
     {
       (*plicopie).nbpli_ligne[j] = ((pli_t *) data)->nbpli_ligne[j];
@@ -214,7 +212,6 @@ void affiche_pli( pli_t *ppli)
     {
       printf("Vci pli.nbpli_ligne[%d] %d\n",j,ppli->nbpli_ligne[j]); 
     }
-	printf("Vci  pli.ligne %d\n",ppli->ligne);
 
 }
 void free_ihm_pli( ihm_pli_t *ihm_pli) {
@@ -406,7 +403,6 @@ void init_pli (pli_t * pli, int maniere)
     }
   pli->phcarte.nocarte = pdc;
   pli->phcarte.clcarte = aucune;
-  pli->ligne = pdl;
   if (maniere == INIT)
     {
       pli->entame = aucun;

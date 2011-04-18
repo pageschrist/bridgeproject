@@ -319,17 +319,13 @@ evaluation_pli (pli_t * pli)
       pli->entame = posgagnante;
       pli->nextpos = posgagnante;
       pli->nopli++;
-      pli->ligne = posgagnante % 2;
-      pli->nbpli_ligne[pli->ligne]++;
+      pli->nbpli_ligne[(posgagnante%2)]++;
 
       init_pli (pli, RESET);	/*on reinitialise le pli */
       //affiche_pli (pli);
     }
   else
     {
-      /*retpli->position=(positionc+1)%4;
-         retpli->ligne=pdl;
-         retpli->nbpligagne[retpli->ligne]=pdp; */
       if(pli->phcarte.nocarte==pdc){
         pli->phcarte.nocarte=pli->carte[pli->nextpos].nocarte;
         pli->phcarte.clcarte=pli->carte[pli->nextpos].clcarte;

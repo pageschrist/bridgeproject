@@ -97,7 +97,6 @@ typedef struct _pli_t
   carte_t lastcarte;
   int nopli;
   int nbpli_ligne[eo + 1];
-  ligne_t ligne;
   int noj; //Numero du joueur qui joue
   status_t status;
   couleur_t atout;
