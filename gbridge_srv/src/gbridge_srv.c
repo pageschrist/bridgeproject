@@ -163,7 +163,6 @@ gboolean newgame(game_t *game) {
   printf("4 jeux envoyé\n");
   game->transfert->status=WAITING;
   free(pli);
-  free(game);
   return (TRUE);
 }
 

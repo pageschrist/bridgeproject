@@ -98,7 +98,6 @@ typedef struct _pli_t
   int nopli;
   int nbpli_ligne[eo + 1];
   int noj; //Numero du joueur qui joue
-  status_t status;
   couleur_t atout;
 
 } pli_t;

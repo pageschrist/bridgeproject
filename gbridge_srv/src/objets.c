@@ -516,5 +516,11 @@ init_pli (pli_t * pli, int maniere)
     }
     pli->phcarte.nocarte = pdc;
     pli->phcarte.clcarte = aucune;
+    for (i=sud;i<est+1;i++) {
+      pli->carte[i].nocarte = pdc;
+      pli->carte[i].clcarte = aucune;
+      pli->defausse[i].nocarte = pdc;
+      pli->defausse[i].clcarte = aucune;
+    }
 }
 
