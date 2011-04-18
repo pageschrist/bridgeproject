@@ -70,6 +70,7 @@ gboolean newgame(game_t *game) {
   pli_t *pli;
   int t,notour=0;
   pli = malloc (sizeof (pli_t));
+  init_pli(pli,INIT);
   printf("On est dans newgame random=%d level=%d\n",random,prof);
 
   //rotation=init_distrib (game,random,pli);
@@ -172,7 +173,6 @@ int main (int argc, char *argv[])
   game_t *game=malloc(sizeof(game_t));
   memset(game,0,sizeof(game_t));
   int socksrv_id = 0, on = 0, port, status = 0, childpid = 0;
-  pli_t *pli=malloc(sizeof(pli_t));
   transfert_t *transfert=NULL;
   int c,random,prof;
   struct hostent *phost = NULL;
@@ -348,7 +348,7 @@ int main (int argc, char *argv[])
 	  printf ("Clear, Init 2\n");
           init_game(game);
 	  printf ("Clear, Init 3\n");
-          init_distrib(game,random,pli);
+          init_distrib(game,random);
 	  printf ("Envoi\n");
 	  envoi_jeu (0, game);
 	  printf ("Envoi apres\n");
@@ -368,7 +368,7 @@ int main (int argc, char *argv[])
                   clear_game(game);
                   init_game(game);
                   printf("transfert->random\n%d",game->transfert->random);
-                  init_distrib(game,game->transfert->random,pli);
+                  init_distrib(game,game->transfert->random);
 	          envoi_jeu (0, game);
                   read(game->sockslv_id,game->transfert,sizeof(transfert_t));
               }
