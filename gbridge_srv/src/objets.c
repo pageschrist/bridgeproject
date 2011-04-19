@@ -126,7 +126,9 @@ void clear_tabjeu (game_t *game)
 	{
 	  index = INDEX (position, couleur);
           free(game->tabjeuref[index]);
+          game->tabjeuref[index]=NULL;
           free(tabjeu[index]);
+          tabjeu[index]=NULL;
 	}
     }
   free(tabjeu);
