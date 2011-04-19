@@ -138,7 +138,7 @@ int sub_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur
 {
 
   int pos_index=0;
-  for(pos_index=0;pos_index<tabjeu[INDEX (position, couleur)]->nbcrt-1;pos_index++)  {
+  for(pos_index=0;pos_index<tmpjeu[INDEX (position, couleur)]->nbcrt-1;pos_index++)  {
 
       if (tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index] < valeur)
         return(pos_index);
