@@ -123,10 +123,10 @@ gboolean newgame(game_t *game) {
           prof=24;
         if(notour==8)
           debug_info();
-	first_explore ( pli, prof-pli->noj,&nb_best,l_best);
+	first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
         gettimeofday(timeap,NULL);
         printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
-        best_coup=choix_best(&nb_best,l_best);
+        best_coup=choix_best(&nb_best,l_best,game);
         nb_best=0;
         clear_list(l_best);
         free(l_best);
@@ -135,7 +135,7 @@ gboolean newgame(game_t *game) {
         pli->lastcarte.clcarte=best_coup->clcarte;
         printf("Joue coup pli,best_coup\n");
         affiche_carte(best_coup);
-	if(joue_coup( pli,best_coup)==0) 
+	if(joue_coup( pli,best_coup,game)==0) 
           { 
            free(best_coup);
            game->transfert->status =WAITING;
@@ -151,7 +151,7 @@ gboolean newgame(game_t *game) {
         else
          return(game->transfert);
         printf("Joue coup pli,NULL\n");
-	joue_coup( pli,NULL); 
+	joue_coup( pli,NULL,game); 
       }
       pli->nextpos=evaluation_pli(pli);
 

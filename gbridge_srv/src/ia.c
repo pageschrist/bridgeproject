@@ -17,7 +17,7 @@ void break_point(void) {
  printf("Test Point\n");
 }
 
-carte_t *choix_best(int *nb_best,l_best_t *l_best) {
+carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   valeur_t tabval[pique+1];
   couleur_t coulref=aucune;
   carte_t *carte=malloc(sizeof(carte_t));
@@ -49,10 +49,10 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best) {
    for (i=0;i<pique+1;i++) {
      if(tabval[i]!=pdc) {
        points[i]=0;
-       for(j=0;j<tabjeu[INDEX(ouest,i)]->nbcrt;j++)
-         points[i]=tabjeu[INDEX(ouest,i)]->tabcoul[j]+points[i];
-       for(j=0;j<tabjeu[INDEX(est,i)]->nbcrt;j++)
-         points[i]=tabjeu[INDEX(est,i)]->tabcoul[j]+points[i];
+       for(j=0;j<game->tabjeu[INDEX(ouest,i)]->nbcrt;j++)
+         points[i]=game->tabjeu[INDEX(ouest,i)]->tabcoul[j]+points[i];
+       for(j=0;j<game->tabjeu[INDEX(est,i)]->nbcrt;j++)
+         points[i]=game->tabjeu[INDEX(est,i)]->tabcoul[j]+points[i];
      }
    }
    for (i=0;i<pique+1;i++) {
@@ -313,7 +313,7 @@ new_explore (void *arg)
 
 
 void
-first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best)
+first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t *game)
 {
   thread_jeu_t **thread_jeu=NULL;
   pthread_t pid[13];
@@ -333,7 +333,7 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best)
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
 
   stk = create_stack (duplique_pli);
-  nbcoups=list_all_coups (positionc, stk, pplic,tabjeu);
+  nbcoups=list_all_coups (positionc, stk, pplic,game->tabjeu);
   printf("Voici le nombre de coups à examiner: %d\n",nbcoups);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
@@ -341,7 +341,7 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best)
 
     thread_jeu=realloc(thread_jeu,(sizeof(thread_jeu_t *))*(nothr+1));
     thread_jeu[nothr]=malloc(sizeof(thread_jeu_t));
-    copy_jeu (thread_jeu[nothr]);
+    copy_jeu (thread_jeu[nothr],game);
     thread_jeu[nothr]->carte=malloc(sizeof(carte_t));
     thread_jeu[nothr]->best_cartepot=malloc(sizeof(carte_t));
     nocarte = pplin->carte[positionc].nocarte;

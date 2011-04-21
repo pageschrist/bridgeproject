@@ -24,7 +24,7 @@ void ftrace(void) {
   printf("OK\n");
 }
 
-void  copy_jeu(thread_jeu_t *thread_jeu) {
+void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
   position_t position;
   couleur_t couleur;
   int index ,i;
@@ -38,10 +38,9 @@ void  copy_jeu(thread_jeu_t *thread_jeu) {
 	{
 	  index = INDEX (position, couleur);
           thread_jeu->t_jeu[index]=malloc(sizeof (tablist_t));
-	  //for (i = 0; i < tabjeu[index]->nbcrt; i++)
 	  for (i = 0; i < 13; i++)
-	    thread_jeu->t_jeu[index]->tabcoul[i]=tabjeu[index]->tabcoul[i] ;
-	   thread_jeu->t_jeu[index]->nbcrt =tabjeu[index]->nbcrt;
+	    thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
+	   thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
 	}
     }
 }
@@ -67,7 +66,7 @@ list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **t
   int k=0,sub;
   couleur_t couleurc;
   couleur_t i;
-  carte_t phcarte,carte_choisie; 
+  carte_t phcarte; 
   int presence=NON,pos_index;
   nblist_all_coups++;
   if(positionc == pli->entame)
@@ -341,7 +340,7 @@ evaluation_pli (pli_t * pli)
 }
 
 int
-joue_coup (pli_t * pli,carte_t *carte )
+joue_coup (pli_t * pli,carte_t *carte,game_t *game )
 {
   int posindex;
   position_t position;
@@ -350,23 +349,23 @@ joue_coup (pli_t * pli,carte_t *carte )
     position=pli->nextpos;
     pli->carte[position].nocarte = carte->nocarte;
     pli->carte[position].clcarte = carte->clcarte;
-    posindex=find_index(NULL,position,carte->clcarte,carte->nocarte);
+    posindex=find_index(game->tabjeu,position,carte->clcarte,carte->nocarte);
     if(posindex==-1) {
       printf("Pb in joue_coup1\n");
       affiche_pli(pli);
       affiche_carte(carte);
       return(0);
     }
-    posindex=remove_index(NULL,position,carte->clcarte,posindex);
+    posindex=remove_index(game->tabjeu,position,carte->clcarte,posindex);
   }
   else {
     position=pli->nextpos;
-    posindex=find_index(NULL,position,pli->carte[position].clcarte,pli->carte[position].nocarte);
+    posindex=find_index(game->tabjeu,position,pli->carte[position].clcarte,pli->carte[position].nocarte);
     if(posindex==-1) {
       printf("Pb in joue_coup2\n");
        return(0);
     }
-    posindex=remove_index(NULL,position,pli->carte[position].clcarte,posindex);
+    posindex=remove_index(game->tabjeu,position,pli->carte[position].clcarte,posindex);
     if(pli->carte[position].clcarte==pli->carte[pli->entame].clcarte) {
       if(pli->phcarte.nocarte<pli->carte[position].nocarte)
         pli->phcarte.nocarte=pli->carte[position].nocarte;

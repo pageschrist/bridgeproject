@@ -1,6 +1,6 @@
 #define NB_ENTREES_MENU 6
-#define DEFAULTRANDOM 27
-#define DEFAULTLEVEL 4
+#define DEFAULTRANDOM 40
+#define DEFAULTLEVEL 5
 #define MAXCHAR 10 
 #define LARGEUR 600
 #define HAUTEUR 500

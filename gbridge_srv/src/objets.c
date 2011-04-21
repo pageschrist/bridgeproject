@@ -94,7 +94,7 @@ void init_tabjeu (game_t *game)
 {
   position_t position;
   int index ,i;
-  tabjeu = malloc ((sizeof (tablist_t *)) * (est + 1) * (pique + 1));
+  game->tabjeu = malloc ((sizeof (tablist_t *)) * (est + 1) * (pique + 1));
   game->tabjeuref = malloc ((sizeof (tablist_t *)) * (est + 1) * (pique + 1));
   couleur_t couleur;
   for (position = sud; position < est + 1; position++)
@@ -102,16 +102,16 @@ void init_tabjeu (game_t *game)
       for (couleur = trefle; couleur < pique + 1; couleur++)
 	{
 	  index = INDEX (position, couleur);
-          tabjeu[index]=malloc(sizeof (tablist_t));
+          game->tabjeu[index]=malloc(sizeof (tablist_t));
           game->tabjeuref[index]=malloc(sizeof (tablist_t));
 	  for (i = 0; i < NBPCOULEURS; i++)
 	    game->tabjeuref[index]->tabcoul[i] = pdc;
 	  game->tabjeuref[index]->nbcrt = 0;
 	  game->tabjeuref[index]->poscartej = 0;
 	  for (i = 0; i < NBPCOULEURS; i++)
-	    tabjeu[index]->tabcoul[i] = pdc;
-	  tabjeu[index]->nbcrt = 0;
-	  tabjeu[index]->poscartej = 0;
+	    game->tabjeu[index]->tabcoul[i] = pdc;
+	  game->tabjeu[index]->nbcrt = 0;
+	  game->tabjeu[index]->poscartej = 0;
 	}
     }
 }
@@ -127,11 +127,11 @@ void clear_tabjeu (game_t *game)
 	  index = INDEX (position, couleur);
           free(game->tabjeuref[index]);
           game->tabjeuref[index]=NULL;
-          free(tabjeu[index]);
-          tabjeu[index]=NULL;
+          free(game->tabjeu[index]);
+          game->tabjeu[index]=NULL;
 	}
     }
-  free(tabjeu);
+  free(game->tabjeu);
   free(game->tabjeuref);
 }
 int sub_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_t valeur)
@@ -145,18 +145,6 @@ int sub_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur
     }
   return(0);
 }
-/*
-int sub_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_t valeur)
-{
-
-  int pos_index=0;
-  for(pos_index=0;pos_index<tmpjeu[INDEX (position, couleur)]->nbcrt-1;pos_index++)  {
-
-      if (tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index] < valeur)
-        return(pos_index);
-    }
-  return(0);
-}*/
 
 int
 find_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_t valeur)

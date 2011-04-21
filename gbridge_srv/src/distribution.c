@@ -245,11 +245,11 @@ remplit_liste_jeu (game_t *game,position_t rotation)
 	  position = tab_cartes[valeur][couleur].detenteur;
           position=(position+rotation)%4;
 	  index = INDEX (position, couleur);
-	  nbcrt= tabjeu[index]->nbcrt;
+	  nbcrt= game->tabjeu[index]->nbcrt;
 	  nbcrtref= game->tabjeuref[index]->nbcrt;
-	  tabjeu[index]->tabcoul[nbcrt] = valeur;
+	  game->tabjeu[index]->tabcoul[nbcrt] = valeur;
 	  game->tabjeuref[index]->tabcoul[nbcrtref] = valeur;
-	  tabjeu[index]->nbcrt++;
+	  game->tabjeu[index]->nbcrt++;
 	  game->tabjeuref[index]->nbcrt++;
 	}
     }
