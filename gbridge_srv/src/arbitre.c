@@ -13,7 +13,6 @@ int nblist_all_coups=0;
 carte_t best_carte;
 extern coord_t tab_cartes[cA + 1][pique + 1];
 carte_t *find_best(best_t **tab_best);
-extern tablist_t **tabjeu;	//(pique+1)*(est+1)
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
 /*pli.entame doit etre initialise */
 void fdefausse(void);

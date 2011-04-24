@@ -174,7 +174,6 @@ int remove_index (tablist_t **t_jeu,position_t position, couleur_t couleur, int 
 int find_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur);
 void affiche_tab_cartes (void);
 int insert_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur,int pos_index);
-void affiche_tabjeu (position_t position);
 void affiche_tabjeuref (game_t *game,position_t position);
 void affiche_carte (carte_t *carte);
 int sub_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur);

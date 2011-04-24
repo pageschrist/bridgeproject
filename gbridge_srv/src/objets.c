@@ -7,7 +7,6 @@
 #include "objets.h"
 #include "distribution.h"
 #include "arbitre.h"
-tablist_t **tabjeu;
 coord_t tab_cartes[cA + 1][pique + 1];
 void mark(void){
   printf("mark\n");
@@ -151,27 +150,14 @@ find_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_t 
 {
 
   int pos_index=0;
-  if(tmpjeu==NULL ){
-    for(pos_index=0;pos_index<=tabjeu[INDEX (position, couleur)]->nbcrt-1;pos_index++)  {
-      
-      if (tabjeu[INDEX (position, couleur)]->tabcoul[pos_index] == valeur)
-        return(pos_index);
-    }
-    printf("valeur=%d couleur=%d\n",valeur,couleur);
-    affiche_tabjeu(position);
-    return(-1);
-  }
-  else{
     for(pos_index=0;pos_index<=tmpjeu[INDEX (position, couleur)]->nbcrt-1;pos_index++)  {
       
       if (tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index] == valeur)
         return(pos_index);
     }
     printf("valeur=%d couleur=%d\n",valeur,couleur);
-    affiche_tabjeu(position);
     return(-1);
 
-  }
 }
 
 
@@ -184,29 +170,16 @@ remove_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, int pos
     printf("Problem dans remove_index pos_index=%d\n",pos_index);
     exit(1);
   } 
-  if(tmpjeu==NULL) {
-    for(j=pos_index;j<tabjeu[INDEX (position, couleur)]->nbcrt-1;j++)  {
+  for(j=pos_index;j<tmpjeu[INDEX (position, couleur)]->nbcrt-1;j++)  {
       
-      tabjeu[INDEX (position, couleur)]->tabcoul[j] =tabjeu[INDEX(position,couleur)]->tabcoul[j+1];
-    }
-
-    tabjeu[INDEX (position, couleur)]->tabcoul[tabjeu[INDEX (position, couleur)]->nbcrt-1]=pdc;
-    tabjeu[INDEX (position, couleur)]->nbcrt=tabjeu[INDEX (position, couleur)]->nbcrt-1;
-
-    return(pos_index);
+    tmpjeu[INDEX (position, couleur)]->tabcoul[j] =tmpjeu[INDEX(position,couleur)]->tabcoul[j+1];
   }
-  else {
-    for(j=pos_index;j<tmpjeu[INDEX (position, couleur)]->nbcrt-1;j++)  {
-      
-      tmpjeu[INDEX (position, couleur)]->tabcoul[j] =tmpjeu[INDEX(position,couleur)]->tabcoul[j+1];
-    }
 
-    tmpjeu[INDEX (position, couleur)]->tabcoul[tmpjeu[INDEX (position, couleur)]->nbcrt-1]=pdc;
-    tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt-1;
+  tmpjeu[INDEX (position, couleur)]->tabcoul[tmpjeu[INDEX (position, couleur)]->nbcrt-1]=pdc;
+  tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt-1;
 
-    return(pos_index);
+  return(pos_index);
 
-  }
 }
 
 int
@@ -214,61 +187,32 @@ insert_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_
 {
 
   int j=0;
-  if(tmpjeu==NULL) {
-    if((pos_index==0) && (tabjeu[INDEX (position, couleur)]->nbcrt==0)) {
-      tabjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
-      tabjeu[INDEX (position, couleur)]->nbcrt=tabjeu[INDEX (position, couleur)]->nbcrt+1;
-      return(1);
-    }
-    if( (tabjeu[INDEX (position, couleur)]->nbcrt==pos_index)) {
-      tabjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
-      tabjeu[INDEX (position, couleur)]->nbcrt=tabjeu[INDEX (position, couleur)]->nbcrt+1;
-      return(1);
-    }
-  
-    for(j=tabjeu[INDEX (position, couleur)]->nbcrt;j>pos_index;j--)  {
-      if(j==0 ) {
-        printf("j =0 pos_index=%d tabjeu->nbcrt=%d\n",pos_index,tabjeu[INDEX (position, couleur)]->nbcrt);
-        exit(1);
-      } 
-
-      tabjeu[INDEX (position, couleur)]->tabcoul[j] =
-                tabjeu[INDEX(position,couleur)]->tabcoul[j-1];
-    }
-    tabjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
-    tabjeu[INDEX (position, couleur)]->nbcrt=tabjeu[INDEX (position, couleur)]->nbcrt+1;
-    return(1);
-  }
-  else {
-    if((pos_index==0) && (tmpjeu[INDEX (position, couleur)]->nbcrt==0)) {
-      tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
-      tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt+1;
-      return(1);
-    }
-    if( (tmpjeu[INDEX (position, couleur)]->nbcrt==pos_index)) {
-      tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
-      tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt+1;
-      return(1);
-    }
-  
-    for(j=tmpjeu[INDEX (position, couleur)]->nbcrt;j>pos_index;j--)  {
-      if(j==0 ) {
-        printf("j =0 pos_index=%d tmpjeu->nbcrt=%d\n",pos_index,tmpjeu[INDEX (position, couleur)]->nbcrt);
-        exit(1);
-      } 
-
-      tmpjeu[INDEX (position, couleur)]->tabcoul[j] =
-                tmpjeu[INDEX(position,couleur)]->tabcoul[j-1];
-    }
+  if((pos_index==0) && (tmpjeu[INDEX (position, couleur)]->nbcrt==0)) {
     tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
     tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt+1;
     return(1);
-
-
-
   }
+  if( (tmpjeu[INDEX (position, couleur)]->nbcrt==pos_index)) {
+    tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
+    tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt+1;
+    return(1);
+  }
+  
+  for(j=tmpjeu[INDEX (position, couleur)]->nbcrt;j>pos_index;j--)  {
+    if(j==0 ) {
+      printf("j =0 pos_index=%d tmpjeu->nbcrt=%d\n",pos_index,tmpjeu[INDEX (position, couleur)]->nbcrt);
+      exit(1);
+    } 
+
+    tmpjeu[INDEX (position, couleur)]->tabcoul[j] =
+                tmpjeu[INDEX(position,couleur)]->tabcoul[j-1];
+  }
+  tmpjeu[INDEX (position, couleur)]->tabcoul[pos_index]=valeur;
+  tmpjeu[INDEX (position, couleur)]->nbcrt=tmpjeu[INDEX (position, couleur)]->nbcrt+1;
+  return(1);
 
 }
+
 void init_game(game_t *game) {
   
   game->contrat=malloc(sizeof(contrat_t));
@@ -348,24 +292,6 @@ void affiche_tabjeu_c (tablist_t **t_jeu)
   }
 }
 
-void affiche_tabjeu (position_t position)
-{
-
-  couleur_t couleur;
-  int i;
-  printf ("\n%s ", affichage (position, POSITION));
-  for (couleur = trefle; couleur < aucune; couleur++)
-    {
-      printf ("\n%s ", affichage (couleur, COULEUR));
-      //      printf ("%s", affichage (valeur, CARTE));
-/* Prints data in list */
-      for(i=0;i<tabjeu[INDEX (position, couleur)]->nbcrt;i++)
-	  printf ("%s", affichage (tabjeu[INDEX(position,couleur)]->tabcoul[i], CARTE));
-      printf("      Nb de cartes:%d\n",tabjeu[INDEX (position, couleur)]->nbcrt);
-         
-    }
-
-}
 
 void
 init_cartes (void)

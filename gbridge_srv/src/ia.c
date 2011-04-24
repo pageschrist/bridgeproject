@@ -9,7 +9,6 @@
 #include "ia.h"
 #include "arbitre.h"
 
-extern tablist_t **tabjeu;
 int prof_start = 0;
 int flag_debug=0;
 extern best_t **tab_best;

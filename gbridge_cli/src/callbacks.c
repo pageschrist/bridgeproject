@@ -244,7 +244,9 @@ void button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data
 {
   ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
   position_t position;
-  // C'est la fin au a deja 13 plis 
+  if(ihm_pli->state==BID) 
+    return FALSE;
+  // C'est la fin on a deja 13 plis 
   if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
     printf("The end \n");
     trash_list(ihm_pli);
@@ -255,6 +257,7 @@ void button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data
       printf("Recuperation %d\n",position); 
     }
     draw_container_ihm(ihm_pli); 
+    ihm_pli->state=BID; 
   }
   else {
         if(ihm_pli->pli->noj==0)
@@ -275,6 +278,7 @@ void button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data
                         clear_blink(ihm_pli);
         }
   }
+  printf("End button_press_event\n");
 }
 
 gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *ihm_pli)
@@ -287,7 +291,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         couleur_t color,couleur;
         char *coulref="TKCPS";
         char *dis_bid=NULL;
-        debugread();
+        printf("expose comment:read cur_bid\n");
         status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
         
         if(status <=0) {
