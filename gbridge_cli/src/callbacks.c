@@ -39,7 +39,8 @@ void enter_callback_random( GtkWidget *entry,
   printf ("Random : %d\n", ihm_pli->random);
 }
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
-  int status;
+  int status,contrat;
+  couleur_t couleur;
   transfert_t *transfert=malloc(sizeof(transfert_t));
   transfert->status=NEWDIST;
   transfert->level=ihm_pli->level; 
@@ -49,6 +50,11 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   reset_ihm_pli(ihm_pli);
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
+  for(contrat=0;contrat<7;contrat++){
+    for(couleur=trefle;couleur<aucune+1;couleur++) 
+                gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
+  }
+
 
   free(transfert);
 }
@@ -286,6 +292,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
   int status;
   printf("expose comment\n");
       if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
+        debugread();
         ihm_pli->read=FALSE;
         int number,contrat,i;
         couleur_t color,couleur;

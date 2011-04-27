@@ -210,6 +210,7 @@ typedef struct _ihm_pli_t
   FILE *output;
   int blinkid;
   int state ; 
+  transfert_t *transfert;
   gboolean read;
 } ihm_pli_t;
 

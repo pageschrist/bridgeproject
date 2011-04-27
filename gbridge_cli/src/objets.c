@@ -218,6 +218,7 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
   free(ihm_pli->pli);
+  free(ihm_pli->transfert);
   ihm_pli->pli=NULL;
   free(ihm_pli->contrat);
   ihm_pli->contrat=NULL;
@@ -259,6 +260,7 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   position_t position; 
   ihm_pli->pli=malloc(sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
+  ihm_pli->transfert=malloc(sizeof(transfert_t));
   ihm_pli->maxlarg=400;
   ihm_pli->maxhaut=450;
   ihm_pli->socketid=tcpclient();
