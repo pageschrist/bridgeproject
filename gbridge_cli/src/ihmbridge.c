@@ -46,8 +46,6 @@ GtkWidget *About_menu;
 GtkWidget *New_game_item;
 GtkWidget *Quit_item;
 GtkWidget *About_item;
-int level=DEFAULTLEVEL;
-int randomval=DEFAULTRANDOM;
 
 GtkWidget **tab_imgs;
 guint id_sig_connect;
@@ -95,28 +93,6 @@ ihm_about(GtkWidget *Wdgt, guint value)
 
   gtk_widget_show_all(Dialogue);
 }
-
-
-void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
-          printf("****random=%d***************************************\n",randomval);
-	  //affichage_tab_coord(ihm_pli->contrat->maxlarg,ihm_pli->contrat->maxhaut);
-          printf("*******************************************\n");
-          //affichage_tab_couleur(tab_couleur);
-          printf("*******************************************\n");
-  
-
-}
-void ihm_create_bridgeboard(GtkWidget *E,ihm_pli_t  *ihm_pli) {
-          printf("****random=%d***************************************\n",ihm_pli->random);
-	  //affichage_tab_coord(ihm_pli->contrat->maxlarg,ihm_pli->contrat->maxhaut);
-          printf("*******************************************\n");
-          //affichage_tab_couleur(tab_couleur);
-          printf("*******************************************\n");
-  
-
-}
-
-
 
 
 
@@ -265,5 +241,16 @@ void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
   // Ajout pour boite latérale
 
 }
+
+void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
+          printf("****random=%d***************************************\n",ihm_pli->transfert->random);
+          //affichage_tab_coord(ihm_pli->contrat->maxlarg,ihm_pli->contrat->maxhaut);
+          printf("*******************************************\n");
+          //affichage_tab_couleur(tab_couleur);
+          printf("*******************************************\n");
+
+
+}
+
 
 

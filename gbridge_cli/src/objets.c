@@ -1,8 +1,8 @@
-#include "objets.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
+#include "objets.h"
 char * contrat_to_char(couleur_t atout);
 extern GHashTable *configHash;
 carte_t **tab_coord;
@@ -218,7 +218,6 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
   free(ihm_pli->pli);
-  free(ihm_pli->transfert);
   ihm_pli->pli=NULL;
   free(ihm_pli->contrat);
   ihm_pli->contrat=NULL;
@@ -286,8 +285,8 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->cardmask=NULL;
   ihm_pli->Drawing_area=NULL;
   ihm_pli->path=NULL;
-  ihm_pli->level=4;
-  ihm_pli->random=30;
+  ihm_pli->transfert->level=DEFAULTLEVEL;
+  ihm_pli->transfert->random=DEFAULTRANDOM;
   ihm_pli->output=NULL;
   ihm_pli->ligneia=1;
   ihm_pli->blinkid=0;
@@ -302,7 +301,7 @@ void init_bid(ihm_pli_t *ihm_pli) {
   char *rescl,*resct;
   gchar *enchname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*sizeof(gchar));
   ihm_pli->Allbid=g_malloc(sizeof(ihm_bid_t*)*NBENCHERES);
-  ihm_pli->Othbid=g_malloc(sizeof(ihm_bid_t*)*3);
+  ihm_pli->Othbid=g_malloc(sizeof(ihm_bid_t*)*4);
   if(ihm_pli->Allbid) {
     for(i=trefle;i<aucune+1;i++) {
       for(k=0;k<7;k++) {

@@ -323,8 +323,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     return((ihm_pli->pli->nextpos)%2);
   }
   else {
-    transfert_t *transfert=malloc(sizeof(transfert_t));
-    transfert->status=PLI;
+    ihm_pli->transfert->status=PLI;
     printf("Joueur Joue\n");
 
   
@@ -340,8 +339,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
 
     
-    status = write (ihm_pli->socketid,transfert, sizeof (transfert_t));
-    free(transfert);
+    status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
     status = write(ihm_pli->socketid,ihm_pli->pli,sizeof(pli_t));
     status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
     return(ihm_pli->pli->nextpos%2);

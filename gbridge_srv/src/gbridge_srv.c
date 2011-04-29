@@ -362,12 +362,10 @@ int main (int argc, char *argv[])
               }
               if (game->transfert->status == NEWGAME){ 
                   transfert=newgame (game);
-                  clear_game(game);
-                  init_game(game);
-                  printf("transfert->random\n%d",game->transfert->random);
-                  init_distrib(game,game->transfert->random);
-	          envoi_jeu (0, game);
                   read(game->sockslv_id,game->transfert,sizeof(transfert_t));
+                  printf("transfert->random\n%d",game->transfert->random);
+                  printf("transfert->level\n%d",game->transfert->level);
+                  printf("transfert->status\n%d",game->transfert->status);
               }
               if (game->transfert->status == NEWDIST){ 
                   clear_game(game);

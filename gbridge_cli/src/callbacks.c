@@ -27,27 +27,24 @@ void enter_callback_level( GtkWidget *entry,
 {
   const gchar *entry_text_level;
   entry_text_level = gtk_entry_get_text (GTK_ENTRY (entry));
-  ihm_pli->level=atoi(entry_text_level);
-  printf ("Level : %d\n", ihm_pli->level);
+  ihm_pli->transfert->level=atoi(entry_text_level);
+  printf ("Level : %d\n", ihm_pli->transfert->level);
 }
 void enter_callback_random( GtkWidget *entry,
                             ihm_pli_t *ihm_pli )
 {
   const gchar *entry_text_random;
   entry_text_random = gtk_entry_get_text (GTK_ENTRY (entry));
-  ihm_pli->random=atoi(entry_text_random);
-  printf ("Random : %d\n", ihm_pli->random);
+  ihm_pli->transfert->random=atoi(entry_text_random);
+  printf ("Random : %d\n", ihm_pli->transfert->random);
 }
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   int status,contrat;
   couleur_t couleur;
-  transfert_t *transfert=malloc(sizeof(transfert_t));
-  transfert->status=NEWDIST;
-  transfert->level=ihm_pli->level; 
-  transfert->random=ihm_pli->random; 
-  status = write (ihm_pli->socketid,transfert, sizeof (transfert_t));
   free_ihm_pli(ihm_pli);
   reset_ihm_pli(ihm_pli);
+  ihm_pli->transfert->status=NEWDIST;
+  status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
@@ -56,13 +53,11 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   }
 
 
-  free(transfert);
 }
 
 void click_bid (GtkButton *button,button_bid_t *button_bid) {
   couleur_t couleur;
   int contrat,status;
-  transfert_t *transfert=malloc(sizeof(transfert_t));
   printf("Nombre de plis:%d\n",button_bid->ihm_bid->bid->nombre);
   printf("couleur:%d\n",button_bid->ihm_bid->bid->couleur);
   for(contrat=0;contrat<button_bid->ihm_bid->bid->nombre-1;contrat++){
@@ -73,14 +68,11 @@ void click_bid (GtkButton *button,button_bid_t *button_bid) {
     gtk_widget_set_sensitive(button_bid->ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
 
   }
-  transfert->status=BID; 
-  transfert->level=button_bid->ihm_pli->level; 
-  transfert->random=button_bid->ihm_pli->random; 
-  status = write (button_bid->ihm_pli->socketid,transfert, sizeof (transfert_t));
+  button_bid->ihm_pli->transfert->status=BID; 
+  status = write (button_bid->ihm_pli->socketid,button_bid->ihm_pli->transfert, sizeof (transfert_t));
   status = write(button_bid->ihm_pli->socketid,button_bid->ihm_bid->bid,sizeof(bid_t));
   button_bid->ihm_pli->state=BID;
   button_bid->ihm_pli->read=TRUE;
-  free(transfert);
 }
 gboolean key_down(GtkWidget *widget,
         GdkEventKey *event,
@@ -311,7 +303,6 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\n",dis_bid));
         if((ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-1])=='P' &&(ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-2])=='P' && (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-3])=='P'&& (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-4])=='P') {
-          transfert_t *transfert=malloc(sizeof(transfert_t));
           printf("Game Starting\n");
                    
           for(i=strlen(ihm_pli->cur_bid)-1;i>0;i=i-2) {
@@ -333,13 +324,11 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
  
         gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\nFinal Contrat: %s\n",dis_bid,ihm_pli->scontrat));
-          transfert->status=STARTING; 
-          transfert->random=ihm_pli->random; 
+          ihm_pli->transfert->status=STARTING; 
           ihm_pli->state=STARTING; 
           
-          transfert->level=ihm_pli->level;
 
-          status = write (ihm_pli->socketid,transfert, sizeof (transfert_t));
+          status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
           for(contrat=0;contrat<7;contrat++){
             for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
@@ -349,7 +338,6 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
           ihm_pli->pli->nextpos=(ihm_pli->contrat->declarant+1)%4;
  /* Blit */
            
-          free(transfert);
         }
         else {
           number=ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-4]-48;
@@ -381,17 +369,15 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
       printf("expose Drawing_area,\n");
       if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
         printf("expose Drawing_area enchere,\n");
-        transfert_t *transfert=malloc(sizeof(transfert_t));
         bid_t *bid=malloc(sizeof(bid_t));
 
-        status = read (ihm_pli->socketid,transfert, sizeof (transfert_t));
-        if(transfert->status==BID  ) {
+        status = read (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+        if(ihm_pli->transfert->status==BID  ) {
           status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
           
           
           ihm_pli->read=FALSE;
         } 
-        free(transfert);
         free(bid);
 
       }

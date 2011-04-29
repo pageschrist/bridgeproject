@@ -39,6 +39,8 @@
 #define POSITION 102
 #define PASDECARTE -1
 #define PASDECOULEUR -1
+#define DEFAULTLEVEL 5
+#define DEFAULTRANDOM 40
 
 
 
@@ -205,8 +207,6 @@ typedef struct _ihm_pli_t
   ihm_bid_t **Othbid;
   char cur_bid[BIDSIZE];
   char *path;
-  int level;
-  int random;
   FILE *output;
   int blinkid;
   int state ; 
