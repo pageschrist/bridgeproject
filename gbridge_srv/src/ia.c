@@ -11,7 +11,6 @@
 
 int prof_start = 0;
 int flag_debug=0;
-extern best_t **tab_best;
 void break_point(void) {
  printf("Test Point\n");
 }
@@ -28,7 +27,6 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   for( i=0;i<pique+1;i++)
     tabval[i]=pdc;
   int score=l_best->last->best->score;
-  //int score=tab_best[*nb_best-1]->score;
   printf("On a %d bons coups\n",*nb_best);
 
    while(elem_best) {

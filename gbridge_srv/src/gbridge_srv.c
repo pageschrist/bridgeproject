@@ -29,7 +29,6 @@ void print_usage (void);
 extern int flag_debug;
 extern GHashTable *configHash;
 extern carte_t best_carte;
-best_t **tab_best=NULL;
 /*
  * prototypes
  */
