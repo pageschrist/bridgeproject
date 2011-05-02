@@ -3,6 +3,8 @@
 #include <string.h>
 #include <glib.h>
 #include "objets.h"
+#include "free.h"
+#include "client.h"
 char * contrat_to_char(couleur_t atout);
 extern GHashTable *configHash;
 carte_t **tab_coord;
@@ -215,7 +217,6 @@ void affiche_pli( pli_t *ppli)
 
 }
 void free_ihm_pli( ihm_pli_t *ihm_pli) {
-  couleur_t couleur; 
   position_t position; 
   free(ihm_pli->pli);
   ihm_pli->pli=NULL;
@@ -366,14 +367,13 @@ void init_bid(ihm_pli_t *ihm_pli) {
 
 }
 
-char *display_str(char *str ,position_t position) {
+char *display_str(char *str ) {
   char *ret_str=NULL;
-  position_t pos;
   int i;
   if((strlen(str))%2!=0) 
    return (ret_str);
   ret_str=malloc((3*((strlen(str))/2)+1)*sizeof(char));
-  for(i=0;i<(strlen(str))/2;i++) {
+  for(i=0;i<(int)(strlen(str))/2;i++) {
     ret_str[3*i]=str[2*i];
     ret_str[3*i+1]=str[2*i+1];
     if(ret_str[3*i]=='P'&&ret_str[3*i+1]=='P') {

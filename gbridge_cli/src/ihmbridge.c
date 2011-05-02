@@ -63,6 +63,8 @@ int ref_couleur[pique+1];
 void 
 ihm_about(GtkWidget *Wdgt, guint value)
 {
+  Wdgt=Wdgt;
+  value=value;
   GtkWidget *Dialogue;
   GtkWidget *Bouton;
   GtkWidget *Lab;
@@ -97,7 +99,7 @@ ihm_about(GtkWidget *Wdgt, guint value)
 
 
 
-void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
+void create_ihm (ihm_pli_t *ihm_pli) {
 
   char chaine[MAXCHAR];
   couleur_t couleur;
@@ -243,6 +245,7 @@ void create_ihm (gboolean debug,gboolean animation,ihm_pli_t *ihm_pli) {
 }
 
 void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
+          E=E;
           printf("****random=%d***************************************\n",ihm_pli->transfert->random);
           //affichage_tab_coord(ihm_pli->contrat->maxlarg,ihm_pli->contrat->maxhaut);
           printf("*******************************************\n");

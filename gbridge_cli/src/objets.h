@@ -66,7 +66,6 @@ typedef enum
 typedef enum
 { new, partie, end } status_t;
 
-void *duplique_pli (void *data);
 
 typedef struct _coord_t
 {
@@ -245,4 +244,4 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) ;
 void reset_ihm_pli (ihm_pli_t *ihm_pli);
 void init_ihm_pli (ihm_pli_t *ihm_pli);
 void init_bid (ihm_pli_t *ihm_pli);
-char *display_str(char *str ,position_t position); 
+char *display_str(char *str ); 

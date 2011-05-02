@@ -141,13 +141,12 @@ void init_game(ihm_pli_t *ihm_pli) {
 }
 
 
-void position_list(GList *ptr, int x, int y, enum eposition ep, float coef,ihm_pli_t *ihm_pli)
+void position_list(GList *ptr, int x, int y, enum eposition ep, float coef)
 {
         int incx, incy;
-        int xref=x,yref=y;
+        int xref=x;
         int step,i;
         int num;
-        couleur_t couleur=aucune;
         couleur_t couleurref=aucune;
         int tab_coul[pique+1];
         imgcard_t *data_ptr;
@@ -163,8 +162,6 @@ void position_list(GList *ptr, int x, int y, enum eposition ep, float coef,ihm_p
         
         
 
-        //int hspace = ihm_pli->Drawing_area->allocation.width/25;
-        int vspace = ihm_pli->Drawing_area->allocation.height/20;
 
 
         switch(ep)
@@ -250,7 +247,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   position_t poscour;
   char *cardname,*rescl,*resvl,*resps;
   GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
-  int status,k;
+  int status;
   char *reschaine;
   GdkGC *gc;
   printf("Debut game_turn\n");
@@ -392,7 +389,7 @@ void locate_cards(GList *listplayer,position_t position,ihm_pli_t *ihm_pli) {
           break;
 
     }
-    position_list(listplayer, x, y, ep, coef, ihm_pli);
+    position_list(listplayer, x, y, ep, coef);
   }
 }
 

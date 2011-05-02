@@ -4,7 +4,7 @@
 #include "draw.h"
 
 
-void draw_cards(ihm_pli_t *ihm_pli, GList *list, GdkPixmap *target,int status)
+void draw_cards(ihm_pli_t *ihm_pli, GList *list, GdkPixmap *target)
 {
         printf("Draw cards\n");
         GList *ptr;
@@ -149,14 +149,14 @@ void draw_container_ihm(ihm_pli_t *ihm_pli)
                         ihm_pli->Drawing_area->allocation.height );
 
 
-                draw_cards(ihm_pli, ihm_pli->waiting, ihm_pli->target,1);
+                draw_cards(ihm_pli, ihm_pli->waiting, ihm_pli->target);
 
                 if(ihm_pli->players != NULL)
                 {
                         int i;
                         for(i=0; i<4; i++)
                         draw_cards(ihm_pli, ihm_pli->players[i],
-                                        ihm_pli->target,0);
+                                        ihm_pli->target);
                 }
 
                 //if(ihm_pli->dropping) {
@@ -211,14 +211,14 @@ void draw_to(ihm_pli_t *ihm_pli, GdkPixmap *target)
 
 
 
-                draw_cards(ihm_pli, ihm_pli->waiting, target,1);
+                draw_cards(ihm_pli, ihm_pli->waiting, target);
 
                 if(ihm_pli->players != NULL)
                 {
                         int i;
                         for(i=0; i< 4; i++)
                                 draw_cards(ihm_pli,
-                                        ihm_pli->players[i], target,0);
+                                        ihm_pli->players[i], target);
                 }
 
         }

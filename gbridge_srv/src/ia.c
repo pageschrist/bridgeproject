@@ -20,7 +20,7 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   couleur_t coulref=aucune;
   carte_t *carte=malloc(sizeof(carte_t));
   char *affca,*affco;
-  int points[pique+1],j,pointsf=79;
+  int points[pique+1],j;
   
   couleur_t i;
   elem_best_t *elem_best=l_best->last;
@@ -102,7 +102,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
   pli_t *pplin;			/* nouveau pli renvoye par la liste des coups */
   retpli_t *ret;
   retpli_t *retup;
-  int best_score, index,endscore,curscore;
+  int best_score, index,endscore;
   couleur_t nocouleur;
   valeur_t nocarte;
   ligne_t ligne;
@@ -126,9 +126,6 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
   while ((pplin = (pli_t *) pop (stk)) != NULL)
     {
       
-      // On sauvegarde le pli en cours (pliori,plicopie) 
-	//tab_cartes[pplin->carte[positionc].nocarte][pplin->carte[positionc].
-	//					    clcarte].detenteur;
         nocarte = pplin->carte[positionc].nocarte;
         nocouleur = pplin->carte[positionc].clcarte;
         if( nocarte== pdc) { 

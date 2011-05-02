@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <glib/gstring.h>
 #include <glib/gprintf.h>
-#include "mask.xbm"
+//#include "mask.xbm"
 #include "objets.h"
 #include "load.h"
 extern GHashTable *configHash;

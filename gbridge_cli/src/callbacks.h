@@ -5,7 +5,7 @@ void click_bid (GtkButton *button,button_bid_t *button_bid);
 gboolean event_blink(gpointer data);
 gboolean key_down(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean mise_en_place (GtkWidget *Drawing_area,ihm_pli_t *ihm_pli);
-void button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data);
+gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data);
 void button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer data);
 gint motion_notify_event (GtkWidget *widget, GdkEventMotion *event, gpointer data);
 gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event,ihm_pli_t *ihm_pli);

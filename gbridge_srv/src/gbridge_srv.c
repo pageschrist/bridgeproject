@@ -101,7 +101,7 @@ gboolean newgame(game_t *game) {
   printf ("Voici le declarant:%d",game->contrat->declarant);
   pli->entame=(game->contrat->declarant+1)%4;
   pli->nextpos=(game->contrat->declarant+1)%4;
-  pli->atout=char_to_int(&game->contrat->atout);
+  pli->atout= char_to_int(&game->contrat->atout);
   printf("On joue atout:%d\n",pli->atout);
   //Debut de la partie ia
           
@@ -118,10 +118,8 @@ gboolean newgame(game_t *game) {
           init_list_best(l_best);
         }
         gettimeofday(timeav,NULL);
-        if(notour>=7)
-          prof=24;
-        if(notour==8)
-          debug_info();
+        if(notour>=5)
+          prof=28;
 	first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
         gettimeofday(timeap,NULL);
         printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);

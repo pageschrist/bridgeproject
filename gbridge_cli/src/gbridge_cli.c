@@ -49,7 +49,7 @@ int main (int argc, char *argv[])
     create_config();
     rempli_config();
     verifie_config();
-    create_ihm(debug,animation,ihm_pli);        
+    create_ihm(ihm_pli);        
     
   //gtk_init (&argc, &argv);
     if (ihm_pli->Fenetre != NULL ) { 

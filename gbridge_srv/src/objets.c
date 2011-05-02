@@ -117,7 +117,7 @@ void init_tabjeu (game_t *game)
 void clear_tabjeu (game_t *game)
 {
   position_t position;
-  int index ,i;
+  int index ;
   couleur_t couleur;
   for (position = sud; position < est + 1; position++)
     {
@@ -232,7 +232,7 @@ void clear_game(game_t *game) {
 int char_to_int(char *c) {
   char *atout="TKCPS";
   int i;
-  for (i=0;i<strlen(atout);i++) {
+  for (i=0;i<(int) strlen(atout);i++) {
     if(atout[i]==*c) {
       return(i);
 
