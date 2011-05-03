@@ -186,3 +186,4 @@ void init_game(game_t *game);
 void free_game(game_t *game);
 void clear_tabjeu (game_t *game);
 int char_to_int(char *c);
+void clear_game(game_t *game);

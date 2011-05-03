@@ -35,7 +35,6 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
        free(affca);
        free(affco);
        if(elem_best->best->carte->nocarte==2 && elem_best->best->carte->clcarte==0 && score>=4) {
-       debug_info();
        }
        printf("Voici le score: %d\n", elem_best->best->score);
        if(tabval[elem_best->best->carte->clcarte]>elem_best->best->carte->nocarte)
@@ -208,7 +207,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
 
 
 //new_explore (int prof, pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best)
-void *
+void * 
 new_explore (void *arg)
 {
   int prof,prof_max;
@@ -300,7 +299,7 @@ new_explore (void *arg)
 
     thread_jeu->score=best_score;
     thread_jeu->status=1;
-    //return (endscore);
+    return (NULL);
 
 
 }

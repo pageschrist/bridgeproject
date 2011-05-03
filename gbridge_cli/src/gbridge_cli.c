@@ -18,17 +18,12 @@ gboolean animation=TRUE;
 gboolean animation=FALSE;
 #endif
 /* Il s'agit du programme principal */
-
-/*joueur_t mort;
-joueur_t declarant;*/
 static GOptionEntry entries[] =
 {
   { "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Start in debug mode, for developers only"), NULL },
   { "disable-animation", 0, 0, G_OPTION_ARG_NONE, &animation, N_("Do not display cards' move. Useful on old computers."), NULL },
-  { NULL }
 };
 
-FILE *output="stdout";
 
 extern GtkWidget *Fenetre;
 int main (int argc, char *argv[])

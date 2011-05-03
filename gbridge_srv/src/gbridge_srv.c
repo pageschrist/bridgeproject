@@ -50,8 +50,9 @@ void print_usage (void) {
 
 const int BACK_LOG = 5;
 
-void signal_handler ( void)
+void signal_handler ( int sig)
 {
+   sig=sig;
    printf("Signal trappé\n");
   while(0<waitpid(-1,NULL,WNOHANG));
 }
@@ -90,7 +91,7 @@ gboolean newgame(game_t *game) {
   for(i=strlen(game->cur_bid)-1;i>0;i=i-2) {
 
     if(game->cur_bid[i-1]!='P') {
-      game->contrat->atout=game->cur_bid[i];
+      game->contrat->atout=char_to_int(&game->cur_bid[i]);
       break;
 
     }
@@ -101,7 +102,7 @@ gboolean newgame(game_t *game) {
   printf ("Voici le declarant:%d",game->contrat->declarant);
   pli->entame=(game->contrat->declarant+1)%4;
   pli->nextpos=(game->contrat->declarant+1)%4;
-  pli->atout= char_to_int(&game->contrat->atout);
+   pli->atout=  game->contrat->atout;
   printf("On joue atout:%d\n",pli->atout);
   //Debut de la partie ia
           
@@ -146,7 +147,7 @@ gboolean newgame(game_t *game) {
         if(game->transfert->status==PLI )
            read (game->sockslv_id,   pli, sizeof (pli_t));
         else
-         return(game->transfert);
+         return(FALSE);
         printf("Joue coup pli,NULL\n");
 	joue_coup( pli,NULL,game); 
       }
@@ -358,7 +359,7 @@ int main (int argc, char *argv[])
                     read(game->sockslv_id,game->transfert,sizeof(transfert_t));
               }
               if (game->transfert->status == NEWGAME){ 
-                  transfert=newgame (game);
+                  newgame (game);
                   read(game->sockslv_id,game->transfert,sizeof(transfert_t));
                   printf("transfert->random\n%d",game->transfert->random);
                   printf("transfert->level\n%d",game->transfert->level);

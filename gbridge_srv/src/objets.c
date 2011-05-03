@@ -238,6 +238,7 @@ int char_to_int(char *c) {
 
     }
   }
+  return(0);
 }
 
 
