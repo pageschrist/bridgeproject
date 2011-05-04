@@ -317,6 +317,7 @@ void init_bid(ihm_pli_t *ihm_pli) {
         free(rescl);
         free(resct);
         ihm_pli->Allbid[i*7+k]->bid->position=aucun;
+        ihm_pli->Allbid[i*7+k]->bid->passe=FALSE;
         ihm_pli->Allbid[i*7+k]->bid->contre=FALSE;
         ihm_pli->Allbid[i*7+k]->bid->surcontre=FALSE;
         ihm_pli->Allbid[i*7+k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
@@ -336,16 +337,19 @@ void init_bid(ihm_pli_t *ihm_pli) {
       ihm_pli->Othbid[k]->bid->couleur=aucune;
       if(k==0) {
         sprintf(enchname, "%s/enchPP.xpm", ihm_pli->path);
+        ihm_pli->Othbid[k]->bid->passe=TRUE;
         ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
       }
       if(k==1){
         sprintf(enchname, "%s/enchXP.xpm", ihm_pli->path);
+        ihm_pli->Othbid[k]->bid->passe=FALSE;
         ihm_pli->Othbid[k]->bid->contre=TRUE;
         ihm_pli->Othbid[k]->bid->surcontre=FALSE;
         ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
       }
       if(k==2) {
         sprintf(enchname, "%s/enchXX.xpm", ihm_pli->path);
+        ihm_pli->Othbid[k]->bid->passe=FALSE;
         ihm_pli->Othbid[k]->bid->contre=FALSE;
         ihm_pli->Othbid[k]->bid->surcontre=TRUE;
         ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);

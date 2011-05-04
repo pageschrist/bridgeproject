@@ -162,6 +162,7 @@ typedef struct _bid_t
   int nombre;
   couleur_t couleur;
   position_t position;
+  gboolean passe;
   gboolean contre;
   gboolean surcontre;
 } bid_t;

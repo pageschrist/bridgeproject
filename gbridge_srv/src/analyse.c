@@ -151,40 +151,45 @@ void analyse_bid(game_t *game) {
   char bidhomeconf[1024];
   gboolean found=FALSE;
   char *home,tmpstring[2];
-  char *ptr;
+  char *ptr,*affc;
   char *s_bidref,*s_newbid,*s_condition;
   char buf[16384];
   home = getenv ("HOME");
   sprintf (bidhomeconf, "%s%s", home, BIDCONFHOME);
   obidhomeconf=fopen(bidhomeconf,"r");
-  tmpstring[0]=(char ) (game->bid->nombre+48);
-  tmpstring[1]='\0';
-  game->bid->position=(game->bid->position+2)%4;
-  strcat(game->cur_bid,tmpstring);
-  strcat(game->cur_bid,affichage(game->bid->couleur,COULEUR));
-  strcat(game->cur_bid,"PP");
-  while (fgets(buf, 16380, obidhomeconf)) {
-    if (!strncmp(buf, game->cur_bid, strlen(game->cur_bid))) {
-      buf[strlen(buf)-1] = '\0';
-      s_bidref = strtok_r(buf, ":",&ptr);
-      s_newbid = strtok_r(NULL, ":",&ptr);
-      s_condition = strtok_r(NULL, ":",&ptr);
-      if(test_condition(game,s_condition)) {
-        found=TRUE;
-        break;
+  if(game->bid->passe==TRUE) 
+    strcat(game->cur_bid,"PP"); 
+  else {
+    tmpstring[0]=(char ) (game->bid->nombre+48);
+    tmpstring[1]='\0';
+    game->bid->position=(game->bid->position+2)%4;
+    strcat(game->cur_bid,tmpstring);
+    affc=affichage(game->bid->couleur,COULEUR);
+    strcat(game->cur_bid,affc);
+    free(affc);
+    strcat(game->cur_bid,"PP");
+    while (fgets(buf, 16380, obidhomeconf)) {
+      if (!strncmp(buf, game->cur_bid, strlen(game->cur_bid))) {
+        buf[strlen(buf)-1] = '\0';
+        s_bidref = strtok_r(buf, ":",&ptr);
+        s_newbid = strtok_r(NULL, ":",&ptr);
+        s_condition = strtok_r(NULL, ":",&ptr);
+        if(test_condition(game,s_condition)) {
+          found=TRUE;
+          break;
+        }
       }
+
+      
+
     }
-
-    
-
-  }
-  if(found==FALSE) 
-    strcat(game->cur_bid,"PP"); 
-  else
-    strcat(game->cur_bid,s_newbid);
-   // For player 
-    strcat(game->cur_bid,"PP"); 
-  
+    if(found==FALSE) 
+      strcat(game->cur_bid,"PP"); 
+    else
+      strcat(game->cur_bid,s_newbid);
+     // For player 
+  } 
+  strcat(game->cur_bid,"PP"); 
   fclose(obidhomeconf);
 }
 

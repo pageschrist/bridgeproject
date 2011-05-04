@@ -227,7 +227,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
    gtk_container_add( GTK_CONTAINER(ihm_pli->Othbid[contrat]->bwidget), ihm_pli->Othbid[contrat]->widget);
    g_signal_connect( G_OBJECT(ihm_pli->Othbid[contrat]->bwidget), "clicked", G_CALLBACK(click_bid), button_obid[contrat]);
 
-  }
+ }
   id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"realize",G_CALLBACK(mise_en_place),ihm_pli);
   id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"expose_event",G_CALLBACK(rafraichissement),ihm_pli);
   id_sig_connect = g_signal_connect (G_OBJECT(Comment_VBox),"expose_event",G_CALLBACK(expose_comment),ihm_pli);
