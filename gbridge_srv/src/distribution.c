@@ -7,8 +7,6 @@
 #include "distribution.h"
 #include "analyse.h"
 extern coord_t tab_cartes[cA + 1][pique + 1];
-extern tablist_t **tabjeu;
-extern tablist_t **tabjeuref;
 void
 initialisation (void)
 {

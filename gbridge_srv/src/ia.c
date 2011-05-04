@@ -65,7 +65,6 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   
 }
 
-/*ls ligne correspond a NS(0) ou EO(1) */
 int
 minimax (int score_courant, int best_score, position_t positionc)
 {
@@ -206,7 +205,6 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
 }
 
 
-//new_explore (int prof, pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best)
 void * 
 new_explore (void *arg)
 {
@@ -270,9 +268,7 @@ new_explore (void *arg)
         best_cartepot.clcarte = pplin->carte[positionc].clcarte;
         ligne = evaluation_pli (pplin );	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
 
-        //on duplique le jeu
 
-        //On lance explore dans un thread
         ret = cur_explore (prof + 1, pplin, prof_max,thread_jeu->t_jeu,ALPHA_START,BETA_START);
         curscore=ret->score;
         if (minimax (curscore, best_score, positionc))
