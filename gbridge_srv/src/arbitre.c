@@ -673,11 +673,10 @@ joue_coup (pli_t * pli,carte_t *carte,game_t *game )
 int
 check_plis (pli_t * pli)
 {
-  extern ligne_t ligneia;
   int score;
   ligne_t lignej;
-  lignej = (ligneia + 1) % 2;
-  score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[ligneia];
+  lignej = (IALINE + 1) % 2;
+  score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[IALINE];
   /* printf ("Voici le score dans check_plis: %d\n", score); */
   return (score);
 

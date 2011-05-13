@@ -8,7 +8,6 @@
 #include "analyse.h"
 #include "ia.h"
 #include "create_config.h"
-position_t ligneia;
 
 void changeeval(game_t *game,couleur_t couleureval) {
   couleur_t couleur;
@@ -399,7 +398,6 @@ eval_contrat (game_t *game)
   game->contrat->atout = color;
   game->contrat->nbplis = 6 + game->contrat->nom;
   game->contrat->declarant = 0; //modification pour faire pivoter le jeu   =jouepar
-  ligneia = (  1) % 2;
   printf ("Dans eval_contrat\n");
   return(4-jouepar);
 }

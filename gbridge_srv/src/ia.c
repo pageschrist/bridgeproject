@@ -69,8 +69,7 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
 int
 minimax (int score_courant, int best_score, position_t positionc)
 {
-  extern ligne_t ligneia;
-  if (positionc % 2 == ligneia)
+  if (positionc % 2 == IALINE)
     {
       if (score_courant <= best_score)
 	return (1);

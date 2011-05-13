@@ -1,6 +1,7 @@
 #define PROFONDEURMAX 12
 #define ALPHA_START -10000
 #define BETA_START 10000
+#define IALINE 1
 typedef struct _retpli_t
 {
   int score;
