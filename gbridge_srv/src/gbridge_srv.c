@@ -347,7 +347,6 @@ int main (int argc, char *argv[])
                     analyse_bid(game); 
                     write ( game->sockslv_id, game->cur_bid ,sizeof(game->cur_bid));
                     read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-                    analyse_bid(game); 
               }
               if (game->transfert->status == NEWGAME){ 
                   analyse_tabjeu(game); 
