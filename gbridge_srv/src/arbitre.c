@@ -9,15 +9,10 @@
 #include "ia.h"
 #include "arbitre.h"
 extern int flag_debug;
-int nblist_all_coups=0;
 carte_t best_carte;
 extern coord_t tab_cartes[cA + 1][pique + 1];
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
 /*pli.entame doit etre initialise */
-void fdefausse(void);
-void fdefausse(void){ 
-  printf("Defausse\n");
-}
 void ftrace(void) {
   printf("OK\n");
 }
@@ -39,6 +34,7 @@ void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
 	  for (i = 0; i < 13; i++)
 	    thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
 	   thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
+	   thread_jeu->t_jeu[index]->couleureval =game->tabjeu[index]->couleureval;
 	}
     }
 }
@@ -57,16 +53,13 @@ void destroy_jeu (thread_jeu_t *thread_jeu) {
   free(thread_jeu->t_jeu); 
 }
 
-int
-list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu)
+int list_all_tabjeu (position_t positionc,couleur_t couleurc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu)
 {
   int  index,situation,nbcoups=0;
   int k=0,sub;
-  couleur_t couleurc;
   couleur_t i;
   carte_t phcarte; 
   int presence=NON,pos_index;
-  nblist_all_coups++;
   if(positionc == pli->entame)
      situation=ENTAME;
   if(positionc != pli->entame) {
@@ -137,7 +130,6 @@ list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **t
 			tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
                       if(pli->carte[positionc].nocarte == pdc) {
                         int h;
-                        fdefausse();
                         affiche_pli(pli);
                         for(h=0;h<NBJOUEURS;h++)
                         //affiche_tabjeu(h);
@@ -161,7 +153,313 @@ list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **t
 		    tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
                       if(pli->carte[positionc].nocarte == pdc) {
                         int h;
-                        fdefausse();
+                        affiche_pli(pli);
+                        for(h=0;h<NBJOUEURS;h++)
+                        //affiche_tmpjeu(h);
+                        printf("Pb dans list_all_coups 2\n");
+                        exit(3);
+                      }
+                  nbcoups++;
+		  push (stack, pli);
+                  pli->phcarte.nocarte=phcarte.nocarte;
+                  pli->phcarte.clcarte=phcarte.clcarte;
+		  presence = OUI;
+
+
+		}
+	      k--;
+	    }
+	}
+      return(nbcoups);
+    }
+
+
+
+
+  else
+    {
+      couleurc = pli->carte[pli->entame].clcarte;	/*On recupere la couleur entame */
+      presence = NON;
+
+
+      index = INDEX (positionc, couleurc);
+      
+      if (tmpjeu[index]->nbcrt==1) {  //Une seule carte 
+
+        pli->carte[positionc].clcarte = couleurc;
+        pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+        push (stack, pli);
+        return(1);
+
+      }
+      else {
+
+        sub=sub_index (tmpjeu,positionc, couleurc, pli->phcarte.nocarte);
+        if(sub==0 && tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt-1]<pli->phcarte.nocarte) { //Toutes les cartes 
+          pli->carte[positionc].clcarte = couleurc;
+          pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+          push (stack, pli);
+          return(1);
+        }
+        else {
+          pli->carte[positionc].clcarte = couleurc;
+          pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+          push (stack, pli);
+          nbcoups++;
+          for ( pos_index=sub+1;pos_index<tmpjeu[index]->nbcrt;pos_index++) {
+            
+            pli->carte[positionc].clcarte = couleurc;
+            pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[pos_index];
+            pli->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
+            pli->phcarte.clcarte = couleurc;
+            nbcoups++;
+            push (stack, pli);
+            //while(pos_index<tmpjeu[index]->nbcrt-1) {
+            //  if(tmpjeu[index]->tabcoul[pos_index+1]-tmpjeu[index]->tabcoul[pos_index] == 1) {
+            //    pos_index++;
+             // }
+            //}
+
+          }
+        }
+
+      }
+  
+
+    
+    return(nbcoups);
+  }
+  return(0); //Normalement pas utilise
+
+
+}
+
+int
+list_all_coups_eval (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu)
+{
+  couleur_t couleurc=tmpjeu[0]->couleureval;
+  int  index,situation,nbcoups=0;
+  int k=0;
+  couleur_t i;
+  carte_t phcarte; 
+  int presence=NON,pos_index;
+  if(positionc == pli->entame)
+     situation=ENTAME;
+  if(positionc != pli->entame) {
+     situation=NONENTAME;
+     if(tmpjeu[INDEX (positionc,couleurc)]->nbcrt==0) {
+       situation=DEFAUSSE;
+     }
+  }
+  phcarte.nocarte=pli->phcarte.nocarte;
+  phcarte.clcarte=pli->phcarte.clcarte;
+
+  if(situation == DEFAUSSE) {
+    for (i = (couleurc+1)%4; i != couleurc ; i++) {
+      index=INDEX (positionc, i);
+      if(tmpjeu[index]->nbcrt != 0) {
+          pli->carte[positionc].clcarte = i;
+	  pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+          nbcoups++;
+          push (stack, pli);
+          
+
+      }
+      break;
+    }
+    return(nbcoups);
+
+  }
+ 
+
+  if (situation==ENTAME) 
+    {
+      /*On est a l'entame d'une couleur, donc on choisit n'importe quelle carte et on place la phcarte dans la structure */
+          i=couleurc;
+	  presence = NON;
+	  index = INDEX (positionc, i);
+	  k = tmpjeu[INDEX (positionc, i)]->nbcrt;
+	  while (k != 0)
+	    {
+	      if (presence == OUI)
+		{
+		  /* On teste si la carte inférieure est équivalente */
+		  if ((tmpjeu[INDEX (positionc, i)]->tabcoul[k] -
+		       tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1]) != 1)
+		    {
+		      pli->carte[positionc].clcarte = i;
+		      pli->carte[positionc].nocarte =
+			tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+		      pli->phcarte.clcarte = i;
+		      pli->phcarte.nocarte =
+			tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+                      nbcoups++;
+		      push (stack, pli);
+                      pli->phcarte.nocarte=phcarte.nocarte;
+                      pli->phcarte.clcarte=phcarte.clcarte;
+		    }
+		}
+	      else
+		{
+		  pli->carte[positionc].clcarte = i;
+		  pli->carte[positionc].nocarte =
+		    tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+		  pli->phcarte.clcarte = i;
+		  pli->phcarte.nocarte =
+		    tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+                  nbcoups++;
+		  push (stack, pli);
+                  pli->phcarte.nocarte=phcarte.nocarte;
+                  pli->phcarte.clcarte=phcarte.clcarte;
+		  presence = OUI;
+
+
+		}
+	      k--;
+	    }
+      return(nbcoups);
+    }
+
+
+
+
+  else
+    {
+      presence = NON;
+
+
+      index = INDEX (positionc, couleurc);
+      
+      if (tmpjeu[index]->nbcrt==1) {  //Une seule carte 
+
+        pli->carte[positionc].clcarte = couleurc;
+        pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+        push (stack, pli);
+        return(1);
+
+      }
+      else {
+          for ( pos_index=0;pos_index<tmpjeu[index]->nbcrt;pos_index++) {
+            
+            pli->carte[positionc].clcarte = couleurc;
+            pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[pos_index];
+            pli->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
+            pli->phcarte.clcarte = couleurc;
+            nbcoups++;
+            push (stack, pli);
+
+          }
+
+      }
+    
+    return(nbcoups);
+  }
+  return(0); //Normalement pas utilise
+
+
+}
+int
+list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu)
+{
+  int  index,situation,nbcoups=0;
+  int k=0,sub;
+  couleur_t couleurc;
+  couleur_t i;
+  carte_t phcarte; 
+  int presence=NON,pos_index;
+  if(positionc == pli->entame)
+     situation=ENTAME;
+  if(positionc != pli->entame) {
+     situation=NONENTAME;
+     couleurc=pli->carte[pli->entame].clcarte;
+     if(tmpjeu[INDEX (positionc,couleurc)]->nbcrt==0) {
+       situation=DEFAUSSE;
+     }
+  }
+  phcarte.nocarte=pli->phcarte.nocarte;
+  phcarte.clcarte=pli->phcarte.clcarte;
+
+  if(situation == DEFAUSSE) {
+
+    for (i = trefle; i < pique + 1; i++) {
+      index=INDEX (positionc, i);
+      if(tmpjeu[index]->nbcrt != 0) {
+        if(i!=pli->atout ) {
+          pli->carte[positionc].clcarte = i;
+	  pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+          nbcoups++;
+          push (stack, pli);
+        }
+        else {
+          for (k=0;k<tmpjeu[index]->nbcrt;k++) {
+            pli->carte[positionc].clcarte = i;
+	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[k];
+            nbcoups++;
+            push (stack, pli);
+          }
+        }
+
+      }
+
+
+      
+        
+    
+      
+    }
+    return(nbcoups);
+
+  }
+ 
+
+  if (situation==ENTAME) 
+    {
+      /*On est a l'entame d'une couleur, donc on choisit n'importe quelle carte et on place la phcarte dans la structure */
+
+      for (i = trefle; i < pique + 1; i++)
+	{
+	  presence = NON;
+	  index = INDEX (positionc, i);
+	  k = tmpjeu[INDEX (positionc, i)]->nbcrt;
+	  while (k != 0)
+	    {
+	      if (presence == OUI)
+		{
+		  /* On teste si la carte inférieure est équivalente */
+		  if ((tmpjeu[INDEX (positionc, i)]->tabcoul[k] -
+		       tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1]) != 1)
+		    {
+		      pli->carte[positionc].clcarte = i;
+		      pli->carte[positionc].nocarte =
+			tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+		      pli->phcarte.clcarte = i;
+		      pli->phcarte.nocarte =
+			tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+                      if(pli->carte[positionc].nocarte == pdc) {
+                        int h;
+                        affiche_pli(pli);
+                        for(h=0;h<NBJOUEURS;h++)
+                        //affiche_tabjeu(h);
+                        printf("Pb dans list_all_coups 1 \n");
+                        printf("k=%d,presence=%d,positionc=%d,i=%d",k,presence,positionc,i);
+                        exit(3);
+                      }
+                      nbcoups++;
+		      push (stack, pli);
+                      pli->phcarte.nocarte=phcarte.nocarte;
+                      pli->phcarte.clcarte=phcarte.clcarte;
+		    }
+		}
+	      else
+		{
+		  pli->carte[positionc].clcarte = i;
+		  pli->carte[positionc].nocarte =
+		    tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+		  pli->phcarte.clcarte = i;
+		  pli->phcarte.nocarte =
+		    tmpjeu[INDEX (positionc, i)]->tabcoul[k - 1];
+                      if(pli->carte[positionc].nocarte == pdc) {
+                        int h;
                         affiche_pli(pli);
                         for(h=0;h<NBJOUEURS;h++)
                         //affiche_tmpjeu(h);
@@ -256,7 +554,6 @@ copy_carte (void *data)
   return ((void *) carte);
 }
 
-
 /*Cette fonction determine qui sera le suivant a jouer et met a jour les scores*/
 position_t
 evaluation_pli (pli_t * pli)
@@ -268,7 +565,6 @@ evaluation_pli (pli_t * pli)
   position_t postmp;
   position_t posgagnante;
   carte_t carteref;
-/*  printf("Passage evolution\n"); */
   /* On teste si on est le dernier joueur du pli */
   if (pli->noj == 3)
     {

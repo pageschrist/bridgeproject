@@ -107,10 +107,12 @@ void init_tabjeu (game_t *game)
 	    game->tabjeuref[index]->tabcoul[i] = pdc;
 	  game->tabjeuref[index]->nbcrt = 0;
 	  game->tabjeuref[index]->poscartej = 0;
+	  game->tabjeuref[index]->couleureval = aucune;
 	  for (i = 0; i < NBPCOULEURS; i++)
 	    game->tabjeu[index]->tabcoul[i] = pdc;
 	  game->tabjeu[index]->nbcrt = 0;
 	  game->tabjeu[index]->poscartej = 0;
+	  game->tabjeu[index]->couleureval = aucune;
 	}
     }
 }

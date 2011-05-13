@@ -118,7 +118,10 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
     }
 
   stk = create_stack (duplique_pli);
-  nbcoups=list_all_coups (positionc, stk, pplic,t_jeu);
+  if(t_jeu[0]->couleureval==aucune)
+    nbcoups=list_all_coups (positionc, stk, pplic,t_jeu);
+  else
+    nbcoups=list_all_coups_eval (positionc, stk, pplic,t_jeu);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
   while ((pplin = (pli_t *) pop (stk)) != NULL)
@@ -241,7 +244,10 @@ new_explore (void *arg)
     }
 
   stk = create_stack (duplique_pli);
-  nbcoups=list_all_coups (positionc, stk, pplic,thread_jeu->t_jeu);
+  if(thread_jeu->t_jeu[0]->couleureval==aucune)
+    nbcoups=list_all_coups (positionc, stk, pplic,thread_jeu->t_jeu);
+  else
+    nbcoups=list_all_coups_eval (positionc, stk, pplic,thread_jeu->t_jeu);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
   while ((pplin = (pli_t *) pop (stk)) != NULL)
@@ -322,7 +328,10 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
 
   stk = create_stack (duplique_pli);
-  nbcoups=list_all_coups (positionc, stk, pplic,game->tabjeu);
+  if(game->tabjeu[0]->couleureval==aucune) //Tous les jeux contiennes la couleur d'evaluation si necessaire
+    nbcoups=list_all_coups (positionc, stk, pplic,game->tabjeu);
+  else
+    nbcoups=list_all_coups_eval (positionc, stk, pplic,game->tabjeu);
   printf("Voici le nombre de coups à examiner: %d\n",nbcoups);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé

@@ -1,12 +1,83 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 #include <glib/gtypes.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "distribution.h"
 #include "analyse.h"
+#include "ia.h"
 #include "create_config.h"
 position_t ligneia;
+
+void changeeval(game_t *game,couleur_t couleureval) {
+  couleur_t couleur;
+  position_t position;
+  int index;
+  for (couleur=trefle;couleur<pique+1;couleur++) {
+    for(position=sud;position<est+1;position++) {
+      index=INDEX(position,couleur);
+      game->tabjeu[index]->couleureval=couleureval;
+    }
+  }
+}
+void analyse_tabjeu (game_t *game) {
+
+  int index;
+  pli_t *pli;
+  int sizemax[pique+1];
+  l_best_t *l_best=NULL;
+  int nb_best=0;
+  carte_t *best_coup;
+  struct timeval *timeav=malloc(sizeof(struct timeval));
+  struct timeval *timeap=malloc(sizeof(struct timeval));
+  pli=malloc(sizeof(pli_t));
+  position_t position;
+  couleur_t couleur;
+  for (couleur=trefle;couleur<pique+1;couleur++) {
+    sizemax[couleur]=0;
+    for(position=sud;position<est+1;position++) {
+      index=INDEX(position,couleur);
+      if(game->tabjeuref[index]->nbcrt>sizemax[couleur]) 
+        sizemax[couleur]=game->tabjeuref[index]->nbcrt;
+    }
+  }
+  for (couleur=trefle;couleur<pique+1;couleur++) {
+  printf("couleur ******************* %d prof=%d\n",(int) couleur,sizemax[couleur]*4);
+    changeeval(game,couleur);
+  
+    for(position=sud;position<est+1;position++) {
+      printf("\t\tposition ******************* %d\n",(int) position);
+      index=INDEX(position,couleur);
+      init_pli(pli,INIT);
+      pli->entame=position;
+      pli->nextpos=position;
+      pli->atout=aucune;
+      if(NULL==(l_best=malloc(sizeof(l_best_t)))) {
+        fprintf(stderr,"Pb avec malloc\n");
+        exit (EXIT_FAILURE);
+      }
+      else {
+        init_list_best(l_best);
+      }
+      gettimeofday(timeav,NULL);
+      first_explore ( pli, (sizemax[couleur]*4)-pli->noj,&nb_best,l_best,game);
+      gettimeofday(timeap,NULL);
+      printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
+      best_coup=choix_best(&nb_best,l_best,game);
+      nb_best=0;
+      clear_list(l_best);
+      free(l_best);
+      l_best=NULL;
+      free(best_coup);
+      
+    }
+  }
+  changeeval(game,aucune);
+  free(pli);
+  free(timeap);
+  free(timeav);
+}
 
 int small_condition(game_t *game,char *s_smallref) {
 

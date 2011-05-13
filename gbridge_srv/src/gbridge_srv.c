@@ -77,16 +77,6 @@ gboolean newgame(game_t *game) {
   rotation=0;
   printf("Voici la rotation%d\n",rotation);
 
-  /*envoi_jeu (game, sockslv_id);
-  do {
-    read(sockslv_id,transfert,sizeof(transfert_t));
-    if(transfert->status==BID) {
-      read(sockslv_id,bid,sizeof(bid_t));
-      
-    
-    } 
-
-  } while(transfert->status==BID); */
   game->contrat->declarant=sud;
   for(i=strlen(game->cur_bid)-1;i>0;i=i-2) {
 
@@ -357,8 +347,11 @@ int main (int argc, char *argv[])
                     analyse_bid(game); 
                     write ( game->sockslv_id, game->cur_bid ,sizeof(game->cur_bid));
                     read(game->sockslv_id,game->transfert,sizeof(transfert_t));
+                    analyse_bid(game); 
               }
               if (game->transfert->status == NEWGAME){ 
+                  analyse_tabjeu(game); 
+                  printf(" **************  Fin analyse *************   \n");
                   newgame (game);
                   read(game->sockslv_id,game->transfert,sizeof(transfert_t));
                   printf("transfert->random\n%d",game->transfert->random);

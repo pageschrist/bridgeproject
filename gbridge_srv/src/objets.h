@@ -33,6 +33,7 @@ typedef struct _tablist
   valeur_t tabcoul[13];
   int poscartej;		//position de la derniere carte jouee
   int nbcrt;			//nombre de carte dans la couleur
+  couleur_t couleureval;
 } tablist_t;
 
 
@@ -144,6 +145,7 @@ typedef struct _game_t
   int sockslv_id;
   tablist_t **tabjeu;
   tablist_t **tabjeuref;   
+  tablist_t **tabjeueval;   
   transfert_t *transfert;
   main_t mainjoueur[est + 1];
   contrat_t *contrat;
