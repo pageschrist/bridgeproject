@@ -117,6 +117,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
       return (retup);
     }
   stk = create_stack (duplique_pli);
+  nbcoups=list_all_coups (positionc, stk, pplic,t_jeu);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
   while ((pplin = (pli_t *) pop (stk)) != NULL)
