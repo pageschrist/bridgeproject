@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "objets.h"
+#include "string.h"
 #include "find.h"
 #include "callbacks.h"
 #include "draw.h"
@@ -67,6 +68,7 @@ gboolean find_moveable_card(GList *ptr, GdkEventButton *event,
                         {
                                 ihm_pli->movecard = (movingcard_t*)
                                         g_malloc(sizeof( movingcard_t) );
+                                memset(ihm_pli->movecard,0,sizeof( movingcard_t)) ;
 
                                 if( ihm_pli->movecard )
                                 {

@@ -33,6 +33,7 @@ int main (int argc, char *argv[])
   GError *error = NULL;
   ihm_pli_t *ihm_pli;
   ihm_pli=malloc(sizeof(ihm_pli_t));
+  memset(ihm_pli,0,sizeof(ihm_pli_t));
   context = g_option_context_new ( _("Gbridge GTK game") );
   if(context) {
     //g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
