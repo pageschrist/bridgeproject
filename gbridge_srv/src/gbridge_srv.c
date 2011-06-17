@@ -136,7 +136,7 @@ gboolean newgame(game_t *game) {
         printf("Joueur  joue\n");
         read(game->sockslv_id,game->transfert,sizeof(transfert_t));
         if(game->transfert->status==PLI )
-           read (game->sockslv_id,   pli, sizeof (pli_t));
+           read_header (game, pli, 'p');
         else
          return(FALSE);
         printf("Joue coup pli,NULL\n");

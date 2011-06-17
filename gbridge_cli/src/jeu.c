@@ -339,8 +339,8 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
 
     
     status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
-    status = write(ihm_pli->socketid,ihm_pli->pli,sizeof(pli_t));
-    //status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
+    //status = write(ihm_pli->socketid,ihm_pli->pli,sizeof(pli_t));
+    write_data(ihm_pli,ihm_pli->pli,'p');
     status = read_header (ihm_pli,ihm_pli->pli, 'p');
     return(ihm_pli->pli->nextpos%2);
 
