@@ -238,7 +238,6 @@ void set_case(int nl,int nc,  int maxlarg,carte_t *carte) ;
 void remove_case(int nl,int nc,  int maxlarg) ;
 void affiche_carte (carte_t *carte);
 void copy_pli (pli_t *ppliori, pli_t *pplicopie);
-void * duplique_pli (void *data);
 void affiche_pli( pli_t *ppli);
 void init_pli (pli_t * pli, int maniere);
 void free_ihm_pli( ihm_pli_t *ihm_pli) ;

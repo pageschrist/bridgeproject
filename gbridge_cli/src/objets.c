@@ -172,31 +172,6 @@ void copy_pli (pli_t *ppliori, pli_t *pplicopie)
     }
 
 }
-void * duplique_pli (void *data)
-{
-  pli_t *plicopie;
-  position_t i;
-  ligne_t j;
-  plicopie=malloc(sizeof(pli_t));
-  for (i = sud; i < est + 1; i++)
-    {
-      (*plicopie).carte[i].nocarte = ((pli_t *) data)->carte[i].nocarte;
-      (*plicopie).carte[i].clcarte = ((pli_t *) data)->carte[i].clcarte;
-      (*plicopie).defausse[i].nocarte = ((pli_t *) data)->defausse[i].nocarte;
-      (*plicopie).defausse[i].clcarte = ((pli_t *) data)->defausse[i].clcarte;
-    }
-  (*plicopie).entame = ((pli_t *) data)->entame;
-  (*plicopie).nextpos = ((pli_t *) data)->nextpos;
-  (*plicopie).nopli = ((pli_t *) data)->nopli;
-  (*plicopie).phcarte.nocarte = ((pli_t *) data)->phcarte.nocarte;
-  (*plicopie).phcarte.clcarte = ((pli_t *) data)->phcarte.clcarte;
-  for (j = ns; j < eo + 1; j++)
-    {
-      (*plicopie).nbpli_ligne[j] = ((pli_t *) data)->nbpli_ligne[j];
-    }
-  return ((void *) plicopie);
-
-}
 void affiche_pli( pli_t *ppli)
 {
 	position_t i;

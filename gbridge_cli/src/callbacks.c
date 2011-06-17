@@ -340,8 +340,9 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
       
           }
         
-          for(contrat=0;contrat<number-1;contrat++){
-            for(couleur=trefle;couleur<aucune+1;couleur++) 
+          for(couleur=trefle;couleur<aucune+1;couleur++) 
+            for(contrat=0;contrat<number-1;contrat++){
+                printf("couleur=%d,number=%d,contrat=%d\n",couleur,number,contrat);
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
           for(couleur=trefle;couleur<color+1;couleur++) {

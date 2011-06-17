@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include "client.h"
 #include "jeu.h"
+#include "traffic.h"
 #include "load.h"
 #include "draw.h"
 #include "free.h"
@@ -272,7 +273,8 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   if((ihm_pli->pli->nextpos%2)==(position_t)ihm_pli->ligneia) {
    
     printf("IA joue\n");
-    status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
+    //status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
+    status = read_header(ihm_pli,ihm_pli->pli, 'p');
     cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
     gc = ihm_pli->Drawing_area->style->fg_gc[state];
     gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
@@ -338,7 +340,8 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     
     status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
     status = write(ihm_pli->socketid,ihm_pli->pli,sizeof(pli_t));
-    status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
+    //status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
+    status = read_header (ihm_pli,ihm_pli->pli, 'p');
     return(ihm_pli->pli->nextpos%2);
 
   }

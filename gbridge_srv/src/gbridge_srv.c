@@ -20,6 +20,7 @@
 #include "objets.h"
 #include "ia.h"
 #include "arbitre.h"
+#include "traffic.h"
 #include "analyse.h"
 #include "distribution.h"
 #include "gbridge_srv.h"
@@ -143,7 +144,8 @@ gboolean newgame(game_t *game) {
       }
       pli->nextpos=evaluation_pli(pli);
 
-      write (game->sockslv_id,  pli, sizeof (pli_t));
+      //write (game->sockslv_id,  pli, sizeof (pli_t));
+      write_data (game,  pli, 'p');
     }
   }
   for (t=0;t<NBJOUEURS;t++) 

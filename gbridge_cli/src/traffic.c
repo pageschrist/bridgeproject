@@ -56,14 +56,12 @@ void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
   carte_t *carte;
   switch(type) {
     case 'p':
-      pli=(pli_t *) data;
-      write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  pli, sizeof (pli_t));
+      pli= data;
+      read (ihm_pli->socketid,  pli, sizeof (pli_t));
       break;
     case 'c':
       carte=(carte_t *) data;
-      write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  carte, sizeof (carte_t));
+      read (ihm_pli->socketid,  carte, sizeof (carte_t));
       break;
  
 

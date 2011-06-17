@@ -57,13 +57,11 @@ void read_data( game_t *game,void *data, char type) {
   switch(type) {
     case 'p':
       pli=(pli_t *) data;
-      write_header(game,type);
-      write (game->sockslv_id,  pli, sizeof (pli_t));
+      read (game->sockslv_id,  pli, sizeof (pli_t));
       break;
     case 'c':
       carte=(carte_t *) data;
-      write_header(game,type);
-      write (game->sockslv_id,  carte, sizeof (carte_t));
+      read (game->sockslv_id,  carte, sizeof (carte_t));
       break;
  
 
@@ -76,7 +74,7 @@ void write_data(game_t *game,void  *data,char type) {
   carte_t *carte;
   switch(type) {
     case 'p':
-      pli=(pli_t *) data;
+      pli= data;
       write_header(game,type);
       write (game->sockslv_id,  pli, sizeof (pli_t));
       break;
