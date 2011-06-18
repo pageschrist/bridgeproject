@@ -221,7 +221,7 @@ envoi_jeu (position_t position, game_t *game)
 	  printf ("%s", affca=affichage (game->tabjeuref[index]->tabcoul[valeur], CARTE));
           free(affca);
           carte->nocarte=game->tabjeuref[index]->tabcoul[valeur]; 
-          write (game->sockslv_id,  carte, sizeof (carte_t));
+          write_data (game,  carte, 'c');
 	}
       }
     }

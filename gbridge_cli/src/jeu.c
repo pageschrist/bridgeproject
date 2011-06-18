@@ -426,11 +426,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
     ihm_pli->tab_couleur[position][couleur]=0;
 
   for (i = 0; i < NBPCOULEUR; i++) {
-      status = read (ihm_pli->socketid, carte, sizeof (carte_t));
-      if (status <= 0 ) {
-        fprintf(ihm_pli->output,"Problem in the read of the cards !!");
-        exit(1);
-      }
+      status=read_header (ihm_pli, carte, 'c');
       resvl=affichage(carte->nocarte,CARTE);
       rescl=affichage(carte->clcarte,COULEUR);
       sprintf(cardname, "%s/%s%s.xpm", ihm_pli->path,resvl ,rescl);

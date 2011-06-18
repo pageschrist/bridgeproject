@@ -79,7 +79,7 @@ void write_data(game_t *game,void  *data,char type) {
       write (game->sockslv_id,  pli, sizeof (pli_t));
       break;
     case 'c':
-      carte=(carte_t *) data;
+      carte= data;
       write_header(game,type);
       write (game->sockslv_id,  carte, sizeof (carte_t));
       break;
