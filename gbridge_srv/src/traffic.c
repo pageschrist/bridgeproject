@@ -8,17 +8,21 @@
 void write_header( game_t *game,char type) { 
   net_header_t header;
   strncpy(header.head,BRIDGE,8); 
+  header.status=game->status;
   switch(type) {
   case 'p':
     header.type='p';
-    header.status='c';
     header.lenght=sizeof(pli_t);
     write (game->sockslv_id,  &header,sizeof(net_header_t));
     break;
   case 'c':
     header.type='c';
-    header.status='c';
     header.lenght=sizeof(carte_t);
+    write (game->sockslv_id,  &header,sizeof(net_header_t));
+    break;
+  case 'b':
+    header.type='b';
+    header.lenght=sizeof(bid_t);
     write (game->sockslv_id,  &header,sizeof(net_header_t));
     break;
 
@@ -36,6 +40,7 @@ int  read_header (game_t *game,void *data,char type) {
     printf("Error in the read of the header ret=%d\n",ret);
     return(-1);
   }
+  game->status=header.status;
   if(header.status=='e') {
     printf("End of game\n");
     return(0);
@@ -54,6 +59,7 @@ int  read_header (game_t *game,void *data,char type) {
 void read_data( game_t *game,void *data, char type) {
   pli_t *pli;
   carte_t *carte;
+  bid_t *bid;
   switch(type) {
     case 'p':
       pli=(pli_t *) data;
@@ -62,6 +68,10 @@ void read_data( game_t *game,void *data, char type) {
     case 'c':
       carte=(carte_t *) data;
       read (game->sockslv_id,  carte, sizeof (carte_t));
+      break;
+    case 'b':
+      bid=(bid_t *) data;
+      read (game->sockslv_id,  bid, sizeof (bid_t));
       break;
  
 
@@ -72,6 +82,7 @@ void write_data(game_t *game,void  *data,char type) {
 
   pli_t *pli;
   carte_t *carte;
+  bid_t *bid;
   switch(type) {
     case 'p':
       pli= data;
@@ -82,6 +93,11 @@ void write_data(game_t *game,void  *data,char type) {
       carte= data;
       write_header(game,type);
       write (game->sockslv_id,  carte, sizeof (carte_t));
+      break;
+    case 'b':
+      bid= data;
+      write_header(game,type);
+      write (game->sockslv_id,  bid, sizeof (bid_t));
       break;
  
 

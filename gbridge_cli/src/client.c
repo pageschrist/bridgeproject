@@ -32,7 +32,6 @@ tcpclient (void)
   int status = 0, port;
   struct hostent *phost = NULL;
   struct sockaddr_in ianame ;
-  char buffer[256] = "";
   char *iaserver = NULL;
   port = atoi (g_hash_table_lookup (configHash, "port"));
   init_event (suivi);
@@ -75,25 +74,4 @@ tcpclient (void)
       exit (1);
     }
   return (clientsocket);
-  /*
-   * Client application specific code goes here
-   *
-   * e.g. receive messages from server, respond, etc.
-   */
-  while (0 < (status = read (clientsocket, buffer, sizeof (buffer))))
-    {
-      printf ("Message iaserver:%s", buffer);
-      /*for (i = 0; i <= 255; i++)
-         buffer[i] = 0;
-         fgets (buffer, 256, stdin); */
-      if (strncmp (buffer, ":G:", strlen (":G:")))
-	{
-	  printf ("New Game\n");
-	  sprintf (buffer, ":K:G:");
-	  write (clientsocket, buffer, strlen (buffer));
-	  printf ("New Game OK \n");
-
-
-	}
-      }
-    }
+}

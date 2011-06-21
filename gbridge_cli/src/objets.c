@@ -61,88 +61,14 @@ char *affichage (int valeur, int type)
   return  (pos);
 }
  
-void init_tab_coord (int maxhaut,int maxlarg) {
-  int nc,nl;
-  tab_coord=malloc(maxhaut*maxlarg*sizeof(carte_t *));
-  for(nl=0;nl<maxhaut;nl++) {
-    for(nc=0;nc<maxlarg;nc++) {
-      tab_coord[(nc+maxlarg*nl)]=malloc(sizeof(carte_t));
-      tab_coord[(nc+maxlarg*nl)]->nocarte=pdc;
-      tab_coord[(nc+maxlarg*nl)]->clcarte=aucune;
-    }
-  }
-}
-
-
-char *loc_carte(carte_t  *carte) {
-
-  char *chaine=NULL,coul[3],val[3];
-  char *dir_imgs=NULL;
-  dir_imgs= g_hash_table_lookup (configHash, "dir_imgs");
-  if( NULL==(chaine=malloc((strlen(dir_imgs)+8)*sizeof(char)))) {
-    fprintf(stderr, "Probleme avec malloc"); 
-    exit(EXIT_FAILURE);
-  } 
-  strcpy(val,affichage(carte->nocarte,CARTE));
-  strcpy(coul,affichage(carte->clcarte,COULEUR));
-
-  
-  sprintf(chaine,"%s/%c%c.jpg\\0",dir_imgs,val[0],coul[0]);
-  return(chaine);
-
-}
-
-
-carte_t *loc_case(int nl,int nc,  int maxlarg) {
-  carte_t *carte;	
-  if (NULL == (carte=malloc(sizeof(carte_t))))
-  { fprintf(stderr, "Probleme avec malloc"); 
-    exit(EXIT_FAILURE);
-  }
-  carte->nocarte=tab_coord[nc+maxlarg*nl]->nocarte;
-  carte->clcarte=tab_coord[nc+maxlarg*nl]->clcarte;
-  if ((carte->clcarte != trefle)&&(carte->clcarte != carreau) && (carte->clcarte != coeur) && (carte->clcarte != pique)) {
-    printf("Pb: nc=%d nl=%d carte->nocarte=%s carte->clcarte=%s\n",nc,nl,affichage(carte->nocarte,CARTE),affichage(carte->clcarte,COULEUR));
-    printf("Pb: nc=%d nl=%d\n",nc,nl);
-    return(NULL); 
-  }
-  return (carte);
-  
-}
-
- 
-void affichage_tab_coord(int maxlarg,int maxhaut) {
-  int nc,nl;
-  for (nl=0;nl<maxhaut;nl++) {
-    for(nc=0;nc<maxlarg;nc++) {
-      printf("%d ",tab_coord[nc+nl*maxlarg]->clcarte);
-    }
-    printf("\n");
-  }
-
-}
-void affichage_tab_couleur(int tab_couleur[est+1][pique+1]) {
-    couleur_t couleur;
-    position_t position;
-    for(position=sud;position<est+1;position++) {
-      for(couleur=trefle;couleur<pique+1;couleur++) 
-        printf("tab_couleur[%d][%d]:%d\n",position,couleur,tab_couleur[position][couleur]);
-    }
-}
 
 
 
 
-void set_case(int nl,int nc,  int maxlarg,carte_t *carte) {
-  tab_coord[nc+maxlarg*nl]->nocarte=carte->nocarte;
-  tab_coord[nc+maxlarg*nl]->clcarte=carte->clcarte;
-  
-}
-void remove_case(int nl,int nc,  int maxlarg) {
-  tab_coord[nc+maxlarg*nl]->nocarte=pdc;
-  tab_coord[nc+maxlarg*nl]->clcarte=aucune;
-  
-}
+
+
+
+
 
 void affiche_carte (carte_t *carte)
 {
@@ -220,8 +146,6 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
   position_t position; 
   ihm_pli->pli=malloc(sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
-  ihm_pli->maxlarg=400;
-  ihm_pli->maxhaut=450;
   for (position=sud;position<est+1;position++ ) {
     for (couleur=trefle;couleur<pique+1;couleur++) {
       ihm_pli->tab_couleur[position][couleur]=0;
@@ -233,14 +157,13 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
 void init_ihm_pli( ihm_pli_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
+  ihm_pli->status='c';
   ihm_pli->pli=malloc(sizeof(pli_t));
   memset(ihm_pli->pli,0,sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
   memset(ihm_pli->contrat,0,sizeof(contrat_t));
   ihm_pli->transfert=malloc(sizeof(transfert_t));
   memset(ihm_pli->transfert,0,sizeof(transfert_t));
-  ihm_pli->maxlarg=400;
-  ihm_pli->maxhaut=450;
   ihm_pli->socketid=tcpclient();
   for (position=sud;position<est+1;position++ ) {
     for (couleur=trefle;couleur<pique+1;couleur++) {

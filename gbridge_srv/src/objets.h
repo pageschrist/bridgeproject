@@ -135,14 +135,13 @@ typedef struct _contrat_t
   valeur_t nbplis;		/* decrit le nombre de plis a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
-  int maxlarg;
-  int maxhaut;
   int maxc[4];
 } contrat_t;
 
 typedef struct _game_t
 {
   int sockslv_id;
+  char status;
   tablist_t **tabjeu;
   tablist_t **tabjeuref;   
   tablist_t **tabjeueval;   

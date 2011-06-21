@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <glib.h>
 #include "objets.h"
+#include "traffic.h"
 #include "distribution.h"
 #include "analyse.h"
 extern coord_t tab_cartes[cA + 1][pique + 1];

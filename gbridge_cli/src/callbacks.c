@@ -284,7 +284,8 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         char *coulref="TKCPS";
         char *dis_bid=NULL;
         printf("expose comment:read cur_bid\n");
-        status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
+        //status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
+        status = read_header(ihm_pli,ihm_pli->cur_bid,'b');
         
         if(status <=0) {
           printf("status:%d\n",status); 
@@ -369,7 +370,8 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
 
         status = read (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
         if(ihm_pli->transfert->status==BID  ) {
-          status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
+          //status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
+          status = read_header(ihm_pli,ihm_pli->cur_bid,'b');
           
           
           ihm_pli->read=FALSE;

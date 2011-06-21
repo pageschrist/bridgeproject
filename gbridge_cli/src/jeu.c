@@ -128,9 +128,6 @@ void init_game(ihm_pli_t *ihm_pli) {
   
   //ligneia=(ihm_pli->contrat->declarant+1)%2;
   //printf("\ncontrat: \n\tnom %d\n\tdeclarant %d\n\tatout %d\n\tnbplis %d\n\tligneia %d\n\t",ihm_pli->contrat->nom,ihm_pli->contrat->declarant,ihm_pli->contrat->atout,ihm_pli->contrat->nbplis,(ihm_pli->contrat->declarant+1)%2);
-  //printf("maxlargeur=%d\n",ihm_pli->contrat->maxlarg);
-  //hm_pli->maxlarg=ihm_pli->contrat->maxlarg;
-  //ihm_pli->maxhaut=ihm_pli->contrat->maxhaut;
   
   //on initialise le jeu
   printf("recup jeu:%d\n",0);

@@ -145,8 +145,6 @@ typedef struct _contrat_t
   valeur_t nbplis;			/* decrit le nombre de plis a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
-  int maxlarg;
-  int maxhaut;
   int maxc[4];
 } contrat_t;
 
@@ -181,9 +179,8 @@ typedef struct _ihm_pli_t
 {
   pli_t *pli;
   int socketid;
-  int maxlarg;
-  int maxhaut;
   int ligneia;
+  char status ; 
   int tab_couleur[est+1][pique+1];
   contrat_t *contrat;
   char *scontrat;
@@ -226,16 +223,8 @@ void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int max
 void affiche_pli(pli_t *pli);
 char *affichage (int valeur,int type);
 
-void init_tab_coord (int maxhaut,int maxlarg); 
 char * contrat_to_char ( couleur_t atout); 
 char *affichage (int valeur, int type);
-void init_tab_coord (int maxhaut,int maxlarg) ;
-char *loc_carte(carte_t  *carte) ;
-carte_t *loc_case(int nl,int nc,  int maxlarg) ;
-void set_position(int nl,int nc,  int maxlarg,position_t position) ;
-int is_couleur_control(int nc,int nl,  int maxlarg, position_t position,int  tab_couleur[est+1][pique+1],couleur_t couleur) ;
-void set_case(int nl,int nc,  int maxlarg,carte_t *carte) ;
-void remove_case(int nl,int nc,  int maxlarg) ;
 void affiche_carte (carte_t *carte);
 void copy_pli (pli_t *ppliori, pli_t *pplicopie);
 void affiche_pli( pli_t *ppli);
