@@ -136,7 +136,7 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   free_list(&ihm_pli->trash);
   ihm_pli->trash=NULL;
   ihm_pli->ligneia=1;
-  ihm_pli->blinkid=0;
+  ihm_pli->blinkid=-1;
   ihm_pli->state=BID;
   ihm_pli->read=FALSE;
   ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
@@ -157,7 +157,9 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
 void init_ihm_pli( ihm_pli_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
-  ihm_pli->status='c';
+  ihm_pli->status='n';
+  ihm_pli->level=DEFAULTLEVEL;
+  ihm_pli->random=DEFAULTRANDOM;
   ihm_pli->pli=malloc(sizeof(pli_t));
   memset(ihm_pli->pli,0,sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));

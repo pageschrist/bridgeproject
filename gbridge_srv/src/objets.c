@@ -221,7 +221,9 @@ void init_game(game_t *game) {
   game->bid=malloc(sizeof(bid_t));
   game->cur_bid[0]='\0';
   init_tabjeu(game);
-  game->status='c';
+  game->status='b';
+  game->level=DEFAULTLEVEL;
+  game->random=DEFAULTRANDOM;
 
 }
 void clear_game(game_t *game) {

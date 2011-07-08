@@ -11,6 +11,8 @@
 #define WAITING 7
 #define NEWDIST 8
 #define BIDSIZE 100
+#define DEFAULTRANDOM 40
+#define DEFAULTLEVEL 5
 
 typedef  enum 
 { c2, c3, c4, c5, c6, c7, c8, c9, cX, cV, cD, cR, cA, pdc } valeur_t;
@@ -142,6 +144,8 @@ typedef struct _game_t
 {
   int sockslv_id;
   char status;
+  int level;
+  int random;
   tablist_t **tabjeu;
   tablist_t **tabjeuref;   
   tablist_t **tabjeueval;   

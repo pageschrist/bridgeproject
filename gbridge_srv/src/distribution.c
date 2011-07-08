@@ -277,13 +277,14 @@ distribution (void)
 /*conditionouverture(int i) {*/
 /* Fonction de debut des encheres */
 position_t 
-init_distrib ( game_t *game,int random)
+init_distrib ( game_t *game)
 {
+  int random=game->random;
   position_t rotation;
   char phrase[255];
   position_t position;
   bzero ((char *) phrase, sizeof (char));
-  printf("random=%d\n",random);
+  printf("randomdist =%d\n",random);
   //init_pli(pli,INIT);
   initialisation();
   //initstate (time (NULL), phrase, sizeof (phrase)); 

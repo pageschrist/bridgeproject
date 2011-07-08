@@ -58,10 +58,35 @@ void signal_handler ( int sig)
   while(0<waitpid(-1,NULL,WNOHANG));
 }
 
+void main_game(game_t *game) {
+  gboolean status;
+          init_game(game);
+          init_distrib(game);
+	  envoi_jeu (0, game);
+	  printf ("Pas 1 game->random=%d\n",game->random);
+	  printf ("Pas 1 game->level=%d\n",game->level);
+              do {
+	  printf ("Pas 2 game->status=%c\n",game->status);
+                    read_header ( game, game->bid ,'b');
+                    status=analyse_bid(game); 
+	  printf ("Pas 3 game->status=%c\n",game->status);
+                    //write ( game->sockslv_id, game->cur_bid ,sizeof(game->cur_bid));
+                    if(game->status=='b')
+                      write_data(game,game->cur_bid,'u');
+                 } while (status);
+          game->status='g';
+                  analyse_tabjeu(game); 
+                  printf(" **************  Fin analyse *************   \n");
+                  newgame (game);
+          clear_game(game);
+ 
+}
+
+
 
 gboolean newgame(game_t *game) {
-  int random=game->transfert->random, i;
-  int prof=game->transfert->level*4;
+  int random=game->random, i;
+  int prof=game->level*4;
   position_t rotation;
   carte_t *best_coup=NULL;
   l_best_t *l_best=NULL;
@@ -134,11 +159,7 @@ gboolean newgame(game_t *game) {
       }
       else {
         printf("Joueur  joue\n");
-        read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-        if(game->transfert->status==PLI )
-           read_header (game, pli, 'p');
-        else
-         return(FALSE);
+        read_header (game, pli, 'p');
         printf("Joue coup pli,NULL\n");
 	joue_coup( pli,NULL,game); 
       }
@@ -151,7 +172,7 @@ gboolean newgame(game_t *game) {
   for (t=0;t<NBJOUEURS;t++) 
     envoi_jeu ((game->contrat->declarant + t) % NBJOUEURS, game);
   printf("4 jeux envoyé\n");
-  game->transfert->status=WAITING;
+  //game->transfert->status=WAITING;
   free(pli);
   return (TRUE);
 }
@@ -319,7 +340,9 @@ int main (int argc, char *argv[])
 	  exit (1);
 
 	case 0:		/* child process */
-
+          do {
+          main_game(game);
+          } while (game->status!='e');
 	  close (socksrv_id);
 
 	  if (-1 == getpeername (game->sockslv_id,
@@ -332,44 +355,6 @@ int main (int argc, char *argv[])
 	      printf ("Connection request from %s\n",
 		      inet_ntoa (cltname.sin_addr));
 	    }
-	  printf ("Clear, Init\n");
-          //clear_game(game);
-	  printf ("Clear, Init 2\n");
-          init_game(game);
-	  printf ("Clear, Init 3\n");
-          init_distrib(game,random);
-	  printf ("Envoi\n");
-	  envoi_jeu (0, game);
-	  printf ("Envoi apres\n");
-          game->transfert=malloc(sizeof(transfert_t));
-          read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-          do {
-              while(game->transfert->status==BID) {
-                    read ( game->sockslv_id, game->bid ,sizeof(bid_t));
-                    analyse_bid(game); 
-                    //write ( game->sockslv_id, game->cur_bid ,sizeof(game->cur_bid));
-                    write_data(game,game->cur_bid,'b');
-                    read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-              }
-              if (game->transfert->status == NEWGAME){ 
-                  analyse_tabjeu(game); 
-                  printf(" **************  Fin analyse *************   \n");
-                  newgame (game);
-                  read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-                  printf("transfert->random\n%d",game->transfert->random);
-                  printf("transfert->level\n%d",game->transfert->level);
-                  printf("transfert->status\n%d",game->transfert->status);
-              }
-              if (game->transfert->status == NEWDIST){ 
-                  clear_game(game);
-                  init_game(game);
-                  printf("transfert->random\n%d",game->transfert->random);
-                  init_distrib(game,game->transfert->random);
-	          envoi_jeu (0, game);
-                  read(game->sockslv_id,game->transfert,sizeof(transfert_t));
-              }
- 
-          } while (game->transfert->status!=GAMEOVER);
             
             
 	  close (game->sockslv_id);

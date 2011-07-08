@@ -216,7 +216,7 @@ int test_condition(game_t *game,char *s_condition) {
 } 
 
 
-void analyse_bid(game_t *game) {
+gboolean analyse_bid(game_t *game) {
   FILE *obidhomeconf;
   char bidhomeconf[1024];
   gboolean found=FALSE;
@@ -227,8 +227,9 @@ void analyse_bid(game_t *game) {
   home = getenv ("HOME");
   sprintf (bidhomeconf, "%s%s", home, BIDCONFHOME);
   obidhomeconf=fopen(bidhomeconf,"r");
-  if(game->bid->passe==TRUE) 
+  if(game->bid->passe==TRUE) { 
     strcat(game->cur_bid,"PP"); 
+  }
   else {
     tmpstring[0]=(char ) (game->bid->nombre+48);
     tmpstring[1]='\0';
@@ -253,14 +254,15 @@ void analyse_bid(game_t *game) {
       
 
     }
-    if(found==FALSE) 
+    if(found==FALSE){ 
       strcat(game->cur_bid,"PP"); 
+    }
     else
       strcat(game->cur_bid,s_newbid);
-     // For player 
   } 
   strcat(game->cur_bid,"PP"); 
   fclose(obidhomeconf);
+  return(found);
 }
 
 

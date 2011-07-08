@@ -18,6 +18,7 @@
 #include "find.h"
 #include "callbacks.h"
 #include "alloc.h"
+#include "traffic.h"
 
 
 void enter_callback_level( GtkWidget *entry,
@@ -25,25 +26,25 @@ void enter_callback_level( GtkWidget *entry,
 {
   const gchar *entry_text_level;
   entry_text_level = gtk_entry_get_text (GTK_ENTRY (entry));
-  ihm_pli->transfert->level=atoi(entry_text_level);
-  printf ("Level : %d\n", ihm_pli->transfert->level);
+  ihm_pli->level=atoi(entry_text_level);
+  printf ("Level : %d\n", ihm_pli->level);
 }
 void enter_callback_random( GtkWidget *entry,
                             ihm_pli_t *ihm_pli )
 {
   const gchar *entry_text_random;
   entry_text_random = gtk_entry_get_text (GTK_ENTRY (entry));
-  ihm_pli->transfert->random=atoi(entry_text_random);
-  printf ("Random : %d\n", ihm_pli->transfert->random);
+  ihm_pli->random=atoi(entry_text_random);
+  printf ("Random : %d\n", ihm_pli->random);
 }
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   button=button;
-  int status,contrat;
+  int contrat;
   couleur_t couleur;
   free_ihm_pli(ihm_pli);
   reset_ihm_pli(ihm_pli);
-  ihm_pli->transfert->status=NEWDIST;
-  status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+  //status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+  write_data (ihm_pli,NULL, 'n');
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
@@ -57,7 +58,7 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
 void click_bid (GtkButton *button,button_bid_t *button_bid) {
   button=button;
   couleur_t couleur;
-  int contrat,status;
+  int contrat;
   printf("Nombre de plis:%d\n",button_bid->ihm_bid->bid->nombre);
   printf("couleur:%d\n",button_bid->ihm_bid->bid->couleur);
   for(contrat=0;contrat<button_bid->ihm_bid->bid->nombre-1;contrat++){
@@ -68,9 +69,9 @@ void click_bid (GtkButton *button,button_bid_t *button_bid) {
     gtk_widget_set_sensitive(button_bid->ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
 
   }
-  button_bid->ihm_pli->transfert->status=BID; 
-  status = write (button_bid->ihm_pli->socketid,button_bid->ihm_pli->transfert, sizeof (transfert_t));
-  status = write(button_bid->ihm_pli->socketid,button_bid->ihm_bid->bid,sizeof(bid_t));
+  //button_bid->ihm_pli->transfert->status=BID; 
+  //status = write (button_bid->ihm_pli->socketid,button_bid->ihm_pli->transfert, sizeof (transfert_t));
+  write_data(button_bid->ihm_pli,button_bid->ihm_bid->bid,'b');
   button_bid->ihm_pli->state=BID;
   button_bid->ihm_pli->read=TRUE;
 }
@@ -283,9 +284,8 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         couleur_t color,couleur;
         char *coulref="TKCPS";
         char *dis_bid=NULL;
-        printf("expose comment:read cur_bid\n");
-        //status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
-        status = read_header(ihm_pli,ihm_pli->cur_bid,'b');
+        status = read_header(ihm_pli,ihm_pli->cur_bid,'u');
+        printf("expose comment:read cur_bid%s\n",ihm_pli->cur_bid);
         
         if(status <=0) {
           printf("status:%d\n",status); 
@@ -322,7 +322,8 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
           ihm_pli->state=STARTING; 
           
 
-          status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+          //status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+          //write_data (ihm_pli,NULL, 'g');
           for(contrat=0;contrat<7;contrat++){
             for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
@@ -368,8 +369,8 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
         printf("expose Drawing_area enchere,\n");
         bid_t *bid=malloc(sizeof(bid_t));
 
-        status = read (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
-        if(ihm_pli->transfert->status==BID  ) {
+        //status = read (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
+        if(ihm_pli->status=='b'  ) {
           //status = read(ihm_pli->socketid,ihm_pli->cur_bid,sizeof(ihm_pli->cur_bid));
           status = read_header(ihm_pli,ihm_pli->cur_bid,'b');
           

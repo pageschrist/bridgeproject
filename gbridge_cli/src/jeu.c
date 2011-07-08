@@ -123,7 +123,6 @@ void destroy_ihm_pli (ihm_pli_t *ihm_pli) {
 }
 
 void init_game(ihm_pli_t *ihm_pli) {
-  //status = read (ihm_pli->socketid,ihm_pli->contrat, sizeof (contrat_t));
   
   
   //ligneia=(ihm_pli->contrat->declarant+1)%2;
@@ -270,7 +269,6 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   if((ihm_pli->pli->nextpos%2)==(position_t)ihm_pli->ligneia) {
    
     printf("IA joue\n");
-    //status = read (ihm_pli->socketid,ihm_pli->pli, sizeof (pli_t));
     status = read_header(ihm_pli,ihm_pli->pli, 'p');
     cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
     gc = ihm_pli->Drawing_area->style->fg_gc[state];
@@ -319,7 +317,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     return((ihm_pli->pli->nextpos)%2);
   }
   else {
-    ihm_pli->transfert->status=PLI;
+    //ihm_pli->transfert->status=PLI;
     printf("Joueur Joue\n");
 
   
@@ -335,8 +333,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
 
     
-    status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
-    //status = write(ihm_pli->socketid,ihm_pli->pli,sizeof(pli_t));
+    //status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
     write_data(ihm_pli,ihm_pli->pli,'p');
     status = read_header (ihm_pli,ihm_pli->pli, 'p');
     return(ihm_pli->pli->nextpos%2);

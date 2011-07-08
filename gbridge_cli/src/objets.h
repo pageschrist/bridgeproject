@@ -179,6 +179,8 @@ typedef struct _ihm_pli_t
 {
   pli_t *pli;
   int socketid;
+  int level;
+  int random;
   int ligneia;
   char status ; 
   int tab_couleur[est+1][pique+1];
