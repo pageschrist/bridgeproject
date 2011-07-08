@@ -120,6 +120,21 @@ int small_condition(game_t *game,char *s_smallref) {
       }
     }
     break;
+    case 'd':
+    for (couleur=trefle;couleur<pique+1;couleur++) {
+      index=INDEX(game->bid->position,couleur);
+      for (i=0;i<game->tabjeuref[index]->nbcrt;i++) {
+        if(game->tabjeuref[index]->tabcoul[i]==cA)
+          meml=meml+4;
+        if(game->tabjeuref[index]->tabcoul[i]==cR)
+          meml=meml+3;
+        if(game->tabjeuref[index]->tabcoul[i]==cD)
+          meml=meml+2;
+        if(game->tabjeuref[index]->tabcoul[i]==cV)
+          meml=meml+1;
+      }
+    }
+    break;
   }
   if(s_smallref[2]<'A') {
 

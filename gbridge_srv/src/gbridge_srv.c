@@ -135,8 +135,9 @@ gboolean newgame(game_t *game) {
           init_list_best(l_best);
         }
         gettimeofday(timeav,NULL);
-        if(notour>=5)
-          prof=28;
+        if (notour > 3) { 
+          prof=(13-notour)*4;
+        }
 	first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
         gettimeofday(timeap,NULL);
         printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
@@ -160,7 +161,6 @@ gboolean newgame(game_t *game) {
       else {
         printf("Joueur  joue\n");
         read_header (game, pli, 'p');
-        printf("Joue coup pli,NULL\n");
 	joue_coup( pli,NULL,game); 
       }
       pli->nextpos=evaluation_pli(pli);
