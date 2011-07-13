@@ -60,25 +60,20 @@ void signal_handler ( int sig)
 
 void main_game(game_t *game) {
   gboolean status;
-          init_game(game);
-          init_distrib(game);
+  init_game(game);
+  init_distrib(game);
 	  envoi_jeu (0, game);
-	  printf ("Pas 1 game->random=%d\n",game->random);
-	  printf ("Pas 1 game->level=%d\n",game->level);
-              do {
-	  printf ("Pas 2 game->status=%c\n",game->status);
-                    read_header ( game, game->bid ,'b');
-                    status=analyse_bid(game); 
-	  printf ("Pas 3 game->status=%c\n",game->status);
-                    //write ( game->sockslv_id, game->cur_bid ,sizeof(game->cur_bid));
-                    if(game->status=='b')
-                      write_data(game,game->cur_bid,'u');
-                 } while (status);
-          game->status='g';
-                  analyse_tabjeu(game); 
-                  printf(" **************  Fin analyse *************   \n");
-                  newgame (game);
-          clear_game(game);
+  do {
+        read_header ( game, game->bid ,'b');
+        status=analyse_bid(game); 
+        if(game->status=='b')
+          write_data(game,game->cur_bid,'u');
+  } while (status);
+  game->status='g';
+  analyse_tabjeu(game); 
+  printf(" **************  Fin analyse *************   \n");
+      newgame (game);
+  clear_game(game);
  
 }
 
@@ -135,7 +130,7 @@ gboolean newgame(game_t *game) {
           init_list_best(l_best);
         }
         gettimeofday(timeav,NULL);
-        if (notour > 3) { 
+        if (notour > 2) { 
           prof=(13-notour)*4;
         }
 	first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);

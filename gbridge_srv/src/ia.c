@@ -35,8 +35,6 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
        printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
        free(affca);
        free(affco);
-       if(elem_best->best->carte->nocarte==2 && elem_best->best->carte->clcarte==0 && score>=4) {
-       }
        printf("Voici le score: %d\n", elem_best->best->score);
        if(tabval[elem_best->best->carte->clcarte]>elem_best->best->carte->nocarte)
          tabval[elem_best->best->carte->clcarte]=elem_best->best->carte->nocarte;
@@ -54,15 +52,12 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
    }
    for (i=0;i<pique+1;i++) {
       if(tabval[i]!=pdc) {
-        //if (pointsf>points[i]) {
           coulref=i; 
-        //}
       } 
    } 
    carte->nocarte=tabval[coulref];
    carte->clcarte=coulref;
   return(carte);
-  //return(tab_best[nb_best-1]->carte); 
   
 }
 
@@ -133,7 +128,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
         index = INDEX (positionc, nocouleur);
         pos_index = find_index (t_jeu,positionc,nocouleur,nocarte);
         if(pos_index==-1) {
-          printf("Pb in cur_explore \n");
+          fprintf(stderr,"Pb in cur_explore \n");
           exit(1);
         }
         pos_index=remove_index(t_jeu,positionc,nocouleur,pos_index);
@@ -506,8 +501,6 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
     if (minimax (thread_jeu[i]->score, best_score, positionc))
 	  {
 	  best_score = thread_jeu[i]->score;
-	  //best_carte.nocarte = best_cartepot.nocarte;
-	  //best_carte.clcarte = best_cartepot.clcarte;
           *nb_best=*nb_best+1;
   
               //Ajout liste
