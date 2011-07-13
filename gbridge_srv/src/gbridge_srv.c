@@ -89,7 +89,7 @@ gboolean newgame(game_t *game) {
   struct timeval *timeav=malloc(sizeof(struct timeval));
   struct timeval *timeap=malloc(sizeof(struct timeval));
   pli_t *pli;
-  int t,notour=0;
+  int t,notour=0,n;
   pli = malloc (sizeof (pli_t));
   init_pli(pli,INIT);
   printf("On est dans newgame random=%d level=%d\n",random,prof);
@@ -130,10 +130,10 @@ gboolean newgame(game_t *game) {
           init_list_best(l_best);
         }
         gettimeofday(timeav,NULL);
-        if (notour > 2) { 
+        if (notour > 5) { 
           prof=(13-notour)*4;
         }
-	first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
+	n=first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
         gettimeofday(timeap,NULL);
         printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
         best_coup=choix_best(&nb_best,l_best,game);

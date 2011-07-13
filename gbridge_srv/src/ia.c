@@ -422,7 +422,7 @@ new_explore (void *arg)
 }
 
 
-void
+int
 first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t *game)
 {
   thread_jeu_t **thread_jeu=NULL;
@@ -443,8 +443,22 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
 
   stk = create_stack (duplique_pli);
-  if(game->tabjeu[0]->couleureval==aucune) //Tous les jeux contiennes la couleur d'evaluation si necessaire
+  if(game->tabjeu[0]->couleureval==aucune) { //Tous les jeux contiennes la couleur d'evaluation si necessaire
     nbcoups=list_all_coups (positionc, stk, pplic,game->tabjeu);
+    if(nbcoups==1) {
+      pplin = (pli_t *) pop (stk);
+      best=malloc(sizeof(best_t));
+      best->score=1;
+      best->numero=1;
+      best->carte=malloc(sizeof(carte_t));
+      best->carte->nocarte=pplin->carte[positionc].nocarte;
+      best->carte->clcarte=pplin->carte[positionc].clcarte;
+      add_list_l(l_best,best);
+      vidage(stk);
+      return(*nb_best);
+
+    }
+  }
   else
     nbcoups=list_all_coups_eval (positionc, stk, pplic,game->tabjeu);
   printf("Voici le nombre de coups à examiner: %d\n",nbcoups);
@@ -530,4 +544,5 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
 
 
   vidage (stk);
+  return(*nb_best);
 }
