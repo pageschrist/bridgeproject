@@ -61,18 +61,27 @@ void signal_handler ( int sig)
 void main_game(game_t *game) {
   gboolean status;
   init_game(game);
-  init_distrib(game);
-	  envoi_jeu (0, game);
+  //init_distrib(game);
+//	  envoi_jeu (0, game);
   do {
         read_header ( game, game->bid ,'b');
-        status=analyse_bid(game); 
-        if(game->status=='b')
-          write_data(game,game->cur_bid,'u');
+        if(game->status=='n') {
+          clear_game(game);
+          init_game(game); 
+          init_distrib(game);
+          envoi_jeu (0, game);
+          status=1;
+        }
+        else {
+          status=analyse_bid(game); 
+          if(game->status=='b')
+            write_data(game,game->cur_bid,'u');
+        }
   } while (status);
   game->status='g';
   analyse_tabjeu(game); 
   printf(" **************  Fin analyse *************   \n");
-      newgame (game);
+  newgame (game);
   clear_game(game);
  
 }
@@ -167,7 +176,6 @@ gboolean newgame(game_t *game) {
   for (t=0;t<NBJOUEURS;t++) 
     envoi_jeu ((game->contrat->declarant + t) % NBJOUEURS, game);
   printf("4 jeux envoyé\n");
-  //game->transfert->status=WAITING;
   free(pli);
   return (TRUE);
 }
@@ -178,13 +186,13 @@ int main (int argc, char *argv[])
   game_t *game=malloc(sizeof(game_t));
   memset(game,0,sizeof(game_t));
   int socksrv_id = 0, on = 0, port, status = 0, childpid = 0;
-  transfert_t *transfert=NULL;
   int c,random,prof;
   struct hostent *phost = NULL;
   char hostname[80] = "";
   //struct sockaddr_in svrname = { 0 };
   struct sockaddr_in svrname ;
-  transfert=malloc(sizeof(transfert_t));
+  game->level=DEFAULTLEVEL;
+  game->random=DEFAULTRANDOM;
   create_config ();
   rempli_config ();
   verifie_config ();
@@ -360,7 +368,6 @@ int main (int argc, char *argv[])
 	}
     }
         clear_game(game);
-        free(game->transfert);
         free(game);
         exit(0);
 }

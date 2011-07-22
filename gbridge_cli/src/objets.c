@@ -138,6 +138,7 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->ligneia=1;
   ihm_pli->blinkid=-1;
   ihm_pli->state=BID;
+  ihm_pli->status='n';
   ihm_pli->read=FALSE;
   ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
 }
@@ -151,6 +152,7 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
       ihm_pli->tab_couleur[position][couleur]=0;
     }
   }
+  ihm_pli->read=FALSE;
   //init_bid(ihm_pli);
 }
 

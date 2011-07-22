@@ -222,8 +222,6 @@ void init_game(game_t *game) {
   game->cur_bid[0]='\0';
   init_tabjeu(game);
   game->status='b';
-  game->level=DEFAULTLEVEL;
-  game->random=DEFAULTRANDOM;
 
 }
 void clear_game(game_t *game) {

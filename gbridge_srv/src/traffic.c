@@ -50,7 +50,7 @@ char  read_header (game_t *game,void *data,char type) {
   int ret;
   ret=read (game->sockslv_id,  &header,sizeof(net_header_t));
   if(ret != sizeof(net_header_t)) {
-    fprintf(stderr,"Error in the read of the header ret=%d\n",ret);
+    fprintf(stderr,"Error in the read of the header ret=%d\n header.type=%c",ret,header.type);
     return('z');
   }
   game->status=header.status;
@@ -61,7 +61,7 @@ char  read_header (game_t *game,void *data,char type) {
     return('e');
   }
   
-  if(header.type!=type) {
+  if(header.type!=type && header.type!='n') {
     fprintf(stderr,"wrongtype, header.type=%c,type=%c\n",header.type,type);
     return('z'); 
   }
@@ -82,6 +82,7 @@ char  read_header (game_t *game,void *data,char type) {
       game->status='n';
       game->random=header.random;
       game->level=header.level;
+      fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
       break;
 
       default:

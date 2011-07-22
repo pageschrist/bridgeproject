@@ -123,15 +123,26 @@ void destroy_ihm_pli (ihm_pli_t *ihm_pli) {
 }
 
 void init_game(ihm_pli_t *ihm_pli) {
-  
-  
-  //ligneia=(ihm_pli->contrat->declarant+1)%2;
-  //printf("\ncontrat: \n\tnom %d\n\tdeclarant %d\n\tatout %d\n\tnbplis %d\n\tligneia %d\n\t",ihm_pli->contrat->nom,ihm_pli->contrat->declarant,ihm_pli->contrat->atout,ihm_pli->contrat->nbplis,(ihm_pli->contrat->declarant+1)%2);
+   
+  int contrat; 
+  couleur_t couleur;
+  free_ihm_pli(ihm_pli);
+  reset_ihm_pli(ihm_pli);
+  write_data (ihm_pli,NULL, 'n');
+
+  recuperation_jeu(ihm_pli,0);
+  draw_container_ihm(ihm_pli);
+  for(contrat=0;contrat<7;contrat++){
+    for(couleur=trefle;couleur<aucune+1;couleur++)
+                gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
+  }
+
+
+
   
   //on initialise le jeu
-  printf("recup jeu:%d\n",0);
   //printf("recup jeu:%d\n",(ihm_pli->contrat->declarant+2)%4);
-  recuperation_jeu(ihm_pli,0);
+  //recuperation_jeu(ihm_pli,0);
   //recuperation_jeu(ihm_pli,(ihm_pli->contrat->declarant+2)%4);
   ihm_pli->pli->nextpos=ouest;
 

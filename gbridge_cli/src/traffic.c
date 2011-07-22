@@ -44,6 +44,7 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
   case 'n':
     header.type='n';
     header.lenght=0;
+    fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
     write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
 
