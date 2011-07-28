@@ -116,9 +116,6 @@ void read_data( game_t *game,void *data, char type) {
       cur_bid=data;
       read (game->sockslv_id,  cur_bid, BIDSIZE);
       break;
-    default:
-      break;
- 
 
   }
 
@@ -148,11 +145,10 @@ void write_data(game_t *game,void  *data,char type) {
     case 'u':
       cur_bid= data;
       write_header(game,type);
+      fprintf(stderr,"cur_bid=%s\n",cur_bid);
       write (game->sockslv_id,  cur_bid, BIDSIZE);
       break;
- 
 
   }
-
 
 }

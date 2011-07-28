@@ -138,7 +138,6 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
 
         //on duplique le jeu
 
-        //On lance explore dans un thread
         ret = cur_explore (prof + 1, pplin, prof_max,t_jeu,alpha,beta);
         if((prof!=prof_start) && (prof != prof_max -1)) {
           if(positionc%2==1) 

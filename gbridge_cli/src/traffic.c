@@ -61,7 +61,7 @@ int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
   fprintf(stderr,"read_header %d :%c\n",j,type);
   ret=read (ihm_pli->socketid,  &header,sizeof(net_header_t));
   if(ret != sizeof(net_header_t)) {
-    fprintf(stderr,"Error in the read of the header ret=%d\n",ret);
+    fprintf(stderr,"Error in the read of the header ret=%d %d\n",ret,sizeof(net_header_t));
     return(-1);
   }
   ihm_pli->status=header.status;

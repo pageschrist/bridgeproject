@@ -20,6 +20,10 @@
 #include "alloc.h"
 #include "traffic.h"
 
+void fdebug (void) {
+ int i;
+ i=i*3;
+}
 
 void enter_callback_level( GtkWidget *entry,
                             ihm_pli_t *ihm_pli )
@@ -45,7 +49,7 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   reset_ihm_pli(ihm_pli);
   write_data (ihm_pli,NULL, 'n');
   
-	  printf("recuperation_jeu 0, new_dist%c\n",ihm_pli->status);
+	  fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
@@ -235,18 +239,21 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
   position_t position;
   //if(ihm_pli->state==BID) 
-  if(ihm_pli->status=='b' ) 
+  if(ihm_pli->status=='b'  ) 
     return FALSE;
+    printf("Voici ihm_pli->read=%d\n",ihm_pli->read  ); 
   // C'est la fin on a deja 13 plis 
   if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
+    //if(ihm_pli->read==FALSE  ) 
+     // return TRUE;
+
     printf("The end \n");
     trash_list(ihm_pli);
     gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_CENTER);
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Final Contrat:%s\nEnd of Game",ihm_pli->scontrat));
     for (position=sud;position<est+1;position++) {
-      printf("recuperation_jeu position=%d, button_press_event %c\n", position,ihm_pli->status);
+      fprintf(stderr,"recuperation_jeu position=%d, button_press_event %c %d\n", position,ihm_pli->status, ihm_pli->read);
       recuperation_jeu (ihm_pli,  position);
-      printf("Recuperation %d\n",position); 
     }
     draw_container_ihm(ihm_pli); 
     ihm_pli->state=BID; 
@@ -280,7 +287,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
   event=event;
   Fenetre=Fenetre;
   int status;
-  printf("expose comment\n");
+  printf("expose comment %d\n", ihm_pli->read);
       //if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
       if(ihm_pli->status=='b' && ihm_pli->read==TRUE) {
         ihm_pli->read=FALSE;
@@ -302,6 +309,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\n",dis_bid));
         if((ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-1])=='P' &&(ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-2])=='P' && (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-3])=='P'&& (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-4])=='P') {
           printf("Game Starting\n");
+          fdebug();
                    
           for(i=strlen(ihm_pli->cur_bid)-1;i>0;i=i-2) {
 
@@ -322,18 +330,16 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
  
         gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\nFinal Contrat: %s\n",dis_bid,ihm_pli->scontrat));
-	  printf("recuperation_jeu +2 av, expose_comment%c\n",ihm_pli->status);
+	  fprintf(stderr,"recuperation_jeu +2 av, expose_comment%c %d\n",ihm_pli->status,ihm_pli->read);
           ihm_pli->state=STARTING; 
           ihm_pli->status='g'; 
           
 
-          //status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
-          //write_data (ihm_pli,NULL, 'g');
           for(contrat=0;contrat<7;contrat++){
             for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
-	  printf("recuperation_jeu +2, expose_comment\n");
+	  fprintf(stderr,"recuperation_jeu +2, expose_comment:%c %d\n",ihm_pli->status,ihm_pli->read);
           recuperation_jeu(ihm_pli,(ihm_pli->contrat->declarant+2)%4);
           draw_container_ihm(ihm_pli); 
           ihm_pli->pli->nextpos=(ihm_pli->contrat->declarant+1)%4;

@@ -153,6 +153,8 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
     }
   }
   ihm_pli->read=FALSE;
+  memset(ihm_pli->pli,0,sizeof(pli_t));
+  memset(ihm_pli->contrat,0,sizeof(contrat_t));
   //init_bid(ihm_pli);
 }
 

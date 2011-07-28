@@ -61,8 +61,6 @@ void signal_handler ( int sig)
 void main_game(game_t *game) {
   gboolean status;
   init_game(game);
-  //init_distrib(game);
-//	  envoi_jeu (0, game);
   do {
         read_header ( game, game->bid ,'b');
         if(game->status=='n') {
@@ -79,7 +77,7 @@ void main_game(game_t *game) {
         }
   } while (status);
   game->status='g';
-  analyse_tabjeu(game); 
+  //analyse_tabjeu(game); 
   printf(" **************  Fin analyse *************   \n");
   newgame (game);
   clear_game(game);
