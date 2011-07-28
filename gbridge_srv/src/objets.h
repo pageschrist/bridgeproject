@@ -61,6 +61,7 @@ typedef struct _best_t
   carte_t *carte;
   int score;
   int numero;
+  int nbline[eo+1];
 } best_t;
 
 typedef struct _elem_best
@@ -127,6 +128,7 @@ typedef struct _thread_jeu
   pli_t *pli;
   short status;
   int score;
+  int nbline[eo+1];
   int prof;
   int prof_max;
 } thread_jeu_t;

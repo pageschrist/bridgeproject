@@ -670,14 +670,17 @@ joue_coup (pli_t * pli,carte_t *carte,game_t *game )
 }
 
 
-int
+retpli_t *
 check_plis (pli_t * pli)
 {
-  int score;
+  retpli_t *retpli=malloc(sizeof(retpli_t));
   ligne_t lignej;
   lignej = (IALINE + 1) % 2;
-  score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[IALINE];
+  retpli->score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[IALINE];
+  retpli->nbline[lignej]=pli->nbpli_ligne[lignej];
+  retpli->nbline[IALINE]=pli->nbpli_ligne[IALINE];
+  retpli->alpha_or_beta=0;
   /* printf ("Voici le score dans check_plis: %d\n", score); */
-  return (score);
+  return (retpli);
 
 }

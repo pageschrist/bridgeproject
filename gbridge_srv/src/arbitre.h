@@ -13,6 +13,6 @@ int list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t
 int list_all_coups_eval (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu);
 position_t evaluation_pli (pli_t * pli);
 int joue_coup (pli_t * pli,carte_t *carte,game_t *game );
-int check_plis (pli_t * pli);
+retpli_t * check_plis (pli_t * pli);
 void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) ;
 void  destroy_jeu(thread_jeu_t *thread_jeu) ;

@@ -6,6 +6,7 @@
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "distribution.h"
+#include "ia.h"
 #include "arbitre.h"
 coord_t tab_cartes[cA + 1][pique + 1];
 void mark(void){

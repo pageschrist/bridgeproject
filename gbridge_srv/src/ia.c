@@ -95,7 +95,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
   pli_t *pplin;			/* nouveau pli renvoye par la liste des coups */
   retpli_t *ret;
   retpli_t *retup;
-  int best_score, index,endscore;
+  int best_score, index,best_nbline[eo+1];
   couleur_t nocouleur;
   valeur_t nocarte;
   ligne_t ligne;
@@ -105,10 +105,7 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
   if ((prof == prof_max) || (pplic->nopli == 13))
     {
-      retup=malloc(sizeof(retpli_t));
-      endscore = check_plis (pplic);
-      retup->score=endscore;
-      retup->alpha_or_beta = 0; // ce champ n'a ici pas d'importance
+      retup = check_plis (pplic);
       return (retup);
     }
   stk = create_stack (duplique_pli);
@@ -148,6 +145,8 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
         if (minimax (ret->score, best_score, positionc))
 	  {
 	   best_score = ret->score;
+           best_nbline[0]=ret->nbline[0];
+           best_nbline[1]=ret->nbline[1];
            
 
 	  }
@@ -178,6 +177,8 @@ cur_explore (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int orialph
 
     retup=malloc(sizeof(retpli_t));
     retup->score=best_score;
+    retup->nbline[0]=best_nbline[0];
+    retup->nbline[1]=best_nbline[1];
     if(positionc%2==1) {
       if(alpha<best_score) {
         retup->alpha_or_beta = alpha;
@@ -209,7 +210,7 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
   pli_t *pplin;			/* nouveau pli renvoye par la liste des coups */
   retpli_t *ret;
   retpli_t *retup;
-  int best_score, index,endscore;
+  int best_score, index,best_nbline[eo+1];
   couleur_t nocouleur;
   valeur_t nocarte;
   ligne_t ligne;
@@ -226,10 +227,7 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
     prof_max=prof;
   if ((prof == prof_max) || (pplic->nopli == 13))
     {
-      retup=malloc(sizeof(retpli_t));
-      endscore = check_plis (pplic);
-      retup->score=endscore;
-      retup->alpha_or_beta = 0; // ce champ n'a ici pas d'importance
+      retup = check_plis (pplic);
       return (retup);
     }
 
@@ -258,7 +256,6 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
 
         //on duplique le jeu
 
-        //On lance explore dans un thread
         ret = cur_explore_eval (prof + 1, pplin, prof_max,t_jeu,alpha,beta);
         if((prof!=prof_start) && (prof != prof_max -1)) {
           if(positionc%2==1) 
@@ -269,6 +266,8 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
         if (minimax (ret->score, best_score, positionc))
 	  {
 	   best_score = ret->score;
+           best_nbline[0]=ret->nbline[0];
+           best_nbline[1]=ret->nbline[1];
            
 
 	  }
@@ -299,6 +298,8 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
 
     retup=malloc(sizeof(retpli_t));
     retup->score=best_score;
+    retup->nbline[0]=best_nbline[0];
+    retup->nbline[1]=best_nbline[1];
     if(positionc%2==1) {
       if(alpha<best_score) {
         retup->alpha_or_beta = alpha;
@@ -334,9 +335,10 @@ new_explore (void *arg)
   position_t positionc;
   int curscore;
   retpli_t *ret;
+  retpli_t *rettmp;
   int pos_index;
   pli_t *pplin;			/* nouveau pli renvoye par la liste des coups */
-  int best_score, index;
+  int best_score, index,best_nbline[eo+1];
   couleur_t nocouleur;
   valeur_t nocarte;
   ligne_t ligne;
@@ -351,9 +353,12 @@ new_explore (void *arg)
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
   if ((prof == prof_max) || (pplic->nopli == 13))
     {
-      thread_jeu->score = check_plis (pplic);
+      rettmp=check_plis (pplic);
+      thread_jeu->score = rettmp->score;
+      thread_jeu->nbline[0] = rettmp->nbline[0];
+      thread_jeu->nbline[1] = rettmp->nbline[1];
       thread_jeu->status=1;
-      //to_send->alpha_or_beta = 0; // ce champ n'a ici pas d'importance
+      free(rettmp);
     }
 
   stk = create_stack (duplique_pli);
@@ -394,6 +399,8 @@ new_explore (void *arg)
         if (minimax (curscore, best_score, positionc))
 	  {
 	  best_score = curscore;
+          best_nbline[0]=ret->nbline[0];
+          best_nbline[1]=ret->nbline[1];
 	}
         free(ret);
 
@@ -414,6 +421,8 @@ new_explore (void *arg)
     vidage (stk);
 
     thread_jeu->score=best_score;
+    thread_jeu->nbline[0]=best_nbline[0];
+    thread_jeu->nbline[1]=best_nbline[1];
     thread_jeu->status=1;
     return (NULL);
 
@@ -527,6 +536,8 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
               best->carte=malloc(sizeof(carte_t));
               best->carte->nocarte=thread_jeu[i]->best_cartepot->nocarte;
               best->carte->clcarte=thread_jeu[i]->best_cartepot->clcarte;
+              best->nbline[0]=thread_jeu[i]->nbline[0];
+              best->nbline[1]=thread_jeu[i]->nbline[1];
               add_list_l(l_best,best);
 
     }

@@ -6,7 +6,9 @@ typedef struct _retpli_t
 {
   int score;
   int alpha_or_beta;
+  int nbline[eo+1];
 } retpli_t;
+
 int definition_prof ( pli_t *pplic);
 retpli_t * explore (int prof, pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best);
 int  first_explore ( pli_t *pli, int prof_max,int *nb_best,l_best_t *l_best,game_t *game);
