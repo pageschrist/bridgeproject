@@ -132,6 +132,11 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (ihm_debug),
                                ihm_pli);
+  Menu_items = gtk_menu_item_new_with_label("UnDebug");
+  gtk_menu_append(GTK_MENU (Menu), Menu_items);
+  g_signal_connect (G_OBJECT (Menu_items), "activate",
+                              G_CALLBACK (ihm_undebug),
+                               ihm_pli);
   Menu_items = gtk_menu_item_new_with_label("Random");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   Menu_items = gtk_menu_item_new_with_label("Quit");
@@ -245,11 +250,12 @@ void create_ihm (ihm_pli_t *ihm_pli) {
 }
 
 void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
-          E=E;
-          printf("****random=%d***************************************\n",ihm_pli->transfert->random);
-          printf("*******************************************\n");
-
-
+  E=E;
+  ihm_pli->debug=TRUE;
+}
+void ihm_undebug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
+  E=E;
+  ihm_pli->debug=FALSE;
 }
 
 

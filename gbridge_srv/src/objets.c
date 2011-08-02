@@ -107,12 +107,17 @@ void init_tabjeu (game_t *game)
 	  for (i = 0; i < NBPCOULEURS; i++)
 	    game->tabjeuref[index]->tabcoul[i] = pdc;
 	  game->tabjeuref[index]->nbcrt = 0;
-	  game->tabjeuref[index]->poscartej = 0;
+#ifdef DEBUG
+	  game->tabjeuref[index]->debug = TRUE;
+	  game->tabjeu[index]->debug = TRUE;
+#else
+	  game->tabjeuref[index]->debug = FALSE;
+	  game->tabjeu[index]->debug = FALSE;
+#endif
 	  game->tabjeuref[index]->couleureval = aucune;
 	  for (i = 0; i < NBPCOULEURS; i++)
 	    game->tabjeu[index]->tabcoul[i] = pdc;
 	  game->tabjeu[index]->nbcrt = 0;
-	  game->tabjeu[index]->poscartej = 0;
 	  game->tabjeu[index]->couleureval = aucune;
 	}
     }
@@ -217,7 +222,12 @@ insert_index (tablist_t **tmpjeu,position_t position, couleur_t couleur, valeur_
 }
 
 void init_game(game_t *game) {
-  
+ 
+#ifdef DEBUG 
+  game->debug=TRUE;
+#else
+  game->debug=FALSE;
+#endif
   game->contrat=malloc(sizeof(contrat_t));
   game->bid=malloc(sizeof(bid_t));
   game->cur_bid[0]='\0';
@@ -455,5 +465,11 @@ init_pli (pli_t * pli, int maniere)
       pli->defausse[i].nocarte = pdc;
       pli->defausse[i].clcarte = aucune;
     }
+}
+
+void fdebug(void) {
+
+  int i=3;
+  i++;
 }
 

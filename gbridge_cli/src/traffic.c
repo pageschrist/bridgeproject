@@ -12,9 +12,12 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
   strncpy(header.head,BRIDGE,8); 
   header.status=ihm_pli->status; 
   header.level=ihm_pli->level; 
+  header.debug=ihm_pli->debug; 
   header.random=ihm_pli->random; 
-  i++;
-  fprintf(stderr,"write_header %d :%c\n",i,type);
+  if(ihm_pli->debug) {
+    i++;
+    fprintf(stderr,"write_header %d :%c\n",i,type);
+  }
   switch(type) {
   case 'g':
     header.type='g';
@@ -44,7 +47,8 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
   case 'n':
     header.type='n';
     header.lenght=0;
-    fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
+    if(ihm_pli->debug) 
+      fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
     write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
 
@@ -57,8 +61,10 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
 int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
   net_header_t header;
   int ret;
-  j++;
-  fprintf(stderr,"read_header %d :%c\n",j,type);
+  if(ihm_pli->debug) { 
+    j++;
+    fprintf(stderr,"read_header %d :%c\n",j,type);
+  }
   ret=read (ihm_pli->socketid,  &header,sizeof(net_header_t));
   if(ret != sizeof(net_header_t)) {
     fprintf(stderr,"Error in the read of the header ret=%d %d\n",ret,sizeof(net_header_t));
@@ -68,7 +74,8 @@ int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
   ihm_pli->level=header.level;
   ihm_pli->random=header.random;
   if(header.status=='e') {
-    printf("End of ihm_pli\n");
+    if(ihm_pli->debug)  
+      printf("End of ihm_pli\n");
     return(0);
   }
   

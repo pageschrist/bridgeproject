@@ -27,7 +27,6 @@
 void debug_info(void);
 
 void print_usage (void);
-extern int flag_debug;
 extern GHashTable *configHash;
 extern carte_t best_carte;
 /*
@@ -77,7 +76,7 @@ void main_game(game_t *game) {
         }
   } while (status);
   game->status='g';
-  //analyse_tabjeu(game); 
+  analyse_tabjeu(game); 
   printf(" **************  Fin analyse *************   \n");
   newgame (game);
   clear_game(game);

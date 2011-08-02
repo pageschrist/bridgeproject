@@ -143,6 +143,11 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
 }
 void reset_ihm_pli( ihm_pli_t *ihm_pli) {
+#ifdef DEBUG
+  ihm_pli->debug=TRUE;
+#else
+  ihm_pli->debug=FALSE;
+#endif
   couleur_t couleur; 
   position_t position; 
   ihm_pli->pli=malloc(sizeof(pli_t));
@@ -161,6 +166,12 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
 void init_ihm_pli( ihm_pli_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
+
+#ifdef DEBUG
+  ihm_pli->debug=TRUE;
+#else
+  ihm_pli->debug=FALSE;
+#endif
   ihm_pli->status='n';
   ihm_pli->level=DEFAULTLEVEL;
   ihm_pli->random=DEFAULTRANDOM;

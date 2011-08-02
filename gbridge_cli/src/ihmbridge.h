@@ -9,3 +9,4 @@ void ihm_create_bridgeboard(GtkWidget *E,ihm_pli_t  *ihm_pli);
 gint ihm_color_choice (void);
 gint delete_bridgeboard(void);
 void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli);
+void ihm_undebug(GtkWidget *E,ihm_pli_t  *ihm_pli);

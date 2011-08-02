@@ -8,6 +8,7 @@ typedef struct _net_header_t
  int level;
  char status ; //should be c e n
  int lenght; // lenght of the sata if necessary 
+ gboolean debug; // lenght of the sata if necessary 
 } net_header_t;
 void write_data(ihm_pli_t *ihm_pli,void  *data,char type); 
 void read_data( ihm_pli_t *ihm_pli,void *data, char type);

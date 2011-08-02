@@ -12,9 +12,6 @@
 
 int prof_start = 0;
 int flag_debug=0;
-void break_point(void) {
- printf("Test Point\n");
-}
 
 carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   valeur_t tabval[pique+1];
@@ -24,12 +21,13 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   int points[pique+1],j;
   
   couleur_t i;
+  printf("On a %d bons coups\n",*nb_best);
   elem_best_t *elem_best=l_best->last;
   for( i=0;i<pique+1;i++)
     tabval[i]=pdc;
   int score=l_best->last->best->score;
   printf("On a %d bons coups\n",*nb_best);
-
+    
    while(elem_best) {
      if(elem_best->best->score == score) {
        printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
@@ -449,7 +447,7 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
   positionc = pplic->nextpos;	/*C'est la nouvelle position */
   /*choix du joueur qui joue en fonction de la profondeur  */
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-
+  printf("first_explore: debug=%d\n",game->tabjeu[0]->debug);
   stk = create_stack (duplique_pli);
   if(game->tabjeu[0]->couleureval==aucune) { //Tous les jeux contiennes la couleur d'evaluation si necessaire
     nbcoups=list_all_coups (positionc, stk, pplic,game->tabjeu);

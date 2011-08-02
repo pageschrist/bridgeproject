@@ -33,7 +33,7 @@ typedef  enum
 typedef struct _tablist
 {
   valeur_t tabcoul[13];
-  int poscartej;		//position de la derniere carte jouee
+  gboolean debug;		//position de la derniere carte jouee
   int nbcrt;			//nombre de carte dans la couleur
   couleur_t couleureval;
 } tablist_t;
@@ -148,6 +148,7 @@ typedef struct _game_t
   char status;
   int level;
   int random;
+  gboolean debug;
   tablist_t **tabjeu;
   tablist_t **tabjeuref;   
   tablist_t **tabjeueval;   
@@ -195,3 +196,4 @@ void free_game(game_t *game);
 void clear_tabjeu (game_t *game);
 int char_to_int(char *c);
 void clear_game(game_t *game);
+void fdebug(void);

@@ -9,8 +9,10 @@ int i=0;
 int j=0;
 void write_header( game_t *game,char type) { 
   net_header_t header;
-  i++;
-  fprintf(stderr,"write_header %d :%c\n",i,type);
+  if(game->debug) {
+    i++;
+    fprintf(stderr,"write_header %d :%c\n",i,type);
+  }
   strncpy(header.head,BRIDGE,8); 
   header.status=game->status;
   header.level=game->level;
@@ -45,8 +47,13 @@ void write_header( game_t *game,char type) {
 //return -1 Pb of type  0 End 1 OK 
 char  read_header (game_t *game,void *data,char type) {
   net_header_t header;
-  j++;
-  fprintf(stderr,"read_header %d :%c\n",j,type);
+  position_t position;
+  couleur_t couleur;
+  int index;
+  if(game->debug) {
+    j++;
+    fprintf(stderr,"read_header %d :%c\n",j,type);
+  }
   int ret;
   ret=read (game->sockslv_id,  &header,sizeof(net_header_t));
   if(ret != sizeof(net_header_t)) {
@@ -56,8 +63,18 @@ char  read_header (game_t *game,void *data,char type) {
   game->status=header.status;
   game->level=header.level;
   game->random=header.random;
+  game->debug=header.debug;
+  for (position = sud; position < est + 1; position++)
+    {
+    for (couleur = trefle; couleur < pique + 1; couleur++)
+        {
+          index = INDEX (position, couleur);
+          game->tabjeu[index]->debug=header.debug;
+    }
+  }
   if(header.status=='e') {
-    printf("End of game\n");
+    if(game->debug)
+      printf("End of game\n");
     return('e');
   }
   
@@ -82,7 +99,8 @@ char  read_header (game_t *game,void *data,char type) {
       game->status='n';
       game->random=header.random;
       game->level=header.level;
-      fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
+      if(game->debug)
+        fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
       break;
 
       default:
@@ -145,6 +163,7 @@ void write_data(game_t *game,void  *data,char type) {
     case 'u':
       cur_bid= data;
       write_header(game,type);
+      if(game->debug) 
       fprintf(stderr,"cur_bid=%s\n",cur_bid);
       write (game->sockslv_id,  cur_bid, BIDSIZE);
       break;

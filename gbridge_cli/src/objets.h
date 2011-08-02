@@ -183,6 +183,7 @@ typedef struct _ihm_pli_t
   int random;
   int ligneia;
   char status ; 
+  gboolean debug;
   int tab_couleur[est+1][pique+1];
   contrat_t *contrat;
   char *scontrat;
@@ -219,7 +220,6 @@ typedef struct _button_bid_t
   ihm_bid_t *ihm_bid;
 } button_bid_t;
 
-void debugaff(void) ;
 void bouge_carte(position_t position,carte_t *carte,int maxl);
 void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int maxl) ;
 void affiche_pli(pli_t *pli);

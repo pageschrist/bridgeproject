@@ -59,16 +59,18 @@ void analyse_tabjeu (game_t *game) {
       else {
         init_list_best(l_best);
       }
+      nb_best=0;
       gettimeofday(timeav,NULL);
       first_explore ( pli, (sizemax[couleur]*4)-pli->noj,&nb_best,l_best,game);
       gettimeofday(timeap,NULL);
       printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
-      best_coup=choix_best(&nb_best,l_best,game);
-      nb_best=0;
+      if(nb_best!=0) {
+        best_coup=choix_best(&nb_best,l_best,game);
+        free(best_coup);
+      }
       clear_list(l_best);
       free(l_best);
       l_best=NULL;
-      free(best_coup);
       
     }
   }

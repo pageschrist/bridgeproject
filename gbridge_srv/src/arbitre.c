@@ -8,7 +8,6 @@
 #include "stack.h"
 #include "ia.h"
 #include "arbitre.h"
-extern int flag_debug;
 carte_t best_carte;
 extern coord_t tab_cartes[cA + 1][pique + 1];
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
@@ -35,6 +34,7 @@ void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
 	    thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
 	   thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
 	   thread_jeu->t_jeu[index]->couleureval =game->tabjeu[index]->couleureval;
+	   thread_jeu->t_jeu[index]->debug=game->tabjeu[index]->debug;
 	}
     }
 }
@@ -488,8 +488,9 @@ list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **t
       couleurc = pli->carte[pli->entame].clcarte;	/*On recupere la couleur entame */
       presence = NON;
 
-
       index = INDEX (positionc, couleurc);
+      if(tmpjeu[index]->debug)
+        fdebug();
       
       if (tmpjeu[index]->nbcrt==1) {  //Une seule carte 
 
