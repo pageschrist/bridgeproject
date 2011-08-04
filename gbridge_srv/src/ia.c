@@ -17,23 +17,26 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
   valeur_t tabval[pique+1];
   couleur_t coulref=aucune;
   carte_t *carte=malloc(sizeof(carte_t));
-  char *affca,*affco;
   int points[pique+1],j;
+  int jline=(IALINE+1)%2;
   
   couleur_t i;
-  printf("On a %d bons coups\n",*nb_best);
   elem_best_t *elem_best=l_best->last;
   for( i=0;i<pique+1;i++)
     tabval[i]=pdc;
   int score=l_best->last->best->score;
-  printf("On a %d bons coups\n",*nb_best);
+  if(game->debug) 
+    printf("On a %d bons coups\n",*nb_best);
     
    while(elem_best) {
      if(elem_best->best->score == score) {
-       printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
-       free(affca);
-       free(affco);
-       printf("Voici le score: %d\n", elem_best->best->score);
+       if(game->debug) {
+         char *affca,*affco;
+         printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
+         free(affca);
+         free(affco);
+         printf("Voici le score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n", elem_best->best->score,elem_best->best->nbline[IALINE],elem_best->best->nbline[jline]);
+       }
        if(tabval[elem_best->best->carte->clcarte]>elem_best->best->carte->nocarte)
          tabval[elem_best->best->carte->clcarte]=elem_best->best->carte->nocarte;
      }
