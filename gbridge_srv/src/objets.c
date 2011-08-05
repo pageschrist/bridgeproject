@@ -6,6 +6,7 @@
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "distribution.h"
+#include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
 coord_t tab_cartes[cA + 1][pique + 1];
@@ -412,8 +413,14 @@ affiche_pli (pli_t * pli)
 void
 affiche_carte (carte_t * carte)
 {
-  printf ("carte:%d", carte->nocarte);
-  printf ("couleur:%d", carte->clcarte);
+  char *resca;
+  char *rescl;
+  resca=affichage(carte->nocarte,CARTE);
+  rescl=affichage(carte->clcarte,COULEUR);
+  printf ("%s", resca);
+  printf ("%s", rescl);
+  free(resca);
+  free(rescl);
 }
 
 void

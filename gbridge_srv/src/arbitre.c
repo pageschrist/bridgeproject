@@ -6,6 +6,7 @@
 #include "objets.h"
 #include "distribution.h"
 #include "stack.h"
+#include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
 carte_t best_carte;

@@ -9,6 +9,23 @@
 #include "ia.h"
 #include "create_config.h"
 
+couleur_t search_best_color(position_t position,hopestat_t **hopestat){
+  couleur_t color,colorref;
+  int nbref=0,index;
+   
+  for(color=trefle;color<pique+1;color++) {
+    index=INDEX(position,color);
+    if(hopestat[index]->nbline[position%2]>=nbref) {
+      colorref=color;
+      nbref=hopestat[index]->nbline[position%2];
+    }
+     
+
+  }
+  return(colorref); 
+}
+
+
 void changeeval(game_t *game,couleur_t couleureval) {
   couleur_t couleur;
   position_t position;
@@ -20,14 +37,14 @@ void changeeval(game_t *game,couleur_t couleureval) {
     }
   }
 }
-void analyse_tabjeu (game_t *game) {
+hopestat_t  **analyse_tabjeu (game_t *game) {
 
   int index;
+  hopestat_t **hopestat=malloc(16*sizeof(hopestat_t *));
   pli_t *pli;
   int sizemax[pique+1];
   l_best_t *l_best=NULL;
   int nb_best=0;
-  carte_t *best_coup;
   struct timeval *timeav=malloc(sizeof(struct timeval));
   struct timeval *timeap=malloc(sizeof(struct timeval));
   pli=malloc(sizeof(pli_t));
@@ -48,12 +65,16 @@ void analyse_tabjeu (game_t *game) {
     for(position=sud;position<est+1;position++) {
       printf("\t\tposition ******************* %d\n",(int) position);
       index=INDEX(position,couleur);
+      hopestat[index]=malloc(sizeof(hopestat_t ));
+      hopestat[index]->best_card=malloc(sizeof(carte_t ));
+      hopestat[index]->position=position;
+      hopestat[index]->couleur=couleur;
       init_pli(pli,INIT);
       pli->entame=position;
       pli->nextpos=position;
       pli->atout=aucune;
       if(NULL==(l_best=malloc(sizeof(l_best_t)))) {
-        fprintf(stderr,"Pb avec malloc\n");
+        fprintf(stderr,"Pb with malloc\n");
         exit (EXIT_FAILURE);
       }
       else {
@@ -63,10 +84,14 @@ void analyse_tabjeu (game_t *game) {
       gettimeofday(timeav,NULL);
       first_explore ( pli, (sizemax[couleur]*4)-pli->noj,&nb_best,l_best,game);
       gettimeofday(timeap,NULL);
-      printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
+      printf("time:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
       if(nb_best!=0) {
-        best_coup=choix_best(&nb_best,l_best,game);
-        free(best_coup);
+        hopestat[index]->best_card=choix_best(&nb_best,l_best,game,hopestat[index]);
+        
+      }
+      else {
+        free(hopestat[index]->best_card);
+        hopestat[index]->best_card=NULL;
       }
       clear_list(l_best);
       free(l_best);
@@ -78,6 +103,7 @@ void analyse_tabjeu (game_t *game) {
   free(pli);
   free(timeap);
   free(timeav);
+  return(hopestat);
 }
 
 int small_condition(game_t *game,char *s_smallref) {

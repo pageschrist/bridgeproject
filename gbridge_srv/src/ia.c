@@ -6,6 +6,7 @@
 #include "objets.h"
 #include "stack.h"
 #include "distribution.h"
+#include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
 
@@ -13,7 +14,7 @@
 int prof_start = 0;
 int flag_debug=0;
 
-carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
+carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game,hopestat_t *hopestat) {
   valeur_t tabval[pique+1];
   couleur_t coulref=aucune;
   carte_t *carte=malloc(sizeof(carte_t));
@@ -36,6 +37,12 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game) {
          free(affca);
          free(affco);
          printf("Voici le score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n", elem_best->best->score,elem_best->best->nbline[IALINE],elem_best->best->nbline[jline]);
+       }
+       if(hopestat) {
+         hopestat->score=elem_best->best->score;
+         hopestat->nbline[IALINE]=elem_best->best->nbline[IALINE];
+         hopestat->nbline[jline]=elem_best->best->nbline[jline];
+
        }
        if(tabval[elem_best->best->carte->clcarte]>elem_best->best->carte->nocarte)
          tabval[elem_best->best->carte->clcarte]=elem_best->best->carte->nocarte;

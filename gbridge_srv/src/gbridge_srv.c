@@ -18,10 +18,10 @@
 
 #include "create_config.h"
 #include "objets.h"
+#include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
 #include "traffic.h"
-#include "analyse.h"
 #include "distribution.h"
 #include "gbridge_srv.h"
 void debug_info(void);
@@ -59,6 +59,10 @@ void signal_handler ( int sig)
 
 void main_game(game_t *game) {
   gboolean status;
+  couleur_t couleur;
+  position_t position;
+  int index;
+  hopestat_t **hopestat;
   init_game(game);
   do {
         read_header ( game, game->bid ,'b');
@@ -76,19 +80,30 @@ void main_game(game_t *game) {
         }
   } while (status);
   game->status='g';
-  analyse_tabjeu(game); 
+  hopestat=analyse_tabjeu(game); 
   printf(" **************  Fin analyse *************   \n");
-  newgame (game);
+  newgame (game,hopestat);
   clear_game(game);
+  for (couleur=trefle;couleur<pique+1;couleur++) {
+    for(position=sud;position<est+1;position++) {
+      index=INDEX(position,couleur);
+      if(hopestat[index]->best_card)
+        free(hopestat[index]->best_card);
+      free(hopestat[index]);
+    }
+  }
+  free(hopestat);
  
 }
 
 
 
-gboolean newgame(game_t *game) {
+gboolean newgame(game_t *game,hopestat_t **hopestat) {
   int random=game->random, i;
   int prof=game->level*4;
-  position_t rotation;
+  position_t rotation,position;
+  couleur_t couleur;
+  int index;
   carte_t *best_coup=NULL;
   l_best_t *l_best=NULL;
   int nb_best=0;
@@ -103,6 +118,18 @@ gboolean newgame(game_t *game) {
   //rotation=init_distrib (game,random,pli);
   rotation=0;
   printf("Voici la rotation%d\n",rotation);
+  
+  if(game->debug) {
+    for (couleur=trefle;couleur<pique+1;couleur++) {
+  
+      for(position=sud;position<est+1;position++) {
+        index=INDEX(position,couleur);
+        printf("position=%d,color=%d,nbline[IALINE]=%d,nbline[IALINE+1]=%d\n",hopestat[index]->position,hopestat[index]->couleur,hopestat[index]->nbline[IALINE],hopestat[index]->nbline[(IALINE+1)%2]);
+        affiche_carte(hopestat[index]->best_card);
+      }
+    }
+
+  }
 
   game->contrat->declarant=sud;
   for(i=strlen(game->cur_bid)-1;i>0;i=i-2) {
@@ -114,8 +141,7 @@ gboolean newgame(game_t *game) {
     }
   }
   envoi_jeu ((game->contrat->declarant + 2) % NBJOUEURS, game);
-
-  // On positionne le premier pli à 
+  couleur_t color;
   printf ("Voici le declarant:%d",game->contrat->declarant);
   pli->entame=(game->contrat->declarant+1)%4;
   pli->nextpos=(game->contrat->declarant+1)%4;
@@ -139,18 +165,28 @@ gboolean newgame(game_t *game) {
         if (notour > 5) { 
           prof=(13-notour)*4;
         }
-	n=first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
-        gettimeofday(timeap,NULL);
-        printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
-        best_coup=choix_best(&nb_best,l_best,game);
-        nb_best=0;
-        clear_list(l_best);
-        free(l_best);
-        l_best=NULL;
+        if(notour==0 && t==0) {// On est à l'entame
+          color=search_best_color(pli->nextpos,hopestat);
+          best_coup=malloc(sizeof(carte_t));
+          memcpy(best_coup,hopestat[INDEX(pli->nextpos,color)]->best_card,sizeof(carte_t));
+          gettimeofday(timeap,NULL);
+        }
+        else {
+  	  n=first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
+          gettimeofday(timeap,NULL);
+          printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
+          best_coup=choix_best(&nb_best,l_best,game,NULL);
+          nb_best=0;
+          clear_list(l_best);
+          free(l_best);
+          l_best=NULL;
+        }
         pli->lastcarte.nocarte=best_coup->nocarte;
         pli->lastcarte.clcarte=best_coup->clcarte;
-        printf("Joue coup pli,best_coup\n");
-        affiche_carte(best_coup);
+        if(game->debug) {
+          printf("Joue coup pli,best_coup\n");
+          affiche_carte(best_coup);
+        }
 	if(joue_coup( pli,best_coup,game)==0) 
           { 
            free(best_coup);
@@ -160,19 +196,20 @@ gboolean newgame(game_t *game) {
         free(best_coup);
       }
       else {
-        printf("Joueur  joue\n");
+        
+        printf("Player  \n");
         read_header (game, pli, 'p');
 	joue_coup( pli,NULL,game); 
       }
       pli->nextpos=evaluation_pli(pli);
 
-      //write (game->sockslv_id,  pli, sizeof (pli_t));
       write_data (game,  pli, 'p');
     }
   }
   for (t=0;t<NBJOUEURS;t++) 
     envoi_jeu ((game->contrat->declarant + t) % NBJOUEURS, game);
-  printf("4 jeux envoyé\n");
+  if(game->debug)
+    printf("4 games sent\n");
   free(pli);
   return (TRUE);
 }
