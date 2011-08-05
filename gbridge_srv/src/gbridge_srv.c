@@ -81,7 +81,6 @@ void main_game(game_t *game) {
   } while (status);
   game->status='g';
   hopestat=analyse_tabjeu(game); 
-  printf(" **************  Fin analyse *************   \n");
   newgame (game,hopestat);
   clear_game(game);
   for (couleur=trefle;couleur<pique+1;couleur++) {

@@ -59,11 +59,9 @@ hopestat_t  **analyse_tabjeu (game_t *game) {
     }
   }
   for (couleur=trefle;couleur<pique+1;couleur++) {
-  printf("couleur ******************* %d prof=%d\n",(int) couleur,sizemax[couleur]*4);
     changeeval(game,couleur);
   
     for(position=sud;position<est+1;position++) {
-      printf("\t\tposition ******************* %d\n",(int) position);
       index=INDEX(position,couleur);
       hopestat[index]=malloc(sizeof(hopestat_t ));
       hopestat[index]->best_card=malloc(sizeof(carte_t ));
@@ -84,7 +82,6 @@ hopestat_t  **analyse_tabjeu (game_t *game) {
       gettimeofday(timeav,NULL);
       first_explore ( pli, (sizemax[couleur]*4)-pli->noj,&nb_best,l_best,game);
       gettimeofday(timeap,NULL);
-      printf("time:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
       if(nb_best!=0) {
         hopestat[index]->best_card=choix_best(&nb_best,l_best,game,hopestat[index]);
         
