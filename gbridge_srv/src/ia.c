@@ -477,7 +477,8 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
   }
   else
     nbcoups=list_all_coups_eval (positionc, stk, pplic,game->tabjeu);
-  printf("Voici le nombre de coups à examiner: %d\n",nbcoups);
+  if(game->debug)
+    fprintf(stderr,"Voici le nombre de coups à examiner: %d\n",nbcoups);
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((pplin = (pli_t *) pop (stk)) != NULL) {  
@@ -505,7 +506,8 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
 
 
           
-    printf("thread %d created\n",nothr);
+    if(game->debug)
+      printf("thread %d created\n",nothr);
     pthread_create(&pid[nothr],NULL,new_explore,thread_jeu[nothr]);
     nothr++;
   }        

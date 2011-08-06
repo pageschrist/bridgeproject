@@ -116,15 +116,16 @@ gboolean newgame(game_t *game,hopestat_t **hopestat) {
 
   //rotation=init_distrib (game,random,pli);
   rotation=0;
-  printf("Voici la rotation%d\n",rotation);
-  
+  printf("Voici la rotation%ddebug=%d\n",rotation,game->debug);
+   
   if(game->debug) {
     for (couleur=trefle;couleur<pique+1;couleur++) {
   
       for(position=sud;position<est+1;position++) {
         index=INDEX(position,couleur);
         printf("position=%d,color=%d,nbline[IALINE]=%d,nbline[IALINE+1]=%d\n",hopestat[index]->position,hopestat[index]->couleur,hopestat[index]->nbline[IALINE],hopestat[index]->nbline[(IALINE+1)%2]);
-        affiche_carte(hopestat[index]->best_card);
+        if(hopestat[index]->best_card)
+          affiche_carte(hopestat[index]->best_card);
       }
     }
 

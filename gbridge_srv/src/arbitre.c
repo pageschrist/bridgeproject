@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <glib.h>
 #include <glib/gtypes.h>
 #include <glib/gprintf.h>
@@ -20,7 +21,7 @@ void ftrace(void) {
 void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
   position_t position;
   couleur_t couleur;
-  int index ,i;
+  int index ;
   if (NULL==(thread_jeu->t_jeu = malloc ((sizeof (tablist_t *)) * (est + 1) * (pique + 1)))) {
     fprintf(stderr,"Probleme avec malloc\n");
     exit(EXIT_FAILURE);
@@ -31,11 +32,12 @@ void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
 	{
 	  index = INDEX (position, couleur);
           thread_jeu->t_jeu[index]=malloc(sizeof (tablist_t));
-	  for (i = 0; i < 13; i++)
-	    thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
-	   thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
-	   thread_jeu->t_jeu[index]->couleureval =game->tabjeu[index]->couleureval;
-	   thread_jeu->t_jeu[index]->debug=game->tabjeu[index]->debug;
+          memcpy(thread_jeu->t_jeu[index],game->tabjeu[index],sizeof (tablist_t));
+	  //for (i = 0; i < 13; i++)
+	  //  thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
+	  // thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
+	  // thread_jeu->t_jeu[index]->couleureval =game->tabjeu[index]->couleureval;
+	  // thread_jeu->t_jeu[index]->debug=game->tabjeu[index]->debug;
 	}
     }
 }
