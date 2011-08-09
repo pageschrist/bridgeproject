@@ -258,17 +258,15 @@ list_all_coups_eval (position_t positionc, stackia_t stack, pli_t * pli,tablist_
   phcarte.clcarte=pli->phcarte.clcarte;
 
   if(situation == DEFAUSSE) {
-    for (i = (couleurc+1)%4; i != couleurc ; i++) {
+    for (i = (couleurc+1)%4; (i)%4 != couleurc ; i=(i+1)%4) {
       index=INDEX (positionc, i);
       if(tmpjeu[index]->nbcrt != 0) {
           pli->carte[positionc].clcarte = i;
 	  pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
           nbcoups++;
           push (stack, pli);
-          
-
+          break;    
       }
-      break;
     }
     return(nbcoups);
 
@@ -492,8 +490,6 @@ list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **t
       presence = NON;
 
       index = INDEX (positionc, couleurc);
-      if(tmpjeu[index]->debug)
-        fdebug();
       
       if (tmpjeu[index]->nbcrt==1) {  //Une seule carte 
 

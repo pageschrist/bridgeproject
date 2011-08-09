@@ -32,10 +32,9 @@ carte_t *choix_best(int *nb_best,l_best_t *l_best,game_t *game,hopestat_t *hopes
    while(elem_best) {
      if(elem_best->best->score == score) {
        if(game->debug) {
-         char *affca,*affco;
-         printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
-         free(affca);
-         free(affco);
+         //printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
+         //free(affca);
+         //free(affco);
          printf("Voici le score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n", elem_best->best->score,elem_best->best->nbline[IALINE],elem_best->best->nbline[jline]);
        }
        if(hopestat) {
@@ -222,7 +221,6 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
   couleur_t nocouleur;
   valeur_t nocarte;
   ligne_t ligne;
-  
   positionc = pplic->nextpos;	/*C'est la nouvelle position */
   /*choix du joueur qui joue en fonction de la profondeur  */
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
@@ -235,6 +233,7 @@ cur_explore_eval (int prof , pli_t *pplic, int prof_max,tablist_t **t_jeu,int or
     prof_max=prof;
   if ((prof == prof_max) || (pplic->nopli == 13))
     {
+      
       retup = check_plis (pplic);
       return (retup);
     }
@@ -353,10 +352,10 @@ new_explore (void *arg)
   //reconstitution des varaiables
   prof=thread_jeu->prof;
   prof_max=thread_jeu->prof_max;
-  //affiche_thread_jeu(thread_jeu);
   pplic=thread_jeu->pli;
-  printf("Un thread est lance prof=%d, prof_pax=%d\n",prof,prof_max);
-  positionc = pplic->nextpos;	/*C'est la nouvelle position */
+  if(thread_jeu->t_jeu[0]->debug)
+    printf("A thread is started with prof=%d, prof_max=%d\n",prof,prof_max);
+  positionc = pplic->nextpos;	/*New position */
   /*choix du joueur qui joue en fonction de la profondeur  */
   best_score = 100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
   if ((prof == prof_max) || (pplic->nopli == 13))
@@ -367,6 +366,10 @@ new_explore (void *arg)
       thread_jeu->nbline[1] = rettmp->nbline[1];
       thread_jeu->status=1;
       free(rettmp);
+      if(thread_jeu->t_jeu[0]->debug) {
+        affiche_pli(pplic);
+        fprintf(stderr,"End newplore, prof=%d pplic->nopli=%d\n",prof,pplic->nopli);
+      }
     }
 
   stk = create_stack (duplique_pli);
@@ -482,6 +485,7 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
 
   // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((pplin = (pli_t *) pop (stk)) != NULL) {  
+    //if ((pplin = (pli_t *) pop (stk)) != NULL) {  
 
     thread_jeu=realloc(thread_jeu,(sizeof(thread_jeu_t *))*(nothr+1));
     thread_jeu[nothr]=malloc(sizeof(thread_jeu_t));
@@ -518,7 +522,8 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
     for (i = 0; i < nothr; i++) {
       if (1 == thread_jeu[i]->status)
           {
-            printf("thread %d termine\n",i);
+            if(game->debug)
+              printf("thread %d termine\n",i);
             pthread_join (pid[i], NULL);
             thread_jeu[i]->status = 2;
           }
@@ -527,23 +532,29 @@ first_explore ( pli_t * pplic, int prof_max,int *nb_best,l_best_t *l_best,game_t
     }
   }
   
-  printf("Les Threads sont termines\n");
+  if(game->debug)
+    printf("Threads are terminated\n");
   for (i=0 ;i<nothr;i++) {
-    printf("score=%d\n",thread_jeu[i]->score);
+    if(game->debug)
+      printf("score=%d\n",thread_jeu[i]->score);
     if (minimax (thread_jeu[i]->score, best_score, positionc))
 	  {
 	  best_score = thread_jeu[i]->score;
           *nb_best=*nb_best+1;
   
               //Ajout liste
-              printf("Voici nb_best:%d\n",*nb_best);
+              if(game->debug)
+                printf("nb_best=%d\n",*nb_best);
               if(NULL==(best=malloc(sizeof(best_t)))) {
-                fprintf(stderr,"Pb with malloc \n");
+                fprintf(stderr,"Pb with malloc __LINE__\n");
                 exit(EXIT_FAILURE);
               }
               best->score=best_score;
               best->numero=*nb_best-1;
-              best->carte=malloc(sizeof(carte_t));
+              if(NULL==(best->carte=malloc(sizeof(carte_t)))) {
+                fprintf(stderr,"Pb with malloc __LINE__\n");
+                exit(EXIT_FAILURE);
+              }
               best->carte->nocarte=thread_jeu[i]->best_cartepot->nocarte;
               best->carte->clcarte=thread_jeu[i]->best_cartepot->clcarte;
               best->nbline[0]=thread_jeu[i]->nbline[0];

@@ -62,7 +62,7 @@ void main_game(game_t *game) {
   couleur_t couleur;
   position_t position;
   int index;
-  hopestat_t **hopestat;
+  hopestat_t **hopestat=NULL;
   init_game(game);
   do {
         read_header ( game, game->bid ,'b');
@@ -77,10 +77,12 @@ void main_game(game_t *game) {
           status=analyse_bid(game); 
           if(game->status=='b')
             write_data(game,game->cur_bid,'u');
+            if(!hopestat)
+              hopestat=analyse_tabjeu(game); 
         }
   } while (status);
   game->status='g';
-  hopestat=analyse_tabjeu(game); 
+  //hopestat=analyse_tabjeu(game); 
   newgame (game,hopestat);
   clear_game(game);
   for (couleur=trefle;couleur<pique+1;couleur++) {
@@ -92,6 +94,7 @@ void main_game(game_t *game) {
     }
   }
   free(hopestat);
+  hopestat=NULL;
  
 }
 
