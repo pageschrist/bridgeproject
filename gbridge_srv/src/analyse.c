@@ -37,6 +37,57 @@ void changeeval(game_t *game,couleur_t couleureval) {
     }
   }
 }
+carte_t  *analyse_hand (game_t *game,pli_t *plic,couleur_t couleur) {
+
+  int index;
+  pli_t *plin=malloc(sizeof(pli_t));
+  memcpy(plin,plic,sizeof(pli_t));
+  plin->atout=aucune;
+  hopestat_t *hopestat=malloc(sizeof(hopestat_t ));
+  int sizemax;
+  l_best_t *l_best=NULL;
+  int nb_best=0;
+  carte_t *best_card=malloc(sizeof(carte_t ));
+  position_t position;
+  sizemax=0;
+  for(position=sud;position<est+1;position++) {
+    index=INDEX(position,couleur);
+    if(game->tabjeu[index]->nbcrt>sizemax) 
+      sizemax=game->tabjeu[index]->nbcrt;
+  }
+  changeeval(game,couleur);
+  position=plin->nextpos; 
+  index=INDEX(position,couleur);
+  hopestat->position=position;
+  hopestat->couleur=couleur;
+  hopestat->best_card=NULL;;
+  if(NULL==(l_best=malloc(sizeof(l_best_t)))) {
+    fprintf(stderr,"Pb with malloc\n");
+    exit (EXIT_FAILURE);
+  }
+  else {
+    init_list_best(l_best);
+  }
+  nb_best=0;
+  first_explore ( plin, (sizemax*4)-plin->noj,&nb_best,l_best,game);
+  if(nb_best!=0) {
+    best_card=choix_best(&nb_best,l_best,game,hopestat);
+    
+  }
+  else {
+    free(best_card);
+    best_card=NULL;
+  }
+  clear_list(l_best);
+  free(l_best);
+  l_best=NULL;
+  
+  changeeval(game,aucune);
+  free(plin);
+  return(best_card);
+}
+
+
 hopestat_t  **analyse_tabjeu (game_t *game) {
 
   int index;

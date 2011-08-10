@@ -156,7 +156,7 @@ gboolean newgame(game_t *game,hopestat_t **hopestat) {
     for(t=0;t<NBJOUEURS;t++) {
       printf("Voici le tour %d ,nojoueur %d\n",notour ,t);
       if((pli->nextpos)%2 == (game->contrat->declarant+1)%2) {
-      printf("IA joue\n");
+      printf("IA play\n");
         if(NULL==(l_best=malloc(sizeof(l_best_t)))) {
           fprintf(stderr,"Pb avec malloc\n");
           exit (EXIT_FAILURE);
@@ -175,10 +175,16 @@ gboolean newgame(game_t *game,hopestat_t **hopestat) {
           gettimeofday(timeap,NULL);
         }
         else {
-  	  n=first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
-          gettimeofday(timeap,NULL);
-          printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
-          best_coup=choix_best(&nb_best,l_best,game,NULL);
+          if(t!=0 && game->tabjeu[INDEX(pli->nextpos,pli->carte[pli->entame].clcarte)]->nbcrt!=0) { // On a entame et on a de la couleur d'entame
+            best_coup=analyse_hand(game,pli,pli->carte[pli->entame].clcarte);
+          }
+          else {
+  	    n=first_explore ( pli, prof-pli->noj,&nb_best,l_best,game);
+            gettimeofday(timeap,NULL);
+            if(game->debug)
+              printf("Voici le temps:%d\n", (int)  timeap->tv_sec-(int) timeav->tv_sec);
+            best_coup=choix_best(&nb_best,l_best,game,NULL);
+          }
           nb_best=0;
           clear_list(l_best);
           free(l_best);
