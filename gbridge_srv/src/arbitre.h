@@ -8,6 +8,7 @@
 #define DEFAUSSE 1
 #define NONENTAME 2
 int check (couleur_t couleur);
+void rotation(game_t *game,hopestat_t **hopestat);
 void mise_a_jour(pli_t *ppli,position_t position,couleur_t couleur,valeur_t valeur);
 int list_all_coups (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu);
 int list_all_coups_eval (position_t positionc, stackia_t stack, pli_t * pli,tablist_t **tmpjeu);

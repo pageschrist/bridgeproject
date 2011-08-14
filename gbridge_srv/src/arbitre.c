@@ -10,13 +10,65 @@
 #include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
-carte_t best_carte;
 extern coord_t tab_cartes[cA + 1][pique + 1];
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
 /*pli.entame doit etre initialise */
 void ftrace(void) {
   printf("OK\n");
 }
+
+void rotation(game_t *game,hopestat_t **hopestat) {
+  int i;
+  position_t position;
+  couleur_t couleur;
+  char trump,*res;
+  int rot;
+  
+  for(i=strlen(game->cur_bid)-1;i>0;i=i-2) {
+ 
+    if(game->cur_bid[i-1]!='P') {
+      trump=game->cur_bid[i];
+      break;
+
+    }
+  } 
+
+  res=strchr(game->cur_bid,trump);
+  rot=((res-game->cur_bid-1)/2)%4;
+  if(game->debug) 
+    printf("trump:%c n=%d\n",trump,rot);
+  if(rot!=0) {
+    tablist_t **tmpjeu=malloc(4*sizeof(tablist_t *));
+    hopestat_t **tmphope=malloc(4*sizeof(hopestat_t *));
+    for(position=sud;position<ouest+1;position++) {
+      for(couleur=trefle;couleur<pique+1;couleur++) {
+        tmpjeu[couleur]=malloc(sizeof(tablist_t));
+        memcpy(tmpjeu[couleur],game->tabjeu[INDEX((position+rot)%4 ,couleur)],sizeof(tablist_t)); 
+        memcpy(game->tabjeu[INDEX((position+rot)%4 ,couleur)],game->tabjeu[INDEX(position ,couleur)],sizeof(tablist_t));
+        memcpy(game->tabjeuref[INDEX((position+rot)%4 ,couleur)],game->tabjeuref[INDEX(position ,couleur)],sizeof(tablist_t));
+        memcpy(game->tabjeu[INDEX(position ,couleur)],tmpjeu[couleur],sizeof(tablist_t));
+        memcpy(game->tabjeuref[INDEX(position ,couleur)],tmpjeu[couleur],sizeof(tablist_t));
+        free(tmpjeu[couleur]);
+      }
+    }
+    free(tmpjeu); 
+    for(position=sud;position<ouest+1;position++) {
+      for(couleur=trefle;couleur<pique+1;couleur++) {
+        tmphope[couleur]=malloc(sizeof(hopestat_t));
+        memcpy(tmphope[couleur],hopestat[INDEX((position+rot)%4 ,couleur)],sizeof(hopestat_t)); 
+        memcpy(hopestat[INDEX((position+rot)%4 ,couleur)],hopestat[INDEX(position ,couleur)],sizeof(hopestat_t));
+        memcpy(hopestat[INDEX(position ,couleur)],tmphope[couleur],sizeof(hopestat_t));
+        free(tmphope[couleur]);
+      }
+    }
+    free(tmphope); 
+  }
+  affiche_tabjeu_c(game->tabjeu);
+
+  
+
+}
+
 
 void  copy_jeu(thread_jeu_t *thread_jeu,game_t *game) {
   position_t position;

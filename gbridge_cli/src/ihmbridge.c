@@ -5,7 +5,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "arbitre.h"
 #include "objets.h"
 #include "ihmbridge.h"
 #include "callbacks.h"
@@ -168,7 +167,6 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   gtk_button_set_relief(GTK_BUTTON(Bouton_board), GTK_RELIEF_NONE);
   gtk_box_pack_start(GTK_BOX(Board_HBox), Bouton_board, FALSE, FALSE, 0);
   ihm_pli->Drawing_area=gtk_drawing_area_new();
-  //gtk_box_pack_start (GTK_BOX (Menu_VBox),  ihm_pli->Drawing_area, TRUE, TRUE, 2);
   gtk_box_pack_start (GTK_BOX (Board_HBox),  ihm_pli->Drawing_area, TRUE, TRUE, 2);
   gtk_widget_set_size_request( ihm_pli->Drawing_area, LARGEUR, HAUTEUR);
 
@@ -244,8 +242,6 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   id_sig_connect = g_signal_connect (G_OBJECT (entry_random), "activate",
                       G_CALLBACK (enter_callback_random),
                       ihm_pli);
-  //gtk_widget_show (entry_random);
-  // Ajout pour boite latérale
 
 }
 

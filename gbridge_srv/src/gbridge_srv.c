@@ -28,7 +28,6 @@ void debug_info(void);
 
 void print_usage (void);
 extern GHashTable *configHash;
-extern carte_t best_carte;
 /*
  * prototypes
  */
@@ -83,6 +82,7 @@ void main_game(game_t *game) {
   } while (status);
   game->status='g';
   //hopestat=analyse_tabjeu(game); 
+  rotation(game,hopestat);
   newgame (game,hopestat);
   clear_game(game);
   for (couleur=trefle;couleur<pique+1;couleur++) {
@@ -143,13 +143,12 @@ gboolean newgame(game_t *game,hopestat_t **hopestat) {
 
     }
   }
+  envoi_jeu ((game->contrat->declarant) % NBJOUEURS, game);
   envoi_jeu ((game->contrat->declarant + 2) % NBJOUEURS, game);
   couleur_t color;
-  printf ("Voici le declarant:%d",game->contrat->declarant);
   pli->entame=(game->contrat->declarant+1)%4;
   pli->nextpos=(game->contrat->declarant+1)%4;
    pli->atout=  game->contrat->atout;
-  printf("On joue atout:%d\n",pli->atout);
   //Debut de la partie ia
           
   for (notour=0;notour<13;notour++) {

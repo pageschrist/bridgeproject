@@ -11,7 +11,6 @@
 #include "client.h"
 #include "draw.h"
 #include "ihmbridge.h"
-#include "arbitre.h"
 #include "load.h"
 #include "jeu.h"
 #include "free.h"
@@ -287,6 +286,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
   event=event;
   Fenetre=Fenetre;
   int status;
+  position_t position;
   printf("expose comment %d\n", ihm_pli->read);
       //if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
       if(ihm_pli->status=='b' && ihm_pli->read==TRUE) {
@@ -340,6 +340,11 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
 	  fprintf(stderr,"recuperation_jeu +2, expose_comment:%c %d\n",ihm_pli->status,ihm_pli->read);
+          for (position=sud;position<est+1;position++ ) {
+            free_list(&ihm_pli->players[position]);
+            ihm_pli->players[position]=NULL;
+          }
+          recuperation_jeu(ihm_pli,(ihm_pli->contrat->declarant)%4);
           recuperation_jeu(ihm_pli,(ihm_pli->contrat->declarant+2)%4);
           draw_container_ihm(ihm_pli); 
           ihm_pli->pli->nextpos=(ihm_pli->contrat->declarant+1)%4;
