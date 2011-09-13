@@ -233,8 +233,6 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 
 	    if('e'==write_data(game, pli, 'p'))
               end_session(game);
-            if(t==3 && notour==12)
-              affiche_pli(pli);
 	}
     }
     for (t = 0; t < NBJOUEURS; t++)

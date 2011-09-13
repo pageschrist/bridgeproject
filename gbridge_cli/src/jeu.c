@@ -258,6 +258,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   int status;
   char *reschaine;
   GdkGC *gc;
+  
   printf("Debut game_turn\n");
     //Nettoyage,  à changer 
   if(ihm_pli->pli->noj==0) {
@@ -267,14 +268,12 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   // C'est la fin au a deja 13 plis 
   if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
     printf("The end recuperation_jeu\n");
-    //for (k=0;k<NBJOUEURS;k++)
-     // recuperation_jeu (ihm_pli,  k);
-    printf("The end recuperation_jeu faite\n");
       
    return 0;
   }
-
   poscour = ihm_pli->pli->nextpos;
+  if(ihm_pli->debug)
+    fprintf(stdout,"ihm_pli->pli->nbpli_ligne[1]=%d\nihm_pli->pli->nbpli_ligne[0]=%d\nposcour=%d\n",ihm_pli->pli->nbpli_ligne[1],ihm_pli->pli->nbpli_ligne[0],poscour);
 
 
   if((ihm_pli->pli->nextpos%2)==(position_t)ihm_pli->ligneia) {
@@ -340,13 +339,13 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     ihm_pli->pli->carte[poscour].nocarte=imgcard->valeur;
     ihm_pli->tab_couleur[poscour][imgcard->couleur]--;
     draw_container_ihm(ihm_pli);
-    resps=affichage(ihm_pli->pli->nextpos,POSITION); 
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
 
     
     write_data(ihm_pli,ihm_pli->pli,'p');
     status = read_header (ihm_pli,ihm_pli->pli, 'p');
+    resps=affichage(ihm_pli->pli->nextpos,POSITION); 
+    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
+    gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
     return(ihm_pli->pli->nextpos%2);
 
   }

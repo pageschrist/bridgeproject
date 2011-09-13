@@ -169,8 +169,8 @@ gboolean event_blink(gpointer data)
                                 card->dim.w, card->dim.h);
 
         }
-
-  printf("Event blinck\n");
+        if(ihm_pli->debug)
+        printf("Event blinck\n");
         return(TRUE);
 }
 
