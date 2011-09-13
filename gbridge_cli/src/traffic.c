@@ -51,6 +51,14 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
       fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
     write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
+  case 'e':
+    header.type='e';
+    header.status='e'; 
+    header.lenght=0;
+    if(ihm_pli->debug) 
+      fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
+    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    break;
 
   }
 
@@ -146,6 +154,9 @@ void write_data(ihm_pli_t *ihm_pli,void  *data,char type) {
       write (ihm_pli->socketid,  cur_bid, BIDSIZE);
       break;
     case 'n':
+      write_header(ihm_pli,type);
+      break;
+    case 'e':
       write_header(ihm_pli,type);
       break;
  

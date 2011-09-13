@@ -10,7 +10,7 @@ typedef struct _net_header_t
  int lenght; // lenght of the sata if necessary 
  gboolean debug; 
 } net_header_t;
-void write_data(game_t *game,void  *data,char type); 
+char write_data(game_t *game,void  *data,char type); 
 void read_data( game_t *game,void *data, char type);
 char  read_header (game_t *game,void *data,char type);
 void write_header( game_t *game,char type) ;

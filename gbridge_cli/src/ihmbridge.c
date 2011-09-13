@@ -140,9 +140,9 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   Menu_items = gtk_menu_item_new_with_label("Quit");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
-  g_signal_connect_swapped (G_OBJECT (Menu_items), "activate",
-                              G_CALLBACK (gtk_main_quit),
-                              NULL);
+  g_signal_connect (G_OBJECT (Menu_items), "activate",
+                              G_CALLBACK (quit),
+                              ihm_pli);
   gtk_menu_item_set_submenu(GTK_MENU_ITEM (Root_menu), Menu);
 
   
@@ -239,6 +239,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"button_release_event",G_CALLBACK(button_release_event),ihm_pli);
   id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"motion_notify_event",G_CALLBACK(motion_notify_event),ihm_pli);
   id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"key_press_event",G_CALLBACK(key_down),ihm_pli);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Fenetre),"destroy",G_CALLBACK(quit),ihm_pli);
   id_sig_connect = g_signal_connect (G_OBJECT (entry_random), "activate",
                       G_CALLBACK (enter_callback_random),
                       ihm_pli);

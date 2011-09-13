@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <mcheck.h>
 #include <glib/gi18n.h>
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -32,6 +33,7 @@ int main (int argc, char *argv[])
   GOptionContext* context;
   GError *error = NULL;
   ihm_pli_t *ihm_pli;
+  mtrace();
   ihm_pli=malloc(sizeof(ihm_pli_t));
   memset(ihm_pli,0,sizeof(ihm_pli_t));
   context = g_option_context_new ( _("Gbridge GTK game") );

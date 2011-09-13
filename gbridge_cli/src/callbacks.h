@@ -10,6 +10,7 @@ void button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer da
 gint motion_notify_event (GtkWidget *widget, GdkEventMotion *event, gpointer data);
 gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event,ihm_pli_t *ihm_pli);
 gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event,ihm_pli_t *ihm_pli);
+gboolean quit(GtkWidget *window, ihm_pli_t *ihm_pli);
 gboolean game_drop_enable(ihm_pli_t *ihm_pli);
 rectangle_t * get_active_targetzone(GList *lst);
 void fdebug(void);

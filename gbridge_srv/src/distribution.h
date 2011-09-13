@@ -52,6 +52,6 @@ void qintsort (int arr[], int lidx, int ridx);
 void evalmain (game_t *game);
 void presentation (main_t * mainjoueur);
 void envoi_jeu (position_t position, game_t *game);
-void remplit_liste_jeu (game_t *game,position_t rotation);
+void remplit_liste_jeu (game_t *game);
 void distribution (void);
-position_t init_distrib (game_t *game);
+void init_distrib (game_t *game);

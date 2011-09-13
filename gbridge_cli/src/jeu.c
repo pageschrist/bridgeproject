@@ -322,14 +322,14 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
       sprintf(reschaine,"NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0]);
     gtk_label_set_text (GTK_LABEL (ihm_pli->Score),reschaine );
     free(reschaine);
+    free(resps);
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
 
     
     return((ihm_pli->pli->nextpos)%2);
   }
   else {
-    //ihm_pli->transfert->status=PLI;
-    printf("Joueur Joue\n");
+    printf("Player\n");
 
   
     position_middle(ihm_pli,imgcard,poscour);
@@ -340,11 +340,11 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     ihm_pli->pli->carte[poscour].nocarte=imgcard->valeur;
     ihm_pli->tab_couleur[poscour][imgcard->couleur]--;
     draw_container_ihm(ihm_pli);
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%s",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],affichage(ihm_pli->pli->nextpos,POSITION)) );
+    resps=affichage(ihm_pli->pli->nextpos,POSITION); 
+    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
 
     
-    //status = write (ihm_pli->socketid,ihm_pli->transfert, sizeof (transfert_t));
     write_data(ihm_pli,ihm_pli->pli,'p');
     status = read_header (ihm_pli,ihm_pli->pli, 'p');
     return(ihm_pli->pli->nextpos%2);

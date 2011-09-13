@@ -47,8 +47,8 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   free_ihm_pli(ihm_pli);
   reset_ihm_pli(ihm_pli);
   write_data (ihm_pli,NULL, 'n');
-  
-	  fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
+  if(ihm_pli->debug) 
+    fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
@@ -63,8 +63,10 @@ void click_bid (GtkButton *button,button_bid_t *button_bid) {
   button=button;
   couleur_t couleur;
   int contrat;
-  printf("Nombre de plis:%d\n",button_bid->ihm_bid->bid->nombre);
-  printf("couleur:%d\n",button_bid->ihm_bid->bid->couleur);
+  if(button_bid->ihm_pli->debug) {
+    printf("Nombre de plis:%d\n",button_bid->ihm_bid->bid->nombre);
+    printf("couleur:%d\n",button_bid->ihm_bid->bid->couleur);
+  }
   for(contrat=0;contrat<button_bid->ihm_bid->bid->nombre-1;contrat++){
     for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(button_bid->ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
@@ -109,8 +111,9 @@ gboolean key_down(GtkWidget *widget,
 
 gboolean event_blink(gpointer data)
 {
-  printf("Event blinck\n");
         ihm_pli_t *ihm_pli = (ihm_pli_t*) data;
+  if(ihm_pli->debug) 
+    printf("Event blinck\n");
 
         imgcard_t *tmp;
 
@@ -174,7 +177,8 @@ gboolean event_blink(gpointer data)
 
 void clear_blink(ihm_pli_t *ihm_pli)
 {
-        printf("On est dans blink_clear\n");
+        if(ihm_pli->debug)
+          printf("On est dans blink_clear\n");
         GList *lst;
         imgcard_t *card;
 
@@ -202,7 +206,8 @@ gboolean mise_en_place ( GtkWidget *Drawing_area,ihm_pli_t *ihm_pli) {
   Drawing_area=Drawing_area;
   int contrat;
   couleur_t couleur;
-  printf("mise_en_place\n");
+  if(ihm_pli->debug)
+    printf("mise_en_place\n");
   alloc_ihm(ihm_pli);
   for(couleur=trefle;couleur<aucune+1;couleur++) {
     for(contrat=0;contrat<7;contrat++) {
@@ -237,21 +242,20 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   widget=widget;
   ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
   position_t position;
-  //if(ihm_pli->state==BID) 
   if(ihm_pli->status=='b'  ) 
     return FALSE;
-    printf("Voici ihm_pli->read=%d\n",ihm_pli->read  ); 
   // C'est la fin on a deja 13 plis 
   if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
     //if(ihm_pli->read==FALSE  ) 
      // return TRUE;
-
-    printf("The end \n");
+    if(ihm_pli->debug)
+      printf("The end \n");
     trash_list(ihm_pli);
     gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_CENTER);
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Final Contrat:%s\nEnd of Game",ihm_pli->scontrat));
     for (position=sud;position<est+1;position++) {
-      fprintf(stderr,"recuperation_jeu position=%d, button_press_event %c %d\n", position,ihm_pli->status, ihm_pli->read);
+      if(ihm_pli->debug)
+        fprintf(stderr,"recuperation_jeu position=%d, button_press_event %c %d\n", position,ihm_pli->status, ihm_pli->read);
       recuperation_jeu (ihm_pli,  position);
     }
     draw_container_ihm(ihm_pli); 
@@ -277,7 +281,8 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
                         clear_blink(ihm_pli);
         }
   }
-  printf("End button_press_event\n");
+  if(ihm_pli->debug)
+    printf("End button_press_event\n");
   return(TRUE);
 }
 
@@ -287,8 +292,8 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
   Fenetre=Fenetre;
   int status;
   position_t position;
-  printf("expose comment %d\n", ihm_pli->read);
-      //if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
+  if(ihm_pli->debug)
+    printf("expose comment %d\n", ihm_pli->read);
       if(ihm_pli->status=='b' && ihm_pli->read==TRUE) {
         ihm_pli->read=FALSE;
         int number,contrat,i;
@@ -330,15 +335,17 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
  
         gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\nFinal Contrat: %s\n",dis_bid,ihm_pli->scontrat));
+        if(ihm_pli->debug)
 	  fprintf(stderr,"recuperation_jeu +2 av, expose_comment%c %d\n",ihm_pli->status,ihm_pli->read);
-          ihm_pli->state=STARTING; 
-          ihm_pli->status='g'; 
+        ihm_pli->state=STARTING; 
+        ihm_pli->status='g'; 
           
 
           for(contrat=0;contrat<7;contrat++){
             for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
+        if(ihm_pli->debug)
 	  fprintf(stderr,"recuperation_jeu +2, expose_comment:%c %d\n",ihm_pli->status,ihm_pli->read);
           for (position=sud;position<est+1;position++ ) {
             free_list(&ihm_pli->players[position]);
@@ -361,8 +368,9 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         
           for(couleur=trefle;couleur<aucune+1;couleur++) 
             for(contrat=0;contrat<number-1;contrat++){
+              if(ihm_pli->debug)
                 printf("couleur=%d,number=%d,contrat=%d\n",couleur,number,contrat);
-                gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
+              gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
           for(couleur=trefle;couleur<color+1;couleur++) {
             gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
@@ -381,7 +389,8 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
      // int status; 
 
       draw_container_ihm(ihm_pli); 
-      printf("expose Drawing_area,\n");
+      if(ihm_pli->debug)
+        printf("expose Drawing_area,\n");
      // if(ihm_pli->state==BID && ihm_pli->read==TRUE) {
      //   printf("expose Drawing_area enchere,\n");
      //   bid_t *bid=malloc(sizeof(bid_t));
@@ -398,10 +407,15 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
         return FALSE;
 }
 
-gboolean quit(GtkWidget *window, gpointer data)
+gboolean quit(GtkWidget *window, ihm_pli_t *ihm_pli)
 {
         window=window;
-        data=data;
+        ihm_pli->status='e';
+        //if(ihm_pli->debug) 
+          fprintf(stdout,"End of Session\n");
+        write_data(ihm_pli,NULL,'e');
+        shutdown(ihm_pli->socketid,SHUT_RDWR);
+        close(ihm_pli->socketid);
         gtk_main_quit();
 
         return TRUE;
@@ -410,8 +424,9 @@ gboolean quit(GtkWidget *window, gpointer data)
 gint motion_notify_event (GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
         widget=widget;
-        printf("On est dans motion_notify_event\n");
         ihm_pli_t *ihm_pli = (ihm_pli_t*)data;
+        if(ihm_pli->debug)
+          printf("On est dans motion_notify_event\n");
 
         rectangle_t *zone = NULL;
 
@@ -617,7 +632,6 @@ void button_release_event (GtkWidget *widget,
 
                 }
                 if(ihm_pli->pli->nextpos%2==(position_t)ihm_pli->ligneia) {
-                  //IA joue
                   do {
                 
                     ligne=game_turn(ihm_pli, NULL);

@@ -6,7 +6,8 @@
 
 void draw_cards(ihm_pli_t *ihm_pli, GList *list, GdkPixmap *target)
 {
-        printf("Draw cards\n");
+        if(ihm_pli->debug)
+          printf("Draw cards\n");
         GList *ptr;
         imgcard_t *data_ptr;
         GdkPixmap *img;
