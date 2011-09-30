@@ -41,6 +41,7 @@
 #define PASDECOULEUR -1
 #define DEFAULTLEVEL 5
 #define DEFAULTRANDOM 40
+#define MAXFILENAME 1024
 
 
 
@@ -203,6 +204,8 @@ typedef struct _ihm_pli_t
   GtkWidget *Label;
   GtkWidget *Score;
   GtkWidget *Fenetre;
+  GtkWidget *File_S;
+  char filename[MAXFILENAME];
   ihm_bid_t **Allbid;
   ihm_bid_t **Othbid;
   char cur_bid[BIDSIZE];

@@ -59,6 +59,39 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
 
 }
 
+ void file_ok_sel( GtkWidget        *w,
+                         ihm_pli_t *ihm_pli )
+{
+    w=w;
+    snprintf (ihm_pli->filename,MAXFILENAME,"%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION( (GtkFileSelection *)ihm_pli->File_S)));
+    if (ihm_pli->debug)
+      printf("filename=%s\n",ihm_pli->filename);
+}
+gboolean open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
+  button=button;
+  ihm_pli->File_S=gtk_file_selection_new ("File selection");
+  g_signal_connect (G_OBJECT (ihm_pli->File_S), "destroy",
+                      G_CALLBACK (gtk_widget_destroy), NULL);
+    /* Connect the ok_button to file_ok_sel function */
+    g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (ihm_pli->File_S)->ok_button),
+                      "clicked", G_CALLBACK (file_ok_sel),  ihm_pli);
+
+    /* Connect the cancel_button to destroy the widget */
+    g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (ihm_pli->File_S)->cancel_button),
+                              "clicked", G_CALLBACK (gtk_widget_destroy),
+                              G_OBJECT (ihm_pli->File_S));
+
+    /* Lets set the filename, as if this were a save dialog, and we are giving
+     a default filename */
+    gtk_file_selection_set_filename (GTK_FILE_SELECTION(ihm_pli->File_S),
+                                     "penguin.png");
+
+    gtk_widget_show (ihm_pli->File_S);
+
+return(FALSE);
+
+}
+
 void click_bid (GtkButton *button,button_bid_t *button_bid) {
   button=button;
   couleur_t couleur;

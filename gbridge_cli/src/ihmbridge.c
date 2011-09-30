@@ -30,6 +30,7 @@ GtkWidget **HBox_Encheres;
 GtkWidget *HBox_BidO;
 GtkWidget *Menu_Box;
 
+
 GtkWidget *Menu;
 GtkWidget *Root_menu;
 GtkWidget *Menu_items;
@@ -125,6 +126,11 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (new_dist),
+                               ihm_pli);
+  Menu_items = gtk_menu_item_new_with_label("Open File");
+  gtk_menu_append(GTK_MENU (Menu), Menu_items);
+  g_signal_connect (G_OBJECT (Menu_items), "activate",
+                              G_CALLBACK (open_file),
                                ihm_pli);
   Menu_items = gtk_menu_item_new_with_label("Debug");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
