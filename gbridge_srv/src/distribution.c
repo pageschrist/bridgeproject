@@ -43,18 +43,27 @@ char *affichage(int valeur, int type)
     if (type == CARTE) {
 	strcpy(figure, "23456789XVDRAZ");
 	pos = malloc(sizeof(char) * 2);
-	memcpy(pos, figure + valeur, sizeof(char));
+        if(valeur>cA+1) 
+          pos='W';
+        else
+	  memcpy(pos, figure + valeur, sizeof(char));
 
     }
     if (type == COULEUR) {
 	strcpy(couleurtype, "TKCPS");
 	pos = malloc(sizeof(char) * 2);
-	memcpy(pos, couleurtype + valeur, sizeof(char));
+        if(valeur>pique+1) 
+          pos='W';
+        else
+	  memcpy(pos, couleurtype + valeur, sizeof(char));
     }
     if (type == POSITION) {
 	strcpy(positiontype, "SONEZ");
 	pos = malloc(sizeof(char) * 2);
-	memcpy(pos, positiontype + valeur, sizeof(char));
+        if(valeur>pique+1) 
+          pos='W';
+        else
+	  memcpy(pos, positiontype + valeur, sizeof(char));
     }
     if ((type != CARTE) && (type != COULEUR) && (type != POSITION)) {
 	perror("type invalide\n");

@@ -169,9 +169,9 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 
     for (notour = 0; notour < 13; notour++) {
 	for (t = 0; t < NBJOUEURS; t++) {
-	    printf("Voici le tour %d ,nojoueur %d\n", notour, t);
 	    if ((pli->nextpos) % 2 == (game->contrat->declarant + 1) % 2) {
-		printf("IA play\n");
+                if(game->debug)
+		  printf("IA play\n");
 		if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
 		    fprintf(stderr, "Pb avec malloc\n");
 		    exit(EXIT_FAILURE);
@@ -223,8 +223,8 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		}
 		free(best_coup);
 	    } else {
-
-		printf("Player  \n");
+                if(game->debug)
+		  printf("Player  \n");
 		if ('e' == read_header(game, pli, 'p'))
 		    end_session(game);
 		joue_coup(pli, NULL, game);
@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
 				  (struct sockaddr *) &cltname,
 				  &clientlength);
 	if (-1 == game->sockslv_id) {
-        
+           if(EINTR!=errno) { 
 	    game->sockslv_id = accept(socksrv_id,
 				  (struct sockaddr *) &cltname,
 				  &clientlength);
@@ -392,6 +392,11 @@ int main(int argc, char *argv[])
 	      perror("accept()");
               exit(1);
             }
+          }
+          else {
+            printf ("The errno value is EINTR\n");
+          }
+         
 	}
 
 	childpid = fork();

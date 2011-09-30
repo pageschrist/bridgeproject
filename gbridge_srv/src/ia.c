@@ -34,14 +34,17 @@ carte_t *choix_best(int *nb_best, l_best_t * l_best, game_t * game,
     while (elem_best) {
 	if (elem_best->best->score == score) {
 	    if (game->debug) {
-		//printf("Voici la carte%s%s\n", affca=affichage(elem_best->best->carte->nocarte,CARTE),affco=affichage(elem_best->best->carte->clcarte,COULEUR));
-		//free(affca);
-		//free(affco);
+                char *affca,*affcl;
+		affca=affichage(elem_best->best->carte->nocarte,CARTE),
+		affcl=affichage(elem_best->best->carte->clcarte,COULEUR),
 		printf
-		    ("Voici le score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n",
+		    ("card=%s%s score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n",
+                     affca,affcl,
 		     elem_best->best->score,
 		     elem_best->best->nbline[IALINE],
 		     elem_best->best->nbline[jline]);
+	       free(affca);
+	       free(affcl);
 	    }
 	    if (hopestat) {
 		hopestat->score = elem_best->best->score;
