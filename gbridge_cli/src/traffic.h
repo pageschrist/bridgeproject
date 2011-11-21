@@ -1,4 +1,5 @@
 #define BRIDGE "gbridge"
+#define MAXFILE 1024
 
 typedef struct _net_header_t
 {
@@ -10,7 +11,8 @@ typedef struct _net_header_t
  int lenght; // lenght of the sata if necessary 
  gboolean debug; // lenght of the sata if necessary 
 } net_header_t;
-void write_data(ihm_pli_t *ihm_pli,void  *data,char type); 
+ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...); 
 void read_data( ihm_pli_t *ihm_pli,void *data, char type);
 int  read_header (ihm_pli_t *ihm_pli,void *data,char type);
-void write_header( ihm_pli_t *ihm_pli,char type) ;
+ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) ;
+gboolean send_file(ihm_pli_t *ihm_pli);

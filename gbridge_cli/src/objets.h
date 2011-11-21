@@ -206,16 +206,26 @@ typedef struct _ihm_pli_t
   GtkWidget *Fenetre;
   GtkWidget *File_S;
   char filename[MAXFILENAME];
+  char **tabjeufile;
   ihm_bid_t **Allbid;
   ihm_bid_t **Othbid;
   char cur_bid[BIDSIZE];
   char *path;
+  char *tabfile;
   FILE *output;
   int blinkid;
   int state ; 
   transfert_t *transfert;
   gboolean read;
 } ihm_pli_t;
+
+typedef struct _tablist
+{
+  valeur_t tabcoul[13];
+  gboolean debug;               //position de la derniere carte jouee
+  int nbcrt;                    //nombre de carte dans la couleur
+  couleur_t couleureval;
+} tablist_t;
 
 typedef struct _button_bid_t
 {

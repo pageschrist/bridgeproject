@@ -6,6 +6,7 @@
 #include <glib/ghash.h>
 #include <gdk/gdkkeysyms.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include "objets.h"
 #include "client.h"
@@ -63,9 +64,22 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
                          ihm_pli_t *ihm_pli )
 {
     w=w;
-    snprintf (ihm_pli->filename,MAXFILENAME,"%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION( (GtkFileSelection *)ihm_pli->File_S)));
+    struct stat *buf;
+    buf=malloc(sizeof(struct stat));
+    snprintf (ihm_pli->filename,MAXFILENAME,"%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION( (GtkFileSelection *)ihm_pli->File_S)));
     if (ihm_pli->debug)
       printf("filename=%s\n",ihm_pli->filename);
+    if(strlen(ihm_pli->filename)!=0) {
+      if(!stat(ihm_pli->filename,buf)) {
+        
+        if(!send_file(ihm_pli))
+         fprintf(stderr,"Send of file failed\n");
+      }
+      else 
+        fprintf(stderr,"File not found or unreadable\n");
+      
+
+    }
 }
 gboolean open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
   button=button;

@@ -1,3 +1,4 @@
+#define MAXFILE 1024
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) ;
 void file_ok_sel( GtkWidget        *w, ihm_pli_t *ihm_pli );
 gboolean open_file (GtkButton *button,ihm_pli_t *ihm_pli); 

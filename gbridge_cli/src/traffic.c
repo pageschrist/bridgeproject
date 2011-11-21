@@ -5,10 +5,47 @@
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "traffic.h"
+#define _GNU_SOURCE
+
+#include <stdarg.h>
+
 int i=0;
 int j=0;
-void write_header( ihm_pli_t *ihm_pli,char type) { 
+gboolean send_file(ihm_pli_t *ihm_pli) {
+  FILE *fd;
+  ssize_t ret;
+  char buf[MAXFILE];
+  char transbuf[MAXFILE];
+  transbuf[0]='\0';
+  fd=fopen(ihm_pli->filename,"r");
+  if(NULL==fd) 
+    perror("fopen()");
+  else {
+    while(fgets(buf,MAXFILE,fd)) {
+      if(0==strlen(transbuf))  
+        strncpy(transbuf,buf,MAXFILE);
+      else
+        strcat(transbuf,buf);
+    }
+      if(ihm_pli->debug) 
+        printf("send_file: transbuf=%s",transbuf);
+    ret=write_data(ihm_pli,transbuf,strlen(transbuf));
+    
+
+  }
+  if(ret>=0)
+   return TRUE;
+  else
+   return FALSE;
+}
+
+
+ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) { 
+  va_list args;
+  ssize_t ret;
   net_header_t header;
+  va_start (args, type);
+   
   strncpy(header.head,BRIDGE,8); 
   header.status=ihm_pli->status; 
   header.level=ihm_pli->level; 
@@ -19,37 +56,43 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
     fprintf(stderr,"write_header %d :%c\n",i,type);
   }
   switch(type) {
+  
+  case 'f':
+    header.type='f';
+    header.lenght=va_arg(args,int);
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    break;
   case 'g':
     header.type='g';
     header.lenght=sizeof(pli_t);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'p':
     header.type='p';
     header.lenght=sizeof(pli_t);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'c':
     header.type='c';
     header.lenght=sizeof(carte_t);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'b':
     header.type='b';
     header.lenght=sizeof(bid_t);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'u':
     header.type='u';
     header.lenght=BIDSIZE;
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'n':
     header.type='n';
     header.lenght=0;
     if(ihm_pli->debug) 
       fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'e':
     header.type='e';
@@ -57,10 +100,12 @@ void write_header( ihm_pli_t *ihm_pli,char type) {
     header.lenght=0;
     if(ihm_pli->debug) 
       fprintf(stderr,"header.status=%c,header.random=%d,header.level=%d\n",header.status,header.random,header.level);
-    write (ihm_pli->socketid,  &header,sizeof(net_header_t));
+    ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
 
   }
+  va_end(args);
+  return(ret);
 
 }
 
@@ -126,32 +171,42 @@ void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
   }
 
 }
-void write_data(ihm_pli_t *ihm_pli,void  *data,char type) {
+ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
 
+  va_list args;
+  ssize_t ret=0;
+  va_start (args, type);
   pli_t *pli;
+  int size;
   carte_t *carte;
   bid_t *bid;
   char *cur_bid;
+  
   switch(type) {
     case 'p':
       pli=(pli_t *) data;
       write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  pli, sizeof (pli_t));
+      ret=write (ihm_pli->socketid,  pli, sizeof (pli_t));
+      break;
+    case 'f':
+      size=va_arg(args,int);      
+      write_header(ihm_pli,type,size);
+      ret=write (ihm_pli->socketid,(char *) data, size );
       break;
     case 'c':
       carte= data;
       write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  carte, sizeof (carte_t));
+      ret=write (ihm_pli->socketid,  carte, sizeof (carte_t));
       break;
     case 'b':
       bid= data;
       write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  bid, sizeof (bid_t));
+      ret=write (ihm_pli->socketid,  bid, sizeof (bid_t));
       break;
     case 'u':
       cur_bid= data;
       write_header(ihm_pli,type);
-      write (ihm_pli->socketid,  cur_bid, BIDSIZE);
+      ret=write (ihm_pli->socketid,  cur_bid, BIDSIZE);
       break;
     case 'n':
       write_header(ihm_pli,type);
@@ -162,6 +217,6 @@ void write_data(ihm_pli_t *ihm_pli,void  *data,char type) {
  
 
   }
-
+  return(ret);
 
 }
