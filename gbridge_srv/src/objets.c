@@ -276,8 +276,10 @@ void init_game(game_t * game)
 
 void clear_game(game_t * game)
 {
-    free(game->contrat);
-    free(game->bid);
+    if(game->contrat)
+      free(game->contrat);
+    if(game->bid)
+      free(game->bid);
     game->cur_bid[0] = '\0';
     clear_tabjeu(game);
 

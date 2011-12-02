@@ -92,10 +92,11 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
       }
 
     }
+    gtk_widget_destroy(ihm_pli->File_S);
 }
-gboolean open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
+void open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
   button=button;
-  ihm_pli->File_S=gtk_file_selection_new ("File selection");
+  ihm_pli->File_S=gtk_file_selection_new (g_locale_to_utf8( "Select a file", -1, NULL, NULL, NULL));
   g_signal_connect (G_OBJECT (ihm_pli->File_S), "destroy",
                       G_CALLBACK (gtk_widget_destroy), NULL);
     /* Connect the ok_button to file_ok_sel function */
@@ -114,7 +115,7 @@ gboolean open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
 
     gtk_widget_show (ihm_pli->File_S);
 
-return(FALSE);
+//return(FALSE);
 
 }
 
