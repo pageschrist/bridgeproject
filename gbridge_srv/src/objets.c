@@ -15,7 +15,6 @@ void mark(void)
     printf("mark\n");
 }
 
-void affiche_tabjeu(position_t position);
 void init_list_best(l_best_t * l_best)
 {
     l_best->first = NULL;
@@ -149,14 +148,18 @@ void clear_tabjeu(game_t * game)
     for (position = sud; position < est + 1; position++) {
 	for (couleur = trefle; couleur < pique + 1; couleur++) {
 	    index = INDEX(position, couleur);
-	    free(game->tabjeuref[index]);
+            if(game->tabjeuref[index])
+	      free(game->tabjeuref[index]);
 	    game->tabjeuref[index] = NULL;
-	    free(game->tabjeu[index]);
+            if(game->tabjeu[index])
+	      free(game->tabjeu[index]);
 	    game->tabjeu[index] = NULL;
 	}
     }
-    free(game->tabjeu);
-    free(game->tabjeuref);
+    if(game->tabjeu)
+      free(game->tabjeu);
+    if(game->tabjeuref)
+      free(game->tabjeuref);
 }
 
 int sub_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
@@ -267,6 +270,7 @@ void init_game(game_t * game)
     game->cur_bid[0] = '\0';
     init_tabjeu(game);
     game->status = 'b';
+    game->buffile=NULL;
 
 }
 

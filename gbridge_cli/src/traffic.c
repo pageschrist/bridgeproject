@@ -29,7 +29,7 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
     }
       if(ihm_pli->debug) 
         printf("send_file: transbuf=%s",transbuf);
-    ret=write_data(ihm_pli,transbuf,strlen(transbuf));
+    ret=write_data(ihm_pli,transbuf,'f',strlen(transbuf));
     
 
   }
@@ -180,7 +180,10 @@ ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
   int size;
   carte_t *carte;
   bid_t *bid;
+  int sizetmp;
   char *cur_bid;
+  char *buf,*bufref;
+  
   
   switch(type) {
     case 'p':
@@ -190,8 +193,24 @@ ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
       break;
     case 'f':
       size=va_arg(args,int);      
+      if(ihm_pli->debug)
+        fprintf(stdout,"size=%d",size);
       write_header(ihm_pli,type,size);
       ret=write (ihm_pli->socketid,(char *) data, size );
+      bufref=data;
+      sizetmp=strlen(bufref);
+      if(ihm_pli->debug) {
+        while(NULL!=(buf=strchr(data,'\n'))) {
+          buf[0]='\0';
+          printf("data=%s\n",(char *)data);
+          if(buf>(bufref+sizetmp-2))
+            break;
+          data=buf+1;
+        
+      
+        }
+      }
+      
       break;
     case 'c':
       carte= data;
@@ -217,6 +236,7 @@ ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
  
 
   }
+  va_end(args);
   return(ret);
 
 }

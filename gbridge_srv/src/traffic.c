@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <glib/gtypes.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "traffic.h"
+#include "file.h"
 int i = 0;
 int j = 0;
 void write_header(game_t * game, char type)
@@ -81,7 +83,7 @@ char read_header(game_t * game, void *data, char type)
 	return ('e');
     }
 
-    if (header.type != type && header.type != 'n' && header.type != 'e') {
+    if (header.type != type && header.type != 'n' && header.type != 'e' && header.type != 'f') {
 	fprintf(stderr, "wrongtype, header.type=%c,type=%c\n", header.type,
 		type);
 	return ('z');
@@ -107,6 +109,16 @@ char read_header(game_t * game, void *data, char type)
 			"header.status=%c,header.random=%d,header.level=%d\n",
 			header.status, header.random, header.level);
 	    break;
+	case 'f':
+	    game->status = 'f';
+	    game->random = header.random;
+	    game->level = header.level;
+	    if (game->debug)
+		fprintf(stderr,
+			"header.status=%c,header.random=%d,header.level=%d,header.lenght=%d\n",
+			header.status, header.random, header.level,header.lenght);
+	    read_data(game, data, 'f',header.lenght);
+	    break;
 
 	default:
 	    read_data(game, data, type);
@@ -117,9 +129,12 @@ char read_header(game_t * game, void *data, char type)
     return (game->status);
 }
 
-void read_data(game_t * game, void *data, char type)
+void read_data(game_t * game, void *data, char type,...)
 {
+    va_list args;
     pli_t *pli;
+    ssize_t size;
+    va_start (args, type);
     carte_t *carte;
     bid_t *bid;
     char *cur_bid;
@@ -139,6 +154,13 @@ void read_data(game_t * game, void *data, char type)
     case 'u':
 	cur_bid = data;
 	read(game->sockslv_id, cur_bid, BIDSIZE);
+	break;
+    case 'f':
+        size=va_arg(args,int);
+        if(!game->buffile)
+          game->buffile=malloc(size*sizeof(char));
+	read(game->sockslv_id, game->buffile, size);
+        //file_parse(game);
 	break;
 
     }

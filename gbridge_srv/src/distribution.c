@@ -44,7 +44,7 @@ char *affichage(int valeur, int type)
 	strcpy(figure, "23456789XVDRAZ");
 	pos = malloc(sizeof(char) * 2);
         if(valeur>cA+1) 
-          pos='W';
+          *pos=  'W';
         else
 	  memcpy(pos, figure + valeur, sizeof(char));
 
@@ -53,7 +53,7 @@ char *affichage(int valeur, int type)
 	strcpy(couleurtype, "TKCPS");
 	pos = malloc(sizeof(char) * 2);
         if(valeur>pique+1) 
-          pos='W';
+          *pos='W';
         else
 	  memcpy(pos, couleurtype + valeur, sizeof(char));
     }
@@ -61,7 +61,7 @@ char *affichage(int valeur, int type)
 	strcpy(positiontype, "SONEZ");
 	pos = malloc(sizeof(char) * 2);
         if(valeur>pique+1) 
-          pos='W';
+          *pos='W';
         else
 	  memcpy(pos, positiontype + valeur, sizeof(char));
     }

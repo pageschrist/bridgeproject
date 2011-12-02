@@ -126,10 +126,6 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->scontrat=NULL;
   g_list_free(ihm_pli->waiting);
   ihm_pli->waiting=NULL;
-  if(ihm_pli->tabfile) {
-    free(ihm_pli->tabfile);
-    ihm_pli->tabfile=NULL;
-  }
   //g_list_free(ihm_pli->dropping);
   //ihm_pli->dropping=NULL;
   ihm_pli->movecard=NULL;
@@ -161,8 +157,8 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
       ihm_pli->tab_couleur[position][couleur]=0;
     }
   }
-  if(ihm_pli->tabfile) 
-  ihm_pli->tabfile[0]='\0';
+  if(ihm_pli->filename) 
+  ihm_pli->filename[0]='\0';
    
   ihm_pli->read=FALSE;
   memset(ihm_pli->pli,0,sizeof(pli_t));
@@ -183,7 +179,6 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->level=DEFAULTLEVEL;
   ihm_pli->random=DEFAULTRANDOM;
   ihm_pli->pli=malloc(sizeof(pli_t));
-  ihm_pli->tabfile=malloc(MAXFILENAME*sizeof(char));
   memset(ihm_pli->pli,0,sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
   memset(ihm_pli->contrat,0,sizeof(contrat_t));
@@ -201,7 +196,6 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->dropping=NULL;
   ihm_pli->movecard=NULL;
   ihm_pli->trash=NULL;
-  ihm_pli->tabfile=NULL;
   ihm_pli->players = (GList **) g_malloc( sizeof(GList*) *NBJOUEURS );
   for (position=sud;position<est+1;position++ ) {
     ihm_pli->players[position]=NULL;

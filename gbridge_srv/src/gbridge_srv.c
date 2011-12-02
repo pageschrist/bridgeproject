@@ -25,6 +25,7 @@
 #include "traffic.h"
 #include "distribution.h"
 #include "gbridge_srv.h"
+#include "file.h"
 void debug_info(void);
 
 void print_usage(void);
@@ -85,6 +86,13 @@ void main_game(game_t * game)
 	    init_distrib(game);
 	    envoi_jeu(0, game);
 	    status = 1;
+        } else if (game->status == 'f') {
+	    clear_game(game);
+            file_parse(game);
+            
+	    envoi_jeu(0, game);
+	    status = 1;
+            
 	} else {
 	    status = analyse_bid(game);
 	    if (game->status == 'b') {

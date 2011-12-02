@@ -148,6 +148,7 @@ typedef struct _game_t
   char status;
   int level;
   int random;
+  char *buffile;
   gboolean debug;
   tablist_t **tabjeu;
   tablist_t **tabjeuref;   

@@ -211,7 +211,6 @@ typedef struct _ihm_pli_t
   ihm_bid_t **Othbid;
   char cur_bid[BIDSIZE];
   char *path;
-  char *tabfile;
   FILE *output;
   int blinkid;
   int state ; 
