@@ -82,6 +82,8 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
       
       if(ihm_pli->debug) 
         fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
+      free_ihm_pli(ihm_pli);
+      reset_ihm_pli(ihm_pli);
       recuperation_jeu(ihm_pli,0);
       draw_container_ihm(ihm_pli);
       for(contrat=0;contrat<7;contrat++){
