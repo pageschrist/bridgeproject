@@ -80,16 +80,15 @@ void main_game(game_t * game)
     do {
 	if ('e' == read_header(game, game->bid, 'b'))
 	    end_session(game);
-	if (game->status == 'n') {
+	if (game->status == 'n'|| game->status == 'f') {
 	    clear_game(game);
-	    init_game(game);
-	    init_distrib(game);
-	    envoi_jeu(0, game);
-	    status = 1;
-        } else if (game->status == 'f') {
-	    clear_game(game);
-            file_parse(game);
-            
+            if(game->status == 'n') {
+	      init_game(game);
+	      init_distrib(game);
+            }
+            else {
+              file_parse(game);
+            }
 	    envoi_jeu(0, game);
 	    status = 1;
             

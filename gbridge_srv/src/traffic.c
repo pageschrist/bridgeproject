@@ -158,8 +158,9 @@ void read_data(game_t * game, void *data, char type,...)
     case 'f':
         size=va_arg(args,int);
         if(!game->buffile)
-          game->buffile=malloc(size*sizeof(char));
+          game->buffile=malloc((size+1)*sizeof(char));
 	read(game->sockslv_id, game->buffile, size);
+        game->buffile[size]='\0';
         //file_parse(game);
 	break;
 
