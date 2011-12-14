@@ -207,6 +207,8 @@ typedef struct _ihm_pli_t
   GtkWidget *File_S;
   char filename[MAXFILENAME];
   char **tabjeufile;
+  gboolean savegame;
+  FILE *fd;
   ihm_bid_t **Allbid;
   ihm_bid_t **Othbid;
   char cur_bid[BIDSIZE];

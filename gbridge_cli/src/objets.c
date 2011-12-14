@@ -214,6 +214,8 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->blinkid=0;
   ihm_pli->state=BID;
   ihm_pli->read=FALSE;
+  ihm_pli->savegame=FALSE;
+  ihm_pli->fd=NULL;
   ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
   ihm_pli->filename[0]='\0';
   init_bid(ihm_pli);

@@ -142,6 +142,11 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (ihm_undebug),
                                ihm_pli);
+  Menu_items = gtk_menu_item_new_with_label("SaveGame");
+  gtk_menu_append(GTK_MENU (Menu), Menu_items);
+  g_signal_connect (G_OBJECT (Menu_items), "activate",
+                              G_CALLBACK (save_game),
+                               ihm_pli);
   Menu_items = gtk_menu_item_new_with_label("Random");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   Menu_items = gtk_menu_item_new_with_label("Quit");

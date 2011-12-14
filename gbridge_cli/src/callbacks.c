@@ -94,6 +94,13 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
     }
     gtk_widget_destroy(ihm_pli->File_S);
 }
+
+void save_game (GtkButton *button,ihm_pli_t *ihm_pli) {
+  button=button;
+  ihm_pli->savegame=TRUE;
+
+}
+
 void open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
   button=button;
   ihm_pli->File_S=gtk_file_selection_new (g_locale_to_utf8( "Select a file", -1, NULL, NULL, NULL));
@@ -115,7 +122,6 @@ void open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
 
     gtk_widget_show (ihm_pli->File_S);
 
-//return(FALSE);
 
 }
 

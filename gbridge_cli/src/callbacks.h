@@ -2,6 +2,7 @@
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) ;
 void file_ok_sel( GtkWidget        *w, ihm_pli_t *ihm_pli );
 void open_file (GtkButton *button,ihm_pli_t *ihm_pli); 
+void save_game (GtkButton *button,ihm_pli_t *ihm_pli);
 void enter_callback_level( GtkWidget *entry,ihm_pli_t *ihm_pli);
 void enter_callback_random( GtkWidget *entry,ihm_pli_t *ihm_pli);
 void click_bid (GtkButton *button,button_bid_t *button_bid);

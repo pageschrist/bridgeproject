@@ -89,8 +89,8 @@ void main_game(game_t * game)
             else {
               file_parse(game);
             }
-	    envoi_jeu(0, game);
-	    status = 1;
+	      envoi_jeu(0, game);
+            status=1;
             
 	} else {
 	    status = analyse_bid(game);

@@ -7,6 +7,9 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "client.h"
 #include "jeu.h"
 #include "traffic.h"
@@ -140,10 +143,6 @@ void init_game(ihm_pli_t *ihm_pli) {
 
 
   
-  //on initialise le jeu
-  //printf("recup jeu:%d\n",(ihm_pli->contrat->declarant+2)%4);
-  //recuperation_jeu(ihm_pli,0);
-  //recuperation_jeu(ihm_pli,(ihm_pli->contrat->declarant+2)%4);
   ihm_pli->pli->nextpos=ouest;
 
 }
@@ -404,8 +403,12 @@ void
 recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
 {
   imgcard_t *imgcard;
-  char *rescl,*resvl;
+  char *rescl,*resvl,refcoul='O',*resp;
+  char savefile[MAXFILENAME];
   carte_t *carte;
+  char writebuf[NBPCOULEURS+2];
+  char *colorref="TKCP";
+  int j=0;
   carte=malloc(sizeof(carte_t));
   int i, status;
   gchar *cardname=NULL;
@@ -413,7 +416,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
   couleur_t couleur;
   char model[] = "paris";
-
+  resp=affichage(position,POSITION);
   cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
   gc = ihm_pli->Drawing_area->style->fg_gc[state];
   gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
@@ -428,7 +431,21 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   }
   for( couleur=trefle;couleur<pique+1;couleur++)
     ihm_pli->tab_couleur[position][couleur]=0;
+  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&TRUE==ihm_pli->savegame) {
+    if(NULL==ihm_pli->fd) {
+      snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_pli->random);
+      ihm_pli->fd=fopen(savefile,"a");
 
+    }
+    if(position==sud){
+      snprintf(writebuf,NBPCOULEURS+2,"%c",resp[0]);
+      fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+    }
+    else{
+      snprintf(writebuf,NBPCOULEURS+2,"\n%c",resp[0]);
+      fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+    }
+  }
   for (i = 0; i < NBPCOULEUR; i++) {
       status=read_header (ihm_pli, carte, 'c');
       resvl=affichage(carte->nocarte,CARTE);
@@ -438,15 +455,45 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
         imgcard=load_imgcard(cardname,carte,ihm_pli,position); 
          ihm_pli->players[position]=g_list_prepend(ihm_pli->players[position], (gpointer)imgcard);
+        if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&TRUE==ihm_pli->savegame) {
+          if(ihm_pli->fd) {
+            if(refcoul!=rescl[0]){ 
+              if(rescl[0] != colorref[j]) {
+                snprintf(writebuf,NBPCOULEURS+2,"\n%c",colorref[j]);
+                fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+              }
+              snprintf(writebuf,NBPCOULEURS+2,"\n%c%c",rescl[0],resvl[0]);
+              fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+              refcoul=rescl[0];
+              j++;
+            }
+            else{
+              snprintf(writebuf,NBPCOULEURS+2,"%c",resvl[0]);
+              fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+            }
+          }
+          
+        }
       }
 
       ihm_pli->tab_couleur[position][carte->clcarte]=ihm_pli->tab_couleur[position][carte->clcarte]+1;
 	
+      free(rescl);
+      free(resvl);
       
-    }
-    locate_cards(ihm_pli->players[position],position,ihm_pli);
+  }
+  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&(TRUE==ihm_pli->savegame )&& (position==est) &&ihm_pli->fd) {
+    snprintf(writebuf,NBPCOULEURS+2,"\n");
+    fwrite(writebuf,1,1,ihm_pli->fd);
+  }
+  locate_cards(ihm_pli->players[position],position,ihm_pli);
   free(carte);
-  free(rescl);
-  free(resvl);
+  free(resp);
+  
+  if(ihm_pli->fd) {
+    fclose(ihm_pli->fd);
+    ihm_pli->fd=NULL;
+  }
+  
   g_free(cardname);
 }
