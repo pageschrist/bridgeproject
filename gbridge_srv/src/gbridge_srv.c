@@ -71,7 +71,7 @@ void signal_handler(int sig)
 
 void main_game(game_t * game)
 {
-    gboolean status;
+    gboolean bidstatus,diststatus=FALSE;
     couleur_t couleur;
     position_t position;
     int index;
@@ -85,15 +85,18 @@ void main_game(game_t * game)
             if(game->status == 'n') {
 	      init_game(game);
 	      init_distrib(game);
+              diststatus=TRUE;
             }
             else {
-              file_parse(game);
+              diststatus=file_parse(game);
             }
+            if(diststatus ) {
 	      envoi_jeu(0, game);
-            status=1;
+              bidstatus=TRUE;
+            }
             
 	} else {
-	    status = analyse_bid(game);
+	    bidstatus = analyse_bid(game);
 	    if (game->status == 'b') {
 		if('e'==write_data(game, game->cur_bid, 'u'))
                   end_session(game);
@@ -101,7 +104,7 @@ void main_game(game_t * game)
 	    if (!hopestat)
 		hopestat = analyse_tabjeu(game);
 	}
-    } while (status);
+    } while  (diststatus==FALSE || bidstatus==TRUE);
     game->status = 'g';
     rotation(game, hopestat);
     newgame(game, hopestat);
