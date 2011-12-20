@@ -14,7 +14,7 @@
 int prof_start = 0;
 int flag_debug = 0;
 
-carte_t *choix_best(int *nb_best, l_best_t * l_best, game_t * game,
+carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		    hopestat_t * hopestat)
 {
     valeur_t tabval[pique + 1];

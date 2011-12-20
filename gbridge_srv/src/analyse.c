@@ -63,6 +63,7 @@ carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
     index = INDEX(position, couleur);
     hopestat->position = position;
     hopestat->couleur = couleur;
+    hopestat->aff = 0;
     hopestat->best_card = NULL;;
     if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
 	fprintf(stderr, "Pb with malloc\n");
@@ -73,7 +74,7 @@ carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
     nb_best = 0;
     first_explore(plin, (sizemax * 4) - plin->noj, &nb_best, l_best, game);
     if (nb_best != 0) {
-	best_card = choix_best(&nb_best, l_best, game, hopestat);
+	best_card = best_choice(&nb_best, l_best, game, hopestat);
 
     } else {
 	free(best_card);
@@ -137,7 +138,7 @@ hopestat_t **analyse_tabjeu(game_t * game)
 	    gettimeofday(timeap, NULL);
 	    if (nb_best != 0) {
 		hopestat[index]->best_card =
-		    choix_best(&nb_best, l_best, game, hopestat[index]);
+		    best_choice(&nb_best, l_best, game, hopestat[index]);
 
 	    } else {
 		free(hopestat[index]->best_card);

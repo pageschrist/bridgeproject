@@ -213,7 +213,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 				   (int) timeap->tv_sec -
 				   (int) timeav->tv_sec);
 			best_coup =
-			    choix_best(&nb_best, l_best, game, NULL);
+			    best_choice(&nb_best, l_best, game, NULL);
 		    }
 		    nb_best = 0;
 		    clear_list(l_best);

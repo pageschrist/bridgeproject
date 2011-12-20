@@ -11,6 +11,7 @@ typedef struct _hopestat_t
   int nbline[2];
   carte_t *best_card;
   int profmax;
+  int aff;
 } hopestat_t;
 carte_t  *analyse_hand (game_t *game,pli_t *plic,couleur_t couleur);
 couleur_t search_best_color(position_t position,hopestat_t **hopestat);
