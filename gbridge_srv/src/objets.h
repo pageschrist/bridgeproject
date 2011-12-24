@@ -176,6 +176,7 @@ struct stack_box
 typedef struct stack_box *stackia_t;
 
 int echiquier_init (void);
+int max(int a,int b);
 void init_tablist (void);
 void affiche_pli (pli_t * ppli);
 void *copy_carte (void *data);

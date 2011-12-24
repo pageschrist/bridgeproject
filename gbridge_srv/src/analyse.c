@@ -9,21 +9,33 @@
 #include "ia.h"
 #include "create_config.h"
 
-couleur_t search_best_color(position_t position, hopestat_t ** hopestat)
+void search_best_color(position_t position, hopestat_t ** hopestat,choice_color_t *choice_color)
 {
-    couleur_t color, colorref;
-    int nbref = 0, index;
+    couleur_t color;
+    int refdiff[pique+1]; //Any value
+    int index;
+    position_t pos;
+    choice_color->interessant=aucune;
+    choice_color->toavoid=aucune;
+  
+    for (color = trefle; color < pique + 1; color++) {
+      index = INDEX(position, color);
+      refdiff[color]=hopestat[index]->nbline[position % 2]-hopestat[index]->nbline[(position+1) % 2];
+    }
 
     for (color = trefle; color < pique + 1; color++) {
-	index = INDEX(position, color);
-	if (hopestat[index]->nbline[position % 2] >= nbref) {
-	    colorref = color;
-	    nbref = hopestat[index]->nbline[position % 2];
+      for(pos=sud;pos<est+1;pos++) {
+        if(pos!=position) {
+	  index = INDEX(pos, color);
+          if((hopestat[index]->nbline[pos % 2]-hopestat[index]->nbline[(pos+1) % 2]) >=refdiff[color])
+            choice_color->toavoid=color;
+          if((hopestat[index]->nbline[pos % 2]-hopestat[index]->nbline[(pos+1) % 2]) <refdiff[color])
+            choice_color->interessant=color;
+
 	}
-
-
+      }
     }
-    return (colorref);
+
 }
 
 
@@ -39,6 +51,7 @@ void changeeval(game_t * game, couleur_t couleureval)
 	}
     }
 }
+
 carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
 {
 
@@ -90,7 +103,7 @@ carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
 }
 
 
-hopestat_t **analyse_tabjeu(game_t * game)
+hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
 {
 
     int index;
@@ -101,7 +114,10 @@ hopestat_t **analyse_tabjeu(game_t * game)
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
-    pli = malloc(sizeof(pli_t));
+    if(!cur_pli)
+      pli = malloc(sizeof(pli_t));
+    else
+      pli=cur_pli;
     position_t position;
     couleur_t couleur;
     for (couleur = trefle; couleur < pique + 1; couleur++) {
@@ -121,10 +137,12 @@ hopestat_t **analyse_tabjeu(game_t * game)
 	    hopestat[index]->best_card = malloc(sizeof(carte_t));
 	    hopestat[index]->position = position;
 	    hopestat[index]->couleur = couleur;
+            if(!cur_pli) {
 	    init_pli(pli, INIT);
-	    pli->entame = position;
-	    pli->nextpos = position;
-	    pli->atout = aucune;
+	      pli->entame = position;
+	      pli->nextpos = position;
+	     pli->atout = aucune;
+            }
 	    if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
 		fprintf(stderr, "Pb with malloc\n");
 		exit(EXIT_FAILURE);
@@ -151,7 +169,8 @@ hopestat_t **analyse_tabjeu(game_t * game)
 	}
     }
     changeeval(game, aucune);
-    free(pli);
+    if(!cur_pli)
+      free(pli);
     free(timeap);
     free(timeav);
     return (hopestat);

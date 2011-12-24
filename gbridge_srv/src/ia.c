@@ -50,6 +50,9 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		hopestat->score = elem_best->best->score;
 		hopestat->nbline[IALINE] = elem_best->best->nbline[IALINE];
 		hopestat->nbline[jline] = elem_best->best->nbline[jline];
+                hopestat->aff=max(game->tabjeu[INDEX(hopestat->position, hopestat->couleur)]->nbcrt,game->tabjeu[INDEX(((hopestat->position+2)%4), hopestat->couleur)]->nbcrt);
+                hopestat->aff=hopestat->aff-(elem_best->best->nbline[jline]+elem_best->best->nbline[IALINE]);
+                printf("aff=%d for color=%d position=%d\n", hopestat->aff,hopestat->couleur,hopestat->position);
 
 	    }
 	    if (tabval[elem_best->best->carte->clcarte] >

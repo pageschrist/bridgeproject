@@ -22,6 +22,14 @@ void init_list_best(l_best_t * l_best)
 
 }
 
+int max(int a,int b) {
+
+  if(a>b) 
+    return(a);
+  else
+    return(b);
+}
+
 void add_list_l(l_best_t * l_best, best_t * best)
 {
     elem_best_t *elem_best = malloc(sizeof(elem_best_t));

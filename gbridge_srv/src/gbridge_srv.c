@@ -102,7 +102,7 @@ void main_game(game_t * game)
                   end_session(game);
             }
 	    if (!hopestat)
-		hopestat = analyse_tabjeu(game);
+		hopestat = analyse_tabjeu(game,NULL);
 	}
     } while  (diststatus==FALSE || bidstatus==TRUE);
     game->status = 'g';
@@ -130,6 +130,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     int prof = game->level * 4;
     position_t position;
     couleur_t couleur;
+    choice_color_t *choice_color=malloc(sizeof(choice_color_t));
     int index;
     carte_t *best_coup = NULL;
     l_best_t *l_best = NULL;
@@ -150,12 +151,14 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 	    for (position = sud; position < est + 1; position++) {
 		index = INDEX(position, couleur);
 		printf
-		    ("position=%d,color=%d,nbline[IALINE]=%d,nbline[IALINE+1]=%d\n",
+		    ("position=%d,color=%d,nbline[IALINE]=%d,nbline[IALINE+1]=%d,aff=%d \t",
 		     hopestat[index]->position, hopestat[index]->couleur,
 		     hopestat[index]->nbline[IALINE],
-		     hopestat[index]->nbline[(IALINE + 1) % 2]);
+		     hopestat[index]->nbline[(IALINE + 1) % 2],
+		     hopestat[index]->aff);
 		if (hopestat[index]->best_card)
 		    affiche_carte(hopestat[index]->best_card);
+                printf("\n");
 	    }
 	}
 
@@ -172,7 +175,6 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     }
     envoi_jeu((game->contrat->declarant) % NBJOUEURS, game);
     envoi_jeu((game->contrat->declarant + 2) % NBJOUEURS, game);
-    couleur_t color;
     pli->entame = (game->contrat->declarant + 1) % 4;
     pli->nextpos = (game->contrat->declarant + 1) % 4;
     pli->atout = game->contrat->atout;
@@ -193,10 +195,10 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    prof = (13 - notour) * 4;
 		}
 		if (notour == 0 && t == 0) {	// On est à l'entame
-		    color = search_best_color(pli->nextpos, hopestat);
+		    search_best_color(pli->nextpos, hopestat,choice_color);
 		    best_coup = malloc(sizeof(carte_t));
 		    memcpy(best_coup,
-			   hopestat[INDEX(pli->nextpos, color)]->best_card,
+			   hopestat[INDEX(pli->nextpos, choice_color->interessant)]->best_card,
 			   sizeof(carte_t));
 		    gettimeofday(timeap, NULL);
 		} else {
