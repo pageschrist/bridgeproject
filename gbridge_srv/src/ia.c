@@ -512,7 +512,7 @@ first_explore(pli_t * pplic, int prof_max, int *nb_best, l_best_t * l_best,
 	thread_jeu =
 	    realloc(thread_jeu, (sizeof(thread_jeu_t *)) * (nothr + 1));
 	thread_jeu[nothr] = malloc(sizeof(thread_jeu_t));
-	copy_jeu(thread_jeu[nothr], game);
+	dup_game(thread_jeu[nothr], game);
 	thread_jeu[nothr]->carte = malloc(sizeof(carte_t));
 	thread_jeu[nothr]->best_cartepot = malloc(sizeof(carte_t));
 	nocarte = pplin->carte[positionc].nocarte;

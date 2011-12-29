@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 #include <glib/gtypes.h>
 #include <glib/gprintf.h>
 #include "objets.h"
@@ -54,18 +55,20 @@ char read_header(game_t * game, void *data, char type)
     net_header_t header;
     position_t position;
     couleur_t couleur;
-    int index;
+    int index,errnoori;
     if (game->debug) {
 	j++;
 	fprintf(stderr, "read_header %d :%c\n", j, type);
     }
     int ret;
     ret = read(game->sockslv_id, &header, sizeof(net_header_t));
+    errnoori=errno; 
     if (ret != sizeof(net_header_t)) {
+       perror("read()");
 	fprintf(stderr,
-		"Error in the read of the header ret=%d\n header.type=%c",
-		ret, header.type);
-	return ('z');
+		"Error in the read of the header ret=%d\n header.type=%c, errno=%d\n",
+		ret, header.type,errnoori);
+	return ('e');
     }
     game->status = header.status;
     game->level = header.level;
