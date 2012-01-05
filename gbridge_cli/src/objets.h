@@ -101,6 +101,7 @@ typedef struct _pli_t
   int nbpli_ligne[eo + 1];
   int noj; //Numero du joueur qui joue
   couleur_t atout;
+  position_t leader;
 
 } pli_t;
 

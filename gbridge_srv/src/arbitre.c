@@ -427,7 +427,6 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 
 
 }
-
 void *copy_carte(void *data)
 {
     carte_t *carte;
@@ -450,6 +449,8 @@ position_t evaluation_pli(pli_t * pli)
     position_t postmp;
     position_t posgagnante;
     carte_t carteref;
+
+    define_leader(pli); // We setup who  is winning
     /* On teste si on est le dernier joueur du pli */
     if (pli->noj == 3) {
 	postmp = pli->entame;
@@ -569,5 +570,30 @@ retpli_t *check_plis(pli_t * pli)
     retpli->alpha_or_beta = 0;
     /* printf ("Voici le score dans check_plis: %d\n", score); */
     return (retpli);
+
+}
+void define_leader(pli_t *pli) {
+  if(pli->entame==pli->nextpos) {
+   pli->leader=pli->entame;
+  }
+  else {
+    if(pli->atout!=aucune) {
+      if(pli->carte[pli->leader].clcarte==pli->carte[pli->nextpos].clcarte) {
+        if(pli->carte[pli->leader].nocarte<pli->carte[pli->nextpos].nocarte)
+          pli->leader=pli->nextpos;
+      }
+      else {
+        if(pli->carte[pli->nextpos].clcarte==pli->atout)
+          pli->leader=pli->nextpos;
+      }
+    }
+    else {
+      if(pli->carte[pli->leader].clcarte==pli->carte[pli->nextpos].clcarte) {
+        if(pli->carte[pli->leader].nocarte<pli->carte[pli->nextpos].nocarte)
+          pli->leader=pli->nextpos;
+      }
+
+    }
+  }
 
 }

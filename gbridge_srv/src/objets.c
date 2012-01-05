@@ -377,30 +377,8 @@ void init_cartes(void)
 void *duplique_pli(void *data)
 {
     pli_t *plicopie;
-    // position_t i;
-//  ligne_t j;
     plicopie = malloc(sizeof(pli_t));
     memcpy(plicopie, (pli_t *) data, sizeof(pli_t));
-//  for (i = sud; i < est + 1; i++)
-//    {
-//      plicopie->carte[i].nocarte = ((pli_t *) data)->carte[i].nocarte;
-//      plicopie->carte[i].clcarte = ((pli_t *) data)->carte[i].clcarte;
-//      plicopie->defausse[i].nocarte = ((pli_t *) data)->defausse[i].nocarte;
-//      plicopie->defausse[i].clcarte = ((pli_t *) data)->defausse[i].clcarte;
-//    }
-//  plicopie->entame = ((pli_t *) data)->entame;
-//  plicopie->nextpos = ((pli_t *) data)->nextpos;
-//  plicopie->nopli = ((pli_t *) data)->nopli;
-//  plicopie->noj = ((pli_t *) data)->noj;
-//  plicopie->atout = ((pli_t *) data)->atout;
-//  plicopie->phcarte.nocarte = ((pli_t *) data)->phcarte.nocarte;
-//  plicopie->phcarte.clcarte = ((pli_t *) data)->phcarte.clcarte;
-//  plicopie->lastcarte.nocarte = ((pli_t *) data)->lastcarte.nocarte;
-//  plicopie->lastcarte.clcarte = ((pli_t *) data)->lastcarte.clcarte;
-//  for (j = ns; j < eo + 1; j++)
-//    {
-//      plicopie->nbpli_ligne[j] = ((pli_t *) data)->nbpli_ligne[j];
-//    }
     return ((void *) plicopie);
 
 }
@@ -417,7 +395,6 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 
 	}
     }
-    //affiche_pli(thread_jeu->pli);
     affiche_tabjeu_c(thread_jeu->t_jeu);
     printf("carte:%s%s\n", affca =
 	   affichage(thread_jeu->carte->nocarte, CARTE), affco =
@@ -457,6 +434,7 @@ void affiche_pli(pli_t * pli)
     printf("Vci  pli.entame %d\n", pli->entame);
     printf("Vci  pli.nextpos %d\n", pli->nextpos);
     printf("Vci  pli.nopli %d\n", pli->nopli);
+    printf("Vci  pli.leader %d\n", pli->leader);
     for (j = ns; j < eo + 1; j++) {
 	printf("Vci pli.nbpli_ligne[%d] %d\n", j, pli->nbpli_ligne[j]);
     }
@@ -501,6 +479,7 @@ void init_pli(pli_t * pli, int maniere)
     if (maniere == INIT) {
 	pli->atout = aucune;
 	pli->entame = aucun;
+	pli->leader = aucun;
 	pli->nextpos = aucun;
 	pli->nopli = 0;
 	pli->noj = 0;

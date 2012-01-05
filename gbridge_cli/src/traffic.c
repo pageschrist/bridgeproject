@@ -151,6 +151,7 @@ void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
     case 'p':
       pli= data;
       read (ihm_pli->socketid,  pli, sizeof (pli_t));
+      fprintf(stdout,"leader=%d\n",pli->leader);
       break;
     case 'c':
       carte= data;

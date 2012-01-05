@@ -87,7 +87,7 @@ carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
     nb_best = 0;
     first_explore(plin, (sizemax * 4) - plin->noj, &nb_best, l_best, game);
     if (nb_best != 0) {
-	best_card = best_choice(&nb_best, l_best, game, hopestat);
+	best_card = best_choice(&nb_best, l_best, game, hopestat,plic);
 
     } else {
 	free(best_card);
@@ -156,7 +156,7 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
 	    gettimeofday(timeap, NULL);
 	    if (nb_best != 0) {
 		hopestat[index]->best_card =
-		    best_choice(&nb_best, l_best, game, hopestat[index]);
+		    best_choice(&nb_best, l_best, game, hopestat[index],cur_pli);
 
 	    } else {
 		free(hopestat[index]->best_card);

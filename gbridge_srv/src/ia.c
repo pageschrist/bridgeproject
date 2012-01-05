@@ -15,19 +15,21 @@ int prof_start = 0;
 int flag_debug = 0;
 
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
-		    hopestat_t * hopestat)
+		    hopestat_t * hopestat,pli_t *pli)
 {
     valeur_t tabval[pique + 1];
+    gboolean tabvalbool[pique + 1];
     couleur_t coulref = aucune;
     carte_t *carte = malloc(sizeof(carte_t));
-    int points[pique + 1], j;
-    int jline = (IALINE + 1) % 2;
+    unsigned int jline = (IALINE + 1) % 2;
 
     couleur_t i;
-    elem_best_t *elem_best = l_best->last;
+    elem_best_t *elem_best = l_best->first;
     for (i = 0; i < pique + 1; i++)
 	tabval[i] = pdc;
-    int score = l_best->last->best->score;
+    for (i = 0; i < pique + 1; i++)
+	tabvalbool[i] = FALSE;
+    int score = l_best->first->best->score;
     if (game->debug)
 	printf("On a %d bons coups\n", *nb_best);
 
@@ -55,23 +57,12 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
                 printf("aff=%d for color=%d position=%d\n", hopestat->aff,hopestat->couleur,hopestat->position);
 
 	    }
-	    if (tabval[elem_best->best->carte->clcarte] >
-		elem_best->best->carte->nocarte)
-		tabval[elem_best->best->carte->clcarte] =
-		    elem_best->best->carte->nocarte;
+         
+ 
+  	    if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
+  	      tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
 	}
-	elem_best = elem_best->prev;
-    }
-    for (i = 0; i < pique + 1; i++) {
-	if (tabval[i] != pdc) {
-	    points[i] = 0;
-	    for (j = 0; j < game->tabjeu[INDEX(ouest, i)]->nbcrt; j++)
-		points[i] =
-		    game->tabjeu[INDEX(ouest, i)]->tabcoul[j] + points[i];
-	    for (j = 0; j < game->tabjeu[INDEX(est, i)]->nbcrt; j++)
-		points[i] =
-		    game->tabjeu[INDEX(est, i)]->tabcoul[j] + points[i];
-	}
+	elem_best = elem_best->next;
     }
     for (i = 0; i < pique + 1; i++) {
 	if (tabval[i] != pdc) {
