@@ -17,6 +17,7 @@ int flag_debug = 0;
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		    hopestat_t * hopestat,pli_t *pli)
 {
+    gboolean suplead[pique+1];
     valeur_t tabval[pique + 1];
     gboolean tabvalbool[pique + 1];
     couleur_t coulref = aucune;
@@ -27,6 +28,8 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     elem_best_t *elem_best = l_best->first;
     for (i = 0; i < pique + 1; i++)
 	tabval[i] = pdc;
+    for (i = 0; i < pique + 1; i++)
+	suplead[i] = TRUE;
     for (i = 0; i < pique + 1; i++)
 	tabvalbool[i] = FALSE;
     int score = l_best->first->best->score;
@@ -57,10 +60,41 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
                 printf("aff=%d for color=%d position=%d\n", hopestat->aff,hopestat->couleur,hopestat->position);
 
 	    }
-         
- 
-  	    if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
+            if(pli &&(pli->nextpos==(pli->entame+3)%4 &&(pli->leader)%2==jline )) {  
+              if(pli->atout!=aucune) {
+                if(pli->carte[pli->leader].clcarte==elem_best->best->carte->clcarte) {
+                  if(pli->carte[pli->leader].nocarte<elem_best->best->carte->nocarte) {
+                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                  }
+                }
+                else {
+                  if(elem_best->best->carte->clcarte==pli->atout) {
+                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                  }
+                }
+              }
+              else {
+                if(pli->carte[pli->leader].clcarte==elem_best->best->carte->clcarte) {
+                  if(pli->carte[pli->leader].nocarte<elem_best->best->carte->nocarte) {
+                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                  }
+                }
+              }
+              if(suplead[elem_best->best->carte->clcarte]) {
+  	        if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
+  	          tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+
+              }
+
+
+            }
+            else {
+  	      if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
   	      tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+            }
 	}
 	elem_best = elem_best->next;
     }
