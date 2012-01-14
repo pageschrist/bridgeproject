@@ -265,6 +265,17 @@ insert_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
 
 }
 
+void init_cardplayed(game_t *game) {
+  couleur_t color;
+  valeur_t value;
+  game->cardplayed=malloc(NBCARTES*sizeof(gboolean));
+  for (color=trefle;color<pique;color++) {
+    for(value=c2;value<cA+1;value++)
+      game->cardplayed[color][value]=FALSE;
+  }
+  
+}
+
 void init_game(game_t * game)
 {
 
@@ -279,6 +290,7 @@ void init_game(game_t * game)
     init_tabjeu(game);
     game->status = 'b';
     game->buffile=NULL;
+    init_cardplayed(game);
 
 }
 
@@ -382,6 +394,8 @@ void *duplique_pli(void *data)
     return ((void *) plicopie);
 
 }
+
+
 
 void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 {

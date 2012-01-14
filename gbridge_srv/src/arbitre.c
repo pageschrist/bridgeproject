@@ -245,12 +245,39 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 
 }
 
+int points_per_color(tablist_t *tablist ) {
+  int i;
+  int nb=0;
+  for(i=0;tablist->nbcrt&&i<NBPCOULEURS;i++) {
+    switch( tablist->tabcoul[i] ) {
+
+      case cA:
+        nb=nb+4000;
+        break;
+      case cR:
+        nb=nb+300;
+        break;
+      case cD:
+        nb=nb+20;
+        break;
+      case cV:
+        nb=nb+1;
+        break;
+      default:
+        break;
+    }
+  
+  }
+  return(nb);
+}
+
 int
 list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 	       tablist_t ** tmpjeu)
 {
     int index, situation, nbcoups = 0;
-    int k = 0, sub;
+    pli_t *plin;
+    int k = 0, sub,points;
     couleur_t couleurc;
     couleur_t i;
     carte_t phcarte;
@@ -268,18 +295,27 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
     phcarte.clcarte = pli->phcarte.clcarte;
 
     if (situation == DEFAUSSE) {
-    
+      l_item_t *fifo;
+      fifo=create_l_item(duplique_pli); 
 	for (i = trefle; i < pique + 1; i++) {
 	    index = INDEX(positionc, i);
-            if(tmpjeu[index]->debug)
-              ftrace();
 	    if (tmpjeu[index]->nbcrt != 0) {
 		if (i != pli->atout) {
+                    points=points_per_color(tmpjeu[index]);
 		    pli->carte[positionc].clcarte = i;
 		    pli->carte[positionc].nocarte =
 			tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt-1];
+                    if (points<1 ||(points>=1 && tmpjeu[index]->nbcrt>=5)|| ((points >=20 && points<300)&&tmpjeu[index]->nbcrt>=4 ) || ((points>=300 && points<4000)&&tmpjeu[index]->nbcrt>=2))  {
+                        if (pli->carte[positionc].nocarte<=cV)
+                          add_item_head(fifo,pli);
+                        else 
+                          add_item_tail(fifo,pli);
+                    }
+                    else 
+                       add_item_tail(fifo,pli);
+
 		    nbcoups++;
-		    push(stack, pli);
+		    //push(stack, pli);
 		} else {
 		    for (k = 0; k < tmpjeu[index]->nbcrt; k++) {
 			pli->carte[positionc].clcarte = i;
@@ -289,15 +325,15 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 			push(stack, pli);
 		    }
 		}
-
 	    }
-
-
-
-
-
-
 	}
+        if(fifo) {
+          while((plin=pop_item_tail(fifo))) {
+            push(stack,plin);
+          }
+        }
+        
+        clean_l_item(fifo); 
 	return (nbcoups);
 
     }
@@ -519,11 +555,12 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 {
     int posindex;
     position_t position;
-    // NULL correspond au joue ( IHM) tout est dans pli
+    // NULL is used when  (IHM) plays , all the information is in pli
     if (carte != NULL) {
 	position = pli->nextpos;
 	pli->carte[position].nocarte = carte->nocarte;
 	pli->carte[position].clcarte = carte->clcarte;
+        game->cardplayed[carte->clcarte][carte->nocarte]=TRUE;
 	posindex =
 	    find_index(game->tabjeu, position, carte->clcarte,
 		       carte->nocarte);
@@ -553,6 +590,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 	    if (pli->phcarte.nocarte < pli->carte[position].nocarte)
 		pli->phcarte.nocarte = pli->carte[position].nocarte;
 	}
+        game->cardplayed[pli->carte[position].clcarte][pli->carte[position].nocarte]=TRUE;
     }
 
     return (1);

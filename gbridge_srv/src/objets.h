@@ -39,6 +39,7 @@ typedef struct _tablist
 } tablist_t;
 
 
+  
 void *duplique_pli (void *data);
 
 typedef struct _coord_t
@@ -159,6 +160,7 @@ typedef struct _game_t
   contrat_t *contrat;
   bid_t *bid;
   char cur_bid[BIDSIZE];
+  gboolean **cardplayed;
   
 } game_t; 
 
@@ -176,7 +178,6 @@ struct stack_box
 
 typedef struct stack_box *stackia_t;
 
-int echiquier_init (void);
 int max(int a,int b);
 void init_tablist (void);
 void affiche_pli (pli_t * ppli);
@@ -195,6 +196,7 @@ void add_list_f(l_best_t *l_best,best_t *best) ;
 void add_list_l(l_best_t *l_best,best_t *best) ;
 void init_list_best(l_best_t *l_best);
 void clear_list( l_best_t *l_best);
+void init_cardplayed(game_t *game);
 void init_game(game_t *game);
 void free_game(game_t *game);
 void clear_tabjeu (game_t *game);
