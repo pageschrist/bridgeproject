@@ -88,6 +88,7 @@ void main_game(game_t * game)
               diststatus=TRUE;
             }
             else {
+              init_cardplayed(game);
               diststatus=file_parse(game);
             }
             if(diststatus ) {

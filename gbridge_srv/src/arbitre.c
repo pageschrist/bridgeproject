@@ -95,20 +95,22 @@ void dup_game(thread_jeu_t * thread_jeu, game_t * game)
     if (NULL ==
 	(thread_jeu->t_jeu =
 	 malloc((sizeof(tablist_t *)) * (est + 1) * (pique + 1)))) {
-	fprintf(stderr, "Probleme avec malloc\n");
+        perror("malloc");
 	exit(EXIT_FAILURE);
     }
+    if (NULL ==
+	(thread_jeu->cardplayed =
+	 malloc(sizeof( gboolean) * NBPCOULEURS*NBCOULEURS))) {
+        perror("malloc");
+	exit(EXIT_FAILURE);
+    }
+    memcpy(thread_jeu->cardplayed,game->cardplayed,sizeof( gboolean) * NBPCOULEURS*NBCOULEURS);
     for (position = sud; position < est + 1; position++) {
 	for (couleur = trefle; couleur < pique + 1; couleur++) {
 	    index = INDEX(position, couleur);
 	    thread_jeu->t_jeu[index] = malloc(sizeof(tablist_t));
 	    memcpy(thread_jeu->t_jeu[index], game->tabjeu[index],
 		   sizeof(tablist_t));
-	    //for (i = 0; i < 13; i++)
-	    //  thread_jeu->t_jeu[index]->tabcoul[i]=game->tabjeu[index]->tabcoul[i] ;
-	    // thread_jeu->t_jeu[index]->nbcrt =game->tabjeu[index]->nbcrt;
-	    // thread_jeu->t_jeu[index]->couleureval =game->tabjeu[index]->couleureval;
-	    // thread_jeu->t_jeu[index]->debug=game->tabjeu[index]->debug;
 	}
     }
 }
@@ -124,6 +126,7 @@ void destroy_jeu(thread_jeu_t * thread_jeu)
 	}
     }
     free(thread_jeu->t_jeu);
+    free(thread_jeu->cardplayed);
 }
 
 
@@ -273,7 +276,7 @@ int points_per_color(tablist_t *tablist ) {
 
 int
 list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
-	       tablist_t ** tmpjeu)
+	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
     pli_t *plin;
@@ -560,7 +563,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 	position = pli->nextpos;
 	pli->carte[position].nocarte = carte->nocarte;
 	pli->carte[position].clcarte = carte->clcarte;
-        game->cardplayed[carte->clcarte][carte->nocarte]=TRUE;
+        game->cardplayed[INDCARD(carte->clcarte,carte->nocarte)]=TRUE;
 	posindex =
 	    find_index(game->tabjeu, position, carte->clcarte,
 		       carte->nocarte);
@@ -590,7 +593,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 	    if (pli->phcarte.nocarte < pli->carte[position].nocarte)
 		pli->phcarte.nocarte = pli->carte[position].nocarte;
 	}
-        game->cardplayed[pli->carte[position].clcarte][pli->carte[position].nocarte]=TRUE;
+        game->cardplayed[INDCARD(pli->carte[position].clcarte,pli->carte[position].nocarte)]=TRUE;
     }
 
     return (1);

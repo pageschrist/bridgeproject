@@ -153,7 +153,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 	return (retup);
     }
     stk = create_stack(duplique_pli);
-    nbcoups = list_all_coups(positionc, stk, pli_cur, t_jeu);
+    nbcoups = list_all_coups(positionc, stk, pli_cur, t_jeu,NULL);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((pli_new = (pli_t *) pop(stk)) != NULL) {
@@ -263,7 +263,7 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
     stk = create_stack(duplique_pli);
     if (t_jeu[0]->couleureval == aucune)
-	nbcoups = list_all_coups(positionc, stk, pli_cur, t_jeu);
+	nbcoups = list_all_coups(positionc, stk, pli_cur, t_jeu,NULL);
     else
 	nbcoups = list_all_coups_eval(positionc, stk, pli_cur, t_jeu);
     if ((nbcoups == 0) && (t_jeu[0]->couleureval != aucune))
@@ -410,7 +410,7 @@ void *new_explore(void *arg)
 
     stk = create_stack(duplique_pli);
     if (thread_jeu->t_jeu[0]->couleureval == aucune)
-	nbcoups = list_all_coups(positionc, stk, pli_cur, thread_jeu->t_jeu);
+	nbcoups = list_all_coups(positionc, stk, pli_cur, thread_jeu->t_jeu,thread_jeu->cardplayed);
     else
 	nbcoups =
 	    list_all_coups_eval(positionc, stk, pli_cur, thread_jeu->t_jeu);
@@ -509,7 +509,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
     stk = create_stack(duplique_pli);
     if (game->tabjeu[0]->couleureval == aucune) {	//Tous les jeux contiennes la couleur d'evaluation si necessaire
-	nbcoups = list_all_coups(positionc, stk, pli_cur, game->tabjeu);
+	nbcoups = list_all_coups(positionc, stk, pli_cur, game->tabjeu,game->cardplayed);
 	if (nbcoups == 1) {
 	    pli_new = (pli_t *) pop(stk);
 	    best = malloc(sizeof(best_t));

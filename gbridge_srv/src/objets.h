@@ -1,6 +1,8 @@
 #define INIT 0
 #define RESET 1
+#define FREE 2
 #define INDEX(position,couleur) ((position*4)+couleur)
+#define INDCARD(color,value) ((color*NBPCOULEURS)+value)
 #define CARTES 4
 #define GAMEOVER 0
 #define NEWGAME 1
@@ -133,6 +135,7 @@ typedef struct _thread_jeu
   int nbline[eo+1];
   int prof;
   int prof_max;
+  gboolean *cardplayed;
 } thread_jeu_t;
 
 typedef struct _contrat_t
@@ -160,7 +163,7 @@ typedef struct _game_t
   contrat_t *contrat;
   bid_t *bid;
   char cur_bid[BIDSIZE];
-  gboolean **cardplayed;
+  gboolean *cardplayed;
   
 } game_t; 
 
@@ -196,6 +199,8 @@ void add_list_f(l_best_t *l_best,best_t *best) ;
 void add_list_l(l_best_t *l_best,best_t *best) ;
 void init_list_best(l_best_t *l_best);
 void clear_list( l_best_t *l_best);
+void display_cardplayed(game_t * game);
+void clear_cardplayed(game_t *game,int type);
 void init_cardplayed(game_t *game);
 void init_game(game_t *game);
 void free_game(game_t *game);

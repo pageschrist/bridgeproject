@@ -168,6 +168,41 @@ void clear_tabjeu(game_t * game)
       free(game->tabjeu);
     if(game->tabjeuref)
       free(game->tabjeuref);
+    if(game->cardplayed)
+      clear_cardplayed(game,FREE);
+}
+void clear_cardplayed(game_t * game,int type){
+  couleur_t color;
+  valeur_t value;
+  int indcard;
+  if(FREE==type) 
+    free(game->cardplayed);
+  else {
+    for (color=trefle;color<pique;color++) {
+      for(value=c2;value<cA+1;value++)
+        indcard=INDCARD(color,value);
+        game->cardplayed[indcard]=FALSE;
+    }
+  }
+}
+
+void display_card_played(game_t *game) {
+  couleur_t color;
+  valeur_t value;
+  int indcard;
+  char *resco;
+  for (color=trefle;color<pique;color++) {
+    resco=affichage(color,COULEUR);
+    fprintf(stdout,"\n%s",resco);
+    for(value=c2;value<cA+1;value++) {
+      indcard=INDCARD(color,value);
+      if(game->cardplayed[indcard])
+        fprintf(stdout,"T");
+      else
+        fprintf(stdout,"F");
+    }
+  }
+
 }
 
 int sub_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
@@ -266,14 +301,8 @@ insert_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
 }
 
 void init_cardplayed(game_t *game) {
-  couleur_t color;
-  valeur_t value;
-  game->cardplayed=malloc(NBCARTES*sizeof(gboolean));
-  for (color=trefle;color<pique;color++) {
-    for(value=c2;value<cA+1;value++)
-      game->cardplayed[color][value]=FALSE;
-  }
-  
+  game->cardplayed=malloc(NBCOULEURS*NBPCOULEURS*sizeof(gboolean ));
+  clear_cardplayed(game,RESET);
 }
 
 void init_game(game_t * game)
@@ -422,7 +451,6 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
     free(affco);
     printf("status=%d score=%d prof=%d prof_max=%d\n", thread_jeu->status,
 	   thread_jeu->score, thread_jeu->prof, thread_jeu->prof_max);
-
 }
 
 void affiche_pli(pli_t * pli)
