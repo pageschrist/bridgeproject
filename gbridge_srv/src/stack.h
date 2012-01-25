@@ -1,12 +1,11 @@
 
 
-struct item {
+typedef struct item {
 void *data;
 struct item *next;
 struct item *prev;
-};
+} item_t;
 
-typedef struct item item_t;
 typedef struct _l_item_t {
 item_t *upper_item ;
 item_t *lower_item ;

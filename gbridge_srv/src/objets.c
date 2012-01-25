@@ -8,6 +8,7 @@
 #include "distribution.h"
 #include "analyse.h"
 #include "ia.h"
+#include "stack.h"
 #include "arbitre.h"
 coord_t tab_cartes[cA + 1][pique + 1];
 void mark(void)
@@ -178,30 +179,34 @@ void clear_cardplayed(game_t * game,int type){
   if(FREE==type) 
     free(game->cardplayed);
   else {
-    for (color=trefle;color<pique;color++) {
-      for(value=c2;value<cA+1;value++)
+    for (color=trefle;color<pique+1;color++) {
+      for(value=c2;value<cA+1;value++){
         indcard=INDCARD(color,value);
         game->cardplayed[indcard]=FALSE;
+      }
     }
   }
 }
 
-void display_card_played(game_t *game) {
+void display_cardplayed(game_t *game) {
   couleur_t color;
   valeur_t value;
   int indcard;
   char *resco;
-  for (color=trefle;color<pique;color++) {
+  printf("CARD PLAYED \n");
+  for (color=trefle;color<pique+1;color++) {
     resco=affichage(color,COULEUR);
-    fprintf(stdout,"\n%s",resco);
+    printf("\n%s ",resco);
     for(value=c2;value<cA+1;value++) {
       indcard=INDCARD(color,value);
       if(game->cardplayed[indcard])
-        fprintf(stdout,"T");
+        printf("T");
       else
-        fprintf(stdout,"F");
+        printf("F");
     }
   }
+  printf("\nCARD PLAYED END\n");
+  free(resco);
 
 }
 

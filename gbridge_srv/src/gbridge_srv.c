@@ -21,6 +21,7 @@
 #include "objets.h"
 #include "analyse.h"
 #include "ia.h"
+#include "stack.h"
 #include "arbitre.h"
 #include "traffic.h"
 #include "distribution.h"
@@ -132,6 +133,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     position_t position;
     couleur_t couleur;
     choice_color_t *choice_color=malloc(sizeof(choice_color_t));
+    memset(choice_color,0,sizeof(choice_color_t));
     int index;
     carte_t *best_coup = NULL;
     l_best_t *l_best = NULL;
@@ -182,6 +184,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 
     for (notour = 0; notour < 13; notour++) {
 	for (t = 0; t < NBJOUEURS; t++) {
+            display_cardplayed(game);
 	    if ((pli->nextpos) % 2 == (game->contrat->declarant + 1) % 2) {
                 if(game->debug)
 		  printf("IA play\n");

@@ -18,6 +18,27 @@ void ftrace(void)
     printf("OK\n");
 }
 
+int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t highest_player) {
+  int dist;
+  valeur_t val;
+
+  dist=highest-highest_player;
+  if(dist==0)
+    return 0;
+  for(val=highest;val<highest_player;val++) {
+    if(cardplayed[INDCARD(color,val)]==TRUE)
+      dist--;
+  }
+  return(dist);
+}
+valeur_t highest_value(gboolean *cardplayed,couleur_t color) {
+  valeur_t value;
+  for(value=cA;value>=c2;value--) {
+    if( FALSE==cardplayed[INDCARD(color,value)])
+      break;
+  }
+  return(value);
+}
 void rotation(game_t * game, hopestat_t ** hopestat)
 {
     int i;
@@ -131,7 +152,7 @@ void destroy_jeu(thread_jeu_t * thread_jeu)
 
 
 int
-list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
+list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 		    tablist_t ** tmpjeu)
 {
     couleur_t couleurc = tmpjeu[0]->couleureval;
@@ -158,7 +179,8 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 		pli->carte[positionc].clcarte = i;
 		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
 		nbcoups++;
-		push(stack, pli);
+		//push(stack, pli);
+                add_item_head(l_item, pli);
 		break;
 	    }
 	}
@@ -185,7 +207,8 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 		    pli->phcarte.nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		    nbcoups++;
-		    push(stack, pli);
+		    //push(stack, pli);
+                    add_item_head(l_item, pli);
 		    pli->phcarte.nocarte = phcarte.nocarte;
 		    pli->phcarte.clcarte = phcarte.clcarte;
 		}
@@ -197,7 +220,8 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 		pli->phcarte.nocarte =
 		    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		nbcoups++;
-		push(stack, pli);
+		//push(stack, pli);
+                add_item_head(l_item, pli);
 		pli->phcarte.nocarte = phcarte.nocarte;
 		pli->phcarte.clcarte = phcarte.clcarte;
 		presence = OUI;
@@ -222,7 +246,8 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 
 	    pli->carte[positionc].clcarte = couleurc;
 	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-	    push(stack, pli);
+	    //push(stack, pli);
+            add_item_head(l_item, pli);
 	    return (1);
 
 	} else {
@@ -235,17 +260,13 @@ list_all_coups_eval(position_t positionc, stackia_t stack, pli_t * pli,
 		pli->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
 		pli->phcarte.clcarte = couleurc;
 		nbcoups++;
-		push(stack, pli);
-
+		//push(stack, pli);
+                add_item_head(l_item, pli);
 	    }
-
 	}
-
 	return (nbcoups);
     }
     return (0);			//Normalement pas utilise
-
-
 }
 
 int points_per_color(tablist_t *tablist ) {
@@ -275,12 +296,12 @@ int points_per_color(tablist_t *tablist ) {
 }
 
 int
-list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
+list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
-    pli_t *plin;
-    int k = 0, sub,points;
+    int k = 0, sub,points,dist;
+    valeur_t higher_value;
     couleur_t couleurc;
     couleur_t i;
     carte_t phcarte;
@@ -298,8 +319,6 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
     phcarte.clcarte = pli->phcarte.clcarte;
 
     if (situation == DEFAUSSE) {
-      l_item_t *fifo;
-      fifo=create_l_item(duplique_pli); 
 	for (i = trefle; i < pique + 1; i++) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
@@ -308,42 +327,41 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 		    pli->carte[positionc].clcarte = i;
 		    pli->carte[positionc].nocarte =
 			tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt-1];
-                    if (points<1 ||(points>=1 && tmpjeu[index]->nbcrt>=5)|| ((points >=20 && points<300)&&tmpjeu[index]->nbcrt>=4 ) || ((points>=300 && points<4000)&&tmpjeu[index]->nbcrt>=2))  {
-                        if (pli->carte[positionc].nocarte<=cV)
-                          add_item_head(fifo,pli);
-                        else 
-                          add_item_tail(fifo,pli);
+                  if(NULL==cardplayed || tmpjeu[index]->nbcrt ==1) {  //if tmpjeu[index]->nbcrt ==1 no choice
+                    add_item_tail(l_item, pli);
+
+                  }
+                  else {
+                    //correspond to the highest value not played
+                    ftrace();
+                    higher_value=highest_value(cardplayed,i);
+                    dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
+                    printf("higher_value=%d dist=%d value=%d\n",higher_value,dist, pli->carte[positionc].nocarte);
+
+                    if(dist<tmpjeu[index]->nbcrt) {
+                      add_item_head(l_item, pli);    
                     }
                     else 
-                       add_item_tail(fifo,pli);
-
-		    nbcoups++;
-		    //push(stack, pli);
+                      add_item_tail(l_item, pli);
+                  }
+		  nbcoups++;
 		} else {
 		    for (k = 0; k < tmpjeu[index]->nbcrt; k++) {
 			pli->carte[positionc].clcarte = i;
 			pli->carte[positionc].nocarte =
 			    tmpjeu[index]->tabcoul[k];
 			nbcoups++;
-			push(stack, pli);
+			add_item_head(l_item, pli);
 		    }
 		}
 	    }
 	}
-        if(fifo) {
-          while((plin=pop_item_tail(fifo))) {
-            push(stack,plin);
-          }
-        }
-        
-        clean_l_item(fifo); 
 	return (nbcoups);
 
     }
 
 
     if (situation == ENTAME) {
-	/*On est a l'entame d'une couleur, donc on choisit n'importe quelle carte et on place la phcarte dans la structure */
 
 	for (i = trefle; i < pique + 1; i++) {
 	    presence = NON;
@@ -372,7 +390,8 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 			    exit(3);
 			}
 			nbcoups++;
-			push(stack, pli);
+			//push(stack, pli);
+                        add_item_head(l_item, pli);
 			pli->phcarte.nocarte = phcarte.nocarte;
 			pli->phcarte.clcarte = phcarte.clcarte;
 		    }
@@ -392,7 +411,8 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 			exit(3);
 		    }
 		    nbcoups++;
-		    push(stack, pli);
+		    //push(stack, pli);
+                    add_item_head(l_item, pli);
 		    pli->phcarte.nocarte = phcarte.nocarte;
 		    pli->phcarte.clcarte = phcarte.clcarte;
 		    presence = OUI;
@@ -418,7 +438,8 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 
 	    pli->carte[positionc].clcarte = couleurc;
 	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-	    push(stack, pli);
+	    //push(stack, pli);
+            add_item_head(l_item, pli);
 	    return (1);
 
 	} else {
@@ -429,12 +450,14 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 	    if (sub == 0 && tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt - 1] < pli->phcarte.nocarte) {	//Toutes les cartes 
 		pli->carte[positionc].clcarte = couleurc;
 		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-		push(stack, pli);
+		//push(stack, pli);
+                add_item_head(l_item, pli);
 		return (1);
 	    } else {
 		pli->carte[positionc].clcarte = couleurc;
 		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-		push(stack, pli);
+		//push(stack, pli);
+                add_item_head(l_item, pli);
 		nbcoups++;
 		for (pos_index = sub + 1; pos_index < tmpjeu[index]->nbcrt;
 		     pos_index++) {
@@ -446,25 +469,16 @@ list_all_coups(position_t positionc, stackia_t stack, pli_t * pli,
 			tmpjeu[index]->tabcoul[pos_index];
 		    pli->phcarte.clcarte = couleurc;
 		    nbcoups++;
-		    push(stack, pli);
-		    //while(pos_index<tmpjeu[index]->nbcrt-1) {
-		    //  if(tmpjeu[index]->tabcoul[pos_index+1]-tmpjeu[index]->tabcoul[pos_index] == 1) {
-		    //    pos_index++;
-		    // }
-		    //}
+		    //push(stack, pli);
+                    add_item_head(l_item, pli);
 
 		}
 	    }
 
 	}
-
-
-
 	return (nbcoups);
     }
     return (0);			//Normalement pas utilise
-
-
 }
 void *copy_carte(void *data)
 {

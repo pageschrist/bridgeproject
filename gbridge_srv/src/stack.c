@@ -168,6 +168,7 @@ void *pop_item_tail(l_item_t *l_item) {
   free(item);
   return(data);
 }
+
 void add_item_tail(l_item_t *l_item,void *data) {
   item_t *item=malloc(sizeof(item_t));
   item->data=l_item->dup_item(data);
