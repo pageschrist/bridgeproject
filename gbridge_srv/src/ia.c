@@ -21,6 +21,7 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     valeur_t tabval[pique + 1];
     gboolean tabvalbool[pique + 1];
     couleur_t coulref = aucune;
+    l_item_t *l_item=create_l_item(copy_card);
     carte_t *carte = malloc(sizeof(carte_t));
     unsigned int jline = (IALINE + 1) % 2;
 
@@ -94,6 +95,10 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
   	      if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
   	      tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
             }
+          carte->clcarte=elem_best->best->carte->clcarte;
+          carte->nocarte=tabval[elem_best->best->carte->clcarte];
+          if(carte->nocarte!=pdc)
+            add_item_tail(l_item,carte);
 	}
 	elem_best = elem_best->next;
     }
@@ -102,8 +107,8 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	    coulref = i;
 	}
     }
-    carte->nocarte = tabval[coulref];
-    carte->clcarte = coulref;
+    carte=pop_item_head(l_item);
+    clean_l_item(l_item);
     return (carte);
 
 }

@@ -124,8 +124,8 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
 	sizemax[couleur] = 0;
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
-	    if (game->tabjeuref[index]->nbcrt > sizemax[couleur])
-		sizemax[couleur] = game->tabjeuref[index]->nbcrt;
+	    if (game->tabjeu[index]->nbcrt > sizemax[couleur])
+		sizemax[couleur] = game->tabjeu[index]->nbcrt;
 	}
     }
     for (couleur = trefle; couleur < pique + 1; couleur++) {

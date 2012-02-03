@@ -420,6 +420,13 @@ void init_cartes(void)
     }
 
 }
+void *copy_card(void *data) {
+  carte_t *card;
+  card=malloc(sizeof(carte_t));
+  memcpy(card,(carte_t *) data,sizeof(carte_t));
+  return((void*) card);
+}
+
 void *duplique_pli(void *data)
 {
     pli_t *plicopie;

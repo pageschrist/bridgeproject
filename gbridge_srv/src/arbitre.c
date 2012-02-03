@@ -25,7 +25,7 @@ int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t hi
   dist=highest-highest_player;
   if(dist==0)
     return 0;
-  for(val=highest;val<highest_player;val++) {
+  for(val=highest;val>highest_player;val--) {
     if(cardplayed[INDCARD(color,val)]==TRUE)
       dist--;
   }
@@ -33,7 +33,7 @@ int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t hi
 }
 valeur_t highest_value(gboolean *cardplayed,couleur_t color) {
   valeur_t value;
-  for(value=cA;value>=c2;value--) {
+  for(value=cA;value>=c2+1;value--) {
     if( FALSE==cardplayed[INDCARD(color,value)])
       break;
   }
@@ -179,7 +179,6 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 		pli->carte[positionc].clcarte = i;
 		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
 		nbcoups++;
-		//push(stack, pli);
                 add_item_head(l_item, pli);
 		break;
 	    }
@@ -207,7 +206,6 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 		    pli->phcarte.nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		    nbcoups++;
-		    //push(stack, pli);
                     add_item_head(l_item, pli);
 		    pli->phcarte.nocarte = phcarte.nocarte;
 		    pli->phcarte.clcarte = phcarte.clcarte;
@@ -220,7 +218,6 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 		pli->phcarte.nocarte =
 		    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		nbcoups++;
-		//push(stack, pli);
                 add_item_head(l_item, pli);
 		pli->phcarte.nocarte = phcarte.nocarte;
 		pli->phcarte.clcarte = phcarte.clcarte;
@@ -246,7 +243,6 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 
 	    pli->carte[positionc].clcarte = couleurc;
 	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-	    //push(stack, pli);
             add_item_head(l_item, pli);
 	    return (1);
 
@@ -260,7 +256,6 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
 		pli->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
 		pli->phcarte.clcarte = couleurc;
 		nbcoups++;
-		//push(stack, pli);
                 add_item_head(l_item, pli);
 	    }
 	}
@@ -338,7 +333,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                     dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
                     printf("higher_value=%d dist=%d value=%d\n",higher_value,dist, pli->carte[positionc].nocarte);
 
-                    if(dist<tmpjeu[index]->nbcrt) {
+                    if(dist+1<tmpjeu[index]->nbcrt) {
                       add_item_head(l_item, pli);    
                     }
                     else 

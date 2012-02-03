@@ -200,6 +200,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		}
 		if (notour == 0 && t == 0) {	// On est à l'entame
 		    search_best_color(pli->nextpos, hopestat,choice_color);
+                    printf("color->toavoid=%d,color->interessant=%d\n",choice_color->toavoid,choice_color->interessant);
 		    best_coup = malloc(sizeof(carte_t));
 		    memcpy(best_coup,
 			   hopestat[INDEX(pli->nextpos, choice_color->interessant)]->best_card,
