@@ -163,6 +163,7 @@ typedef struct _game_t
   bid_t *bid;
   char cur_bid[BIDSIZE];
   gboolean *cardplayed;
+  int nbcard;
   
 } game_t; 
 

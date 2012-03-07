@@ -39,7 +39,8 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 
     while (elem_best) {
 	if (elem_best->best->score == score) {
-	    if (game->debug) {
+	    if (1) {
+	    //if (game->debug) {
                 char *affca,*affcl;
 		affca=affichage(elem_best->best->carte->nocarte,CARTE),
 		affcl=affichage(elem_best->best->carte->clcarte,COULEUR),
@@ -302,8 +303,7 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	best_cartepot.nocarte = pli_new->carte[positionc].nocarte;
 	best_cartepot.clcarte = pli_new->carte[positionc].clcarte;
 	ligne = evaluation_pli(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
-
-	//on duplique le jeu
+        check_invert_lead(pli_new,t_jeu); //If we have no more cards we change the lead if we have a reprise
 
 	ret =
 	    cur_explore_eval(prof + 1, pli_new, prof_max, t_jeu, alpha,

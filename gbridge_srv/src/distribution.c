@@ -244,6 +244,7 @@ void remplit_liste_jeu(game_t * game)
 	    game->tabjeuref[index]->nbcrt++;
 	}
     }
+    game->nbcard=NBPCOULEURS;
 
 }
 void distribution(void)

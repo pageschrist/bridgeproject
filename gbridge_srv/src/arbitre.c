@@ -17,6 +17,49 @@ void ftrace(void)
 {
     printf("OK\n");
 }
+ 
+gboolean test_reprise(position_t position,tablist_t **t_jeu) {
+  couleur_t color;
+  for (color=trefle;color<pique+1;color++) {
+    if(color==t_jeu[0]->couleureval)
+      continue;
+    else {
+      if(t_jeu[INDEX(position,color)]->nbcrt!=0){
+        if(t_jeu[INDEX(position,color)]->tabcoul[0]==cA){
+          return TRUE;
+        }
+        else if (t_jeu[INDEX(position,color)]->tabcoul[0]==cR &&t_jeu[INDEX(position,color)]->tabcoul[1]==cD && t_jeu[INDEX(position,color)]->nbcrt>1) {
+          return TRUE;
+        }
+        else if(t_jeu[INDEX(position,color)]->tabcoul[0]==cR && t_jeu[INDEX((position+1)%4,color)]->tabcoul[0]!=cA&&t_jeu[INDEX(position,color)]->nbcrt>1 ) {
+          return TRUE;
+        }
+        else 
+          return FALSE;
+
+      }
+
+    }
+  }
+  return FALSE;
+
+  
+
+}
+gboolean check_invert_lead(pli_t *pli,tablist_t **t_jeu) {
+  couleur_t coloreval=t_jeu[0]->couleureval; 
+  if((pli->noj)%4==0) {
+    if(t_jeu[INDEX(pli->nextpos,coloreval)]->nbcrt==0 && t_jeu[INDEX((pli->nextpos+2)%4,coloreval)]->nbcrt!=0) {
+     
+      if(test_reprise((pli->nextpos+2)%4,t_jeu)) {
+        pli->nextpos=(pli->nextpos+2)%4;
+        return(TRUE);
+      }
+    }     
+  }
+  return FALSE;
+
+}
 
 int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t highest_player) {
   int dist;

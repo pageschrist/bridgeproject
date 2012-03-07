@@ -10,6 +10,8 @@
 int check (couleur_t couleur);
 void ftrace(void);
 valeur_t highest_value(gboolean *cardplayed,couleur_t color);
+gboolean test_reprise(position_t position,tablist_t **t_jeu);
+gboolean check_invert_lead(pli_t *pli,tablist_t **tmpjeu);
 int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t highest_player);
 void rotation(game_t *game,hopestat_t **hopestat);
 void mise_a_jour(pli_t *ppli,position_t position,couleur_t couleur,valeur_t valeur);

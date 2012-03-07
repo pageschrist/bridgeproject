@@ -184,6 +184,7 @@ typedef struct _ihm_pli_t
   int level;
   int random;
   int ligneia;
+  int nbcard;
   char status ; 
   gboolean debug;
   int tab_couleur[est+1][pique+1];

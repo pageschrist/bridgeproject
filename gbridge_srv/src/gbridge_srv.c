@@ -90,7 +90,8 @@ void main_game(game_t * game)
             }
             else {
               init_cardplayed(game);
-              diststatus=file_parse(game);
+              if(file_parse(game))
+                diststatus=check_tabjeu(game);
             }
             if(diststatus ) {
 	      envoi_jeu(0, game);
@@ -100,8 +101,10 @@ void main_game(game_t * game)
 	} else {
 	    bidstatus = analyse_bid(game);
 	    if (game->status == 'b') {
+              printf("bidstatus\n",diststatus);
 		if('e'==write_data(game, game->cur_bid, 'u'))
                   end_session(game);
+              printf("bidstatusaft\n",diststatus);
             }
 	    if (!hopestat)
 		hopestat = analyse_tabjeu(game,NULL);
@@ -182,7 +185,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     pli->nextpos = (game->contrat->declarant + 1) % 4;
     pli->atout = game->contrat->atout;
 
-    for (notour = 0; notour < 13; notour++) {
+    for (notour = 0; notour < game->nbcard; notour++) {
 	for (t = 0; t < NBJOUEURS; t++) {
             display_cardplayed(game);
 	    if ((pli->nextpos) % 2 == (game->contrat->declarant + 1) % 2) {
@@ -196,7 +199,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		}
 		gettimeofday(timeav, NULL);
 		if (notour > 5) {
-		    prof = (13 - notour) * 4;
+		    prof = (game->nbcard - notour) * 4;
 		}
 		if (notour == 0 && t == 0) {	// On est à l'entame
 		    search_best_color(pli->nextpos, hopestat,choice_color);
@@ -366,7 +369,6 @@ int main(int argc, char *argv[])
 	perror("gethostbyname()");
 	exit(1);
     }
-    printf("Voici l'addresse%s", phost->h_addr);
     (void) memset(&svrname, 0, sizeof(svrname));
     (void) memcpy(&svrname.sin_addr, phost->h_addr, phost->h_length);
 
@@ -378,20 +380,17 @@ int main(int argc, char *argv[])
 
     status =
 	bind(socksrv_id, (struct sockaddr *) &svrname, sizeof(svrname));
-    printf("We are in bind\n");
     if (-1 == status) {
 	perror("bind()");
 	exit(1);
     }
         status=listen(socksrv_id,5);
-	printf("On vient de passer listen\n");
 	if (-1 == status) {
 	    perror("listen()");
             printf("errno=%d",errno);
 	    exit(1);
 	}
     while (1) {
-	//struct sockaddr_in cltname = { 0 };
 	struct sockaddr_in cltname;
 	socklen_t clientlength = sizeof(cltname);
 

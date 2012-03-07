@@ -49,7 +49,7 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
   reset_ihm_pli(ihm_pli);
   write_data (ihm_pli,NULL, 'n');
   if(ihm_pli->debug) 
-    fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
+    fprintf(stderr,"recuperation_jeu 0, new_dist%c %d ihm_pli->nbcard=%d\n",ihm_pli->status,ihm_pli->read,ihm_pli->nbcard);
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
@@ -78,18 +78,21 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
          fprintf(stderr,"Send of file failed\n");
       }
       else 
-        fprintf(stderr,"File not found or unreadable\n");
+        fprintf(stderr,"File not found or unreadable%s\n",ihm_pli->filename);
       
       if(ihm_pli->debug) 
-        fprintf(stderr,"recuperation_jeu 0, new_dist%c %d\n",ihm_pli->status,ihm_pli->read);
+        fprintf(stderr,"av recuperation_jeu 0, new_dist%c %d ihm_pli->nbcard %d\n",ihm_pli->status,ihm_pli->read,ihm_pli->nbcard);
       free_ihm_pli(ihm_pli);
       reset_ihm_pli(ihm_pli);
       recuperation_jeu(ihm_pli,0);
+      //if(ihm_pli->debug) 
+      free_ihm_pli(ihm_pli);
       draw_container_ihm(ihm_pli);
       for(contrat=0;contrat<7;contrat++){
         for(couleur=trefle;couleur<aucune+1;couleur++) 
                     gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
       }
+        fprintf(stderr,"ap recuperation_jeu 0, new_dist%c %d ihm_pli->nbcard %d\n",ihm_pli->status,ihm_pli->read,ihm_pli->nbcard);
 
     }
     gtk_widget_destroy(ihm_pli->File_S);
@@ -309,6 +312,8 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
   position_t position;
   if(ihm_pli->status=='b'  ) 
+    return FALSE;
+  if(NULL==ihm_pli->pli  ) 
     return FALSE;
   // C'est la fin on a deja 13 plis 
   if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
@@ -667,6 +672,8 @@ void button_release_event (GtkWidget *widget,
         widget=widget;
         ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
         int ligne;
+        if(NULL==ihm_pli->pli)
+          return FALSE;
         imgcard_t *drop = NULL;
         if(event->button == 1)
         {

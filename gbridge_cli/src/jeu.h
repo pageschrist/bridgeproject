@@ -1,4 +1,3 @@
-#define NBPCOULEUR 13
 #define TAILLEIMAGE 108
 #ifndef SAVEFILEDIR
 #define SAVEFILEDIR "/home/cpages/dev/bridgeproject-0.9/"

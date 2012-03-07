@@ -14,6 +14,7 @@
 #include "objets.h"
 couleur_t atout;
 extern GHashTable *configHash;
+/*
 void
 init_event (event_t suivi)
 {
@@ -23,18 +24,19 @@ init_event (event_t suivi)
   suivi.nbtour = NONEXIST;
 
 }
+*/
 
 int
 tcpclient (void)
 {
   int clientsocket;
-  event_t suivi;
+  //event_t suivi;
   int status = 0, port;
   struct hostent *phost = NULL;
   struct sockaddr_in ianame ;
   char *iaserver = NULL;
   port = atoi (g_hash_table_lookup (configHash, "port"));
-  init_event (suivi);
+  //init_event (suivi);
   iaserver = g_hash_table_lookup (configHash, "server");
   port = atoi (g_hash_table_lookup (configHash, "port"));
   printf ("Voici mon server ia: %s", iaserver);

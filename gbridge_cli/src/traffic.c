@@ -118,14 +118,17 @@ int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
     j++;
     fprintf(stderr,"read_header %d :%c\n",j,type);
   }
+  printf("av read_header: ihm_pli->nbcard=%d\n",ihm_pli->nbcard);
   ret=read (ihm_pli->socketid,  &header,sizeof(net_header_t));
   if(ret != sizeof(net_header_t)) {
-    fprintf(stderr,"Error in the read of the header ret=%d %d\n",ret,sizeof(net_header_t));
+    fprintf(stderr,"Error in the read of the header ret=%d %lu\n",ret,sizeof(net_header_t));
     return(-1);
   }
   ihm_pli->status=header.status;
   ihm_pli->level=header.level;
   ihm_pli->random=header.random;
+  ihm_pli->nbcard=header.nbcard;
+  printf("ap read_header: ihm_pli->nbcard=%d\n",ihm_pli->nbcard);
   if(header.status=='e') {
     if(ihm_pli->debug)  
       printf("End of ihm_pli\n");

@@ -22,6 +22,7 @@ void write_header(game_t * game, char type)
     header.status = game->status;
     header.level = game->level;
     header.random = game->random;
+    header.nbcard = game->nbcard;
     switch (type) {
     case 'p':
 	header.type = 'p';
@@ -56,10 +57,6 @@ char read_header(game_t * game, void *data, char type)
     position_t position;
     couleur_t couleur;
     int index,errnoori;
-    if (game->debug) {
-	j++;
-	fprintf(stderr, "read_header %d :%c\n", j, type);
-    }
     int ret;
     ret = read(game->sockslv_id, &header, sizeof(net_header_t));
     errnoori=errno; 
@@ -74,6 +71,10 @@ char read_header(game_t * game, void *data, char type)
     game->level = header.level;
     game->random = header.random;
     game->debug = header.debug;
+    if (game->debug) {
+	j++;
+	fprintf(stderr, "read_header %d :%c\n", j, type);
+    }
     for (position = sud; position < est + 1; position++) {
 	for (couleur = trefle; couleur < pique + 1; couleur++) {
 	    index = INDEX(position, couleur);
@@ -109,8 +110,8 @@ char read_header(game_t * game, void *data, char type)
 	    game->level = header.level;
 	    if (game->debug)
 		fprintf(stderr,
-			"header.status=%c,header.random=%d,header.level=%d\n",
-			header.status, header.random, header.level);
+			"header.status=%c,header.random=%d,header.level=%d,header.nbcard\n",
+			header.status, header.random, header.level,header.nbcard);
 	    break;
 	case 'f':
 	    game->status = 'f';
@@ -118,8 +119,8 @@ char read_header(game_t * game, void *data, char type)
 	    game->level = header.level;
 	    if (game->debug)
 		fprintf(stderr,
-			"header.status=%c,header.random=%d,header.level=%d,header.lenght=%d\n",
-			header.status, header.random, header.level,header.lenght);
+			"header.status=%c,header.random=%d,header.level=%d,header.lenght=%d,header.nbcard\n",
+			header.status, header.random, header.level,header.lenght,header.nbcard);
 	    read_data(game, data, 'f',header.lenght);
 	    break;
 
@@ -164,7 +165,6 @@ void read_data(game_t * game, void *data, char type,...)
           game->buffile=malloc((size+1)*sizeof(char));
 	read(game->sockslv_id, game->buffile, size);
         game->buffile[size]='\0';
-        //file_parse(game);
 	break;
 
     }

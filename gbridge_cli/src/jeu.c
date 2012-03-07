@@ -264,8 +264,8 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     printf("Nettoyage\n");
     trash_list(ihm_pli);
   }
-  // C'est la fin au a deja 13 plis 
-  if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
+  // C'est la fin au a deja ihm_pli->nbcard plis 
+  if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard ) {
     printf("The end recuperation_jeu\n");
       
    return 0;
@@ -431,7 +431,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   }
   for( couleur=trefle;couleur<pique+1;couleur++)
     ihm_pli->tab_couleur[position][couleur]=0;
-  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&TRUE==ihm_pli->savegame) {
+  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
     if(NULL==ihm_pli->fd) {
       snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_pli->random);
       ihm_pli->fd=fopen(savefile,"a");
@@ -446,7 +446,8 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
       fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
     }
   }
-  for (i = 0; i < NBPCOULEUR; i++) {
+  i=0;
+  do {
       status=read_header (ihm_pli, carte, 'c');
       resvl=affichage(carte->nocarte,CARTE);
       rescl=affichage(carte->clcarte,COULEUR);
@@ -455,7 +456,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
         imgcard=load_imgcard(cardname,carte,ihm_pli,position); 
          ihm_pli->players[position]=g_list_prepend(ihm_pli->players[position], (gpointer)imgcard);
-        if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&TRUE==ihm_pli->savegame) {
+        if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
           if(ihm_pli->fd) {
             if(refcoul!=rescl[0]){ 
               if(rescl[0] != colorref[j]) {
@@ -480,9 +481,10 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
 	
       free(rescl);
       free(resvl);
+      i++;
       
-  }
-  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13)&&(TRUE==ihm_pli->savegame )&& (position==est) &&ihm_pli->fd) {
+  } while (i<ihm_pli->nbcard);
+  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&(TRUE==ihm_pli->savegame )&& (position==est) &&ihm_pli->fd) {
     snprintf(writebuf,NBPCOULEURS+2,"\n");
     fwrite(writebuf,1,1,ihm_pli->fd);
   }

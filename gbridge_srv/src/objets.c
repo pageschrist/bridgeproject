@@ -324,6 +324,7 @@ void init_game(game_t * game)
     init_tabjeu(game);
     game->status = 'b';
     game->buffile=NULL;
+    game->nbcard=NBPCOULEURS;
     init_cardplayed(game);
 
 }
