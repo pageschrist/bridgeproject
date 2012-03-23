@@ -80,19 +80,16 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
       else 
         fprintf(stderr,"File not found or unreadable%s\n",ihm_pli->filename);
       
-      if(ihm_pli->debug) 
-        fprintf(stderr,"av recuperation_jeu 0, new_dist%c %d ihm_pli->nbcard %d\n",ihm_pli->status,ihm_pli->read,ihm_pli->nbcard);
       free_ihm_pli(ihm_pli);
       reset_ihm_pli(ihm_pli);
       recuperation_jeu(ihm_pli,0);
       //if(ihm_pli->debug) 
-      free_ihm_pli(ihm_pli);
+      //free_ihm_pli(ihm_pli);
       draw_container_ihm(ihm_pli);
       for(contrat=0;contrat<7;contrat++){
         for(couleur=trefle;couleur<aucune+1;couleur++) 
                     gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
       }
-        fprintf(stderr,"ap recuperation_jeu 0, new_dist%c %d ihm_pli->nbcard %d\n",ihm_pli->status,ihm_pli->read,ihm_pli->nbcard);
 
     }
     gtk_widget_destroy(ihm_pli->File_S);
@@ -316,10 +313,9 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   if(NULL==ihm_pli->pli  ) 
     return FALSE;
   // C'est la fin on a deja 13 plis 
-  if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==13 ) {
+  if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard ) {
     //if(ihm_pli->read==FALSE  ) 
      // return TRUE;
-    if(ihm_pli->debug)
       printf("The end \n");
     trash_list(ihm_pli);
     gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_CENTER);
@@ -406,8 +402,6 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
  
         gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\nFinal Contrat: %s\n",dis_bid,ihm_pli->scontrat));
-        if(ihm_pli->debug)
-	  fprintf(stderr,"recuperation_jeu +2 av, expose_comment%c %d\n",ihm_pli->status,ihm_pli->read);
         ihm_pli->state=STARTING; 
         ihm_pli->status='g'; 
           
@@ -416,8 +410,6 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
             for(couleur=trefle;couleur<aucune+1;couleur++) 
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, FALSE);
           }
-        if(ihm_pli->debug)
-	  fprintf(stderr,"recuperation_jeu +2, expose_comment:%c %d\n",ihm_pli->status,ihm_pli->read);
           for (position=sud;position<est+1;position++ ) {
             free_list(&ihm_pli->players[position]);
             ihm_pli->players[position]=NULL;

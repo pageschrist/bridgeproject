@@ -42,15 +42,19 @@ char *affichage (int valeur, int type)
   char *pos=malloc(2*sizeof(char ));;
     
   if (type == CARTE) {
+      if(valeur<strlen(figure))
       pos[0]=figure[valeur];
   }
   if (type == COULEUR) {
+    if(valeur<strlen(couleurtype))
     pos[0]=couleurtype[valeur];
   }
   if (type == POSITION) {
+    if(valeur<strlen(positiontype))
     pos[0]=positiontype[valeur];
   }
   if (type == CONTRAT) {
+    if(valeur<strlen(contrattype))
     pos[0]=contrattype[valeur];
   }
   pos[1]='\0';

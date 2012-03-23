@@ -141,6 +141,7 @@ rectangle_t * draw_dropping_zone(ihm_pli_t *ihm_pli, GdkPixmap *target)
 
 void draw_container_ihm(ihm_pli_t *ihm_pli)
 {
+        printf("Draw !!\n");
         if(ihm_pli->target != NULL)
         {
                 /* Paint it black */

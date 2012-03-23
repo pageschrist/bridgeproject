@@ -106,7 +106,7 @@ void main_game(game_t * game)
                   end_session(game);
               printf("bidstatusaft\n",diststatus);
             }
-	    if (!hopestat)
+	    if (!hopestat &&(game->nbcard == NBPCOULEURS))
 		hopestat = analyse_tabjeu(game,NULL);
 	}
     } while  (diststatus==FALSE || bidstatus==TRUE);
@@ -114,16 +114,19 @@ void main_game(game_t * game)
     rotation(game, hopestat);
     newgame(game, hopestat);
     clear_game(game);
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    if(hopestat) {
+      for (couleur = trefle; couleur < pique + 1; couleur++) {
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
+            
 	    if (hopestat[index]->best_card)
 		free(hopestat[index]->best_card);
 	    free(hopestat[index]);
 	}
+      }
+      free(hopestat);
+      hopestat = NULL;
     }
-    free(hopestat);
-    hopestat = NULL;
 
 }
 
@@ -151,7 +154,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 	printf("On est dans newgame random=%d level=%d\n", random, prof);
 
 
-    if (game->debug) {
+    if (game->debug && hopestat) {
 	for (couleur = trefle; couleur < pique + 1; couleur++) {
 
 	    for (position = sud; position < est + 1; position++) {
@@ -201,7 +204,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		if (notour > 5) {
 		    prof = (game->nbcard - notour) * 4;
 		}
-		if (notour == 0 && t == 0) {	// On est à l'entame
+		if ((notour == 0 && t == 0)&&hopestat && game->nbcard == NBPCOULEURS) {	// On est à l'entame
 		    search_best_color(pli->nextpos, hopestat,choice_color);
                     printf("color->toavoid=%d,color->interessant=%d\n",choice_color->toavoid,choice_color->interessant);
 		    best_coup = malloc(sizeof(carte_t));
