@@ -340,7 +340,7 @@ gboolean analyse_bid(game_t * game)
     gboolean found = FALSE;
     char *home, tmpstring[2];
     char *ptr, *affc;
-    char *s_bidref, *s_newbid, *s_condition;
+    char  *s_newbid, *s_condition;
     char buf[16384];
     home = getenv("HOME");
     sprintf(bidhomeconf, "%s%s", home, BIDCONFHOME);
@@ -359,7 +359,7 @@ gboolean analyse_bid(game_t * game)
 	while (fgets(buf, 16380, obidhomeconf)) {
 	    if (!strncmp(buf, game->cur_bid, strlen(game->cur_bid))) {
 		buf[strlen(buf) - 1] = '\0';
-		s_bidref = strtok_r(buf, ":", &ptr);
+		strtok_r(buf, ":", &ptr);
 		s_newbid = strtok_r(NULL, ":", &ptr);
 		s_condition = strtok_r(NULL, ":", &ptr);
 		if (test_condition(game, s_condition)) {

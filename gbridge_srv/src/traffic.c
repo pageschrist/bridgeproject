@@ -110,7 +110,7 @@ char read_header(game_t * game, void *data, char type)
 	    game->level = header.level;
 	    if (game->debug)
 		fprintf(stderr,
-			"header.status=%c,header.random=%d,header.level=%d,header.nbcard\n",
+			"header.status=%c,header.random=%d,header.level=%d,header.nbcard=%d\n",
 			header.status, header.random, header.level,header.nbcard);
 	    break;
 	case 'f':
@@ -119,7 +119,7 @@ char read_header(game_t * game, void *data, char type)
 	    game->level = header.level;
 	    if (game->debug)
 		fprintf(stderr,
-			"header.status=%c,header.random=%d,header.level=%d,header.lenght=%d,header.nbcard\n",
+			"header.status=%c,header.random=%d,header.level=%d,header.lenght=%d,header.nbcard=%d\n",
 			header.status, header.random, header.level,header.lenght,header.nbcard);
 	    read_data(game, data, 'f',header.lenght);
 	    break;

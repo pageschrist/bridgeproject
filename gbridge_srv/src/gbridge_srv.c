@@ -101,10 +101,8 @@ void main_game(game_t * game)
 	} else {
 	    bidstatus = analyse_bid(game);
 	    if (game->status == 'b') {
-              printf("bidstatus\n",diststatus);
 		if('e'==write_data(game, game->cur_bid, 'u'))
                   end_session(game);
-              printf("bidstatusaft\n",diststatus);
             }
 	    if (!hopestat &&(game->nbcard == NBPCOULEURS))
 		hopestat = analyse_tabjeu(game,NULL);
@@ -147,7 +145,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
     pli_t *pli;
-    int t, notour = 0, n;
+    int t, notour = 0 ;
     pli = malloc(sizeof(pli_t));
     init_pli(pli, INIT);
     if (game->debug)
@@ -187,7 +185,8 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     pli->entame = (game->contrat->declarant + 1) % 4;
     pli->nextpos = (game->contrat->declarant + 1) % 4;
     pli->atout = game->contrat->atout;
-
+    if(game->nbcard <10)
+      prof = game->nbcard  * 4;
     for (notour = 0; notour < game->nbcard; notour++) {
 	for (t = 0; t < NBJOUEURS; t++) {
             display_cardplayed(game);
@@ -218,7 +217,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 			    analyse_hand(game, pli,
 					 pli->carte[pli->entame].clcarte);
 		    } else {
-			n = first_explore(pli, prof - pli->noj, &nb_best,
+			first_explore(pli, prof - pli->noj, &nb_best,
 					  l_best, game);
 			gettimeofday(timeap, NULL);
 			if (game->debug)

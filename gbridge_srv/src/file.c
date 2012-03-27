@@ -32,13 +32,11 @@ valeur_t convert_char_card(char c ) {
 }
 
 gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
-  char c;
   size_t i;
   int n;
   if(strlen(buffer) <=0 )
     return (FALSE);
   for (i=1;i<strlen(buffer);i++) {
-    c=buffer[i];
     if(pdc==(n=convert_char_card(buffer[i])))
       return(FALSE);
     tabref[couleur][n]++;
@@ -86,7 +84,6 @@ gboolean file_parse (game_t *game) {
   char *bufref;
   position_t position;
   couleur_t couleur=trefle;
-  int sizetmp;
   size_t j;
   int tabref[est+1][cA+1];
   int index;
@@ -95,7 +92,6 @@ gboolean file_parse (game_t *game) {
   char *coul="TKCP";
   memset(tabref,0,(cA+1)*(est+1)*sizeof(int));
   bufref=game->buffile;
-  sizetmp=strlen(bufref);
 
 #ifdef DEBUG
     game->debug = TRUE;

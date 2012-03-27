@@ -338,7 +338,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
-    int k = 0, sub,points,dist;
+    int k = 0, sub,dist;
     valeur_t higher_value;
     couleur_t couleurc;
     couleur_t i;
@@ -361,7 +361,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
 		if (i != pli->atout) {
-                    points=points_per_color(tmpjeu[index]);
+                    points_per_color(tmpjeu[index]);
 		    pli->carte[positionc].clcarte = i;
 		    pli->carte[positionc].nocarte =
 			tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt-1];

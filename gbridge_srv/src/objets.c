@@ -441,16 +441,7 @@ void *duplique_pli(void *data)
 
 void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 {
-    position_t position;
-    couleur_t couleur;
     char *affca, *affco;
-    int index;
-    for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
-	    index = INDEX(position, couleur);
-
-	}
-    }
     affiche_tabjeu_c(thread_jeu->t_jeu);
     printf("carte:%s%s\n", affca =
 	   affichage(thread_jeu->carte->nocarte, CARTE), affco =
