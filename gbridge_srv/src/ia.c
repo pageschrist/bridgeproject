@@ -123,7 +123,7 @@ int minimax(int score_courant, int best_score, position_t positionc)
 
 }
 retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
-		      tablist_t ** t_jeu, int orialpha, int oribeta)
+		      tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
     l_item_t *l_item;
@@ -142,7 +142,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     /*choix du joueur qui joue en fonction de la profondeur  */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    if ((prof == prof_max) || (pli_cur->nopli == 13)) {
+    if ((prof == prof_max) || (pli_cur->nopli == nbcard)) {
 	retup = check_plis(pli_cur);
 	return (retup);
     }
@@ -170,7 +170,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 
 	//on duplique le jeu
 
-	ret = cur_explore(prof + 1, pli_new, prof_max, t_jeu, alpha, beta);
+	ret = cur_explore(prof + 1, pli_new, prof_max, t_jeu, alpha, beta,nbcard);
 	if ((prof != prof_start) && (prof != prof_max - 1)) {
 	    if (positionc % 2 == 1)
 		beta = ret->alpha_or_beta;
@@ -234,7 +234,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 }
 
 retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
-			   tablist_t ** t_jeu, int orialpha, int oribeta)
+			   tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
     l_item_t *l_item;
@@ -260,7 +260,7 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	nbcoups = list_all_coups_eval(positionc, l_item, pli_cur, t_jeu);
     if ((nbcoups == 0) && (t_jeu[0]->couleureval != aucune))
 	prof_max = prof;
-    if ((prof == prof_max) || (pli_cur->nopli == 13)) {
+    if ((prof == prof_max) || (pli_cur->nopli == nbcard)) {
 
 	retup = check_plis(pli_cur);
 	return (retup);
@@ -286,7 +286,7 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 
 	ret =
 	    cur_explore_eval(prof + 1, pli_new, prof_max, t_jeu, alpha,
-			     beta);
+			     beta,nbcard);
 	if ((prof != prof_start) && (prof != prof_max - 1)) {
 	    if (positionc % 2 == 1)
 		beta = ret->alpha_or_beta;
@@ -379,8 +379,9 @@ void *new_explore(void *arg)
     /*choix du joueur qui joue en fonction de la profondeur  */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    if ((prof == prof_max) || (pli_cur->nopli == 13)) {
+    if ((prof == prof_max) || (pli_cur->nopli == thread_jeu->nbcard)) {
 	rettmp = check_plis(pli_cur);
+        printf("new_explore: score=%d\n",rettmp->score);
 	thread_jeu->score = rettmp->score;
 	thread_jeu->nbline[0] = rettmp->nbline[0];
 	thread_jeu->nbline[1] = rettmp->nbline[1];
@@ -427,11 +428,11 @@ void *new_explore(void *arg)
 	    ret =
 		cur_explore_eval(prof + 1, pli_new, prof_max,
 				 thread_jeu->t_jeu, ALPHA_START,
-				 BETA_START);
+				 BETA_START,thread_jeu->nbcard);
 	else
 	    ret =
 		cur_explore(prof + 1, pli_new, prof_max, thread_jeu->t_jeu,
-			    ALPHA_START, BETA_START);
+			    ALPHA_START, BETA_START,thread_jeu->nbcard);
 	curscore = ret->score;
 	if (minimax(curscore, best_score, positionc)) {
 	    best_score = curscore;
@@ -473,7 +474,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	      game_t * game)
 {
     thread_jeu_t **thread_jeu = NULL;
-    pthread_t pid[13];
+    pthread_t pid[NBPCOULEURS];
     int nothr = 0;
     //stackia_t stk;
     l_item_t *l_item;
@@ -493,6 +494,9 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
     l_item=create_l_item(duplique_pli); 
     if (game->tabjeu[0]->couleureval == aucune) {	//Tous les jeux contiennes la couleur d'evaluation si necessaire
 	nbcoups = list_all_coups(positionc, l_item, pli_cur, game->tabjeu,game->cardplayed);
+        /////////////////////////////////
+        printf("first_explore:   nbcoups=%d\n",nbcoups);
+        ////////////////////////////////
 	if (nbcoups == 1) {
 	    //pli_new = (pli_t *) pop(stk);
 	    pli_new = (pli_t *) pop_item_head(l_item);
@@ -515,7 +519,6 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 		nbcoups);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    //while ((pli_new = (pli_t *) pop(stk)) != NULL) {
     while ((pli_new = (pli_t *) pop_item_head(l_item)) != NULL) {
 
 	thread_jeu =
@@ -534,6 +537,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	thread_jeu[nothr]->status = 0;
 	thread_jeu[nothr]->prof_max = prof_max;
 	thread_jeu[nothr]->prof = 1;
+	thread_jeu[nothr]->nbcard = game->nbcard;
 	//On joue le coup
 	pos_index =
 	    find_index(thread_jeu[nothr]->t_jeu, positionc, nocouleur,
@@ -569,7 +573,6 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 		threads_remaining = 1;
 	}
     }
-
     if (game->debug)
 	printf("Threads are terminated\n");
     for (i = 0; i < nothr; i++) {

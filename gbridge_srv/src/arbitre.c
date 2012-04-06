@@ -338,7 +338,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
-    int k = 0, sub,dist;
+    int k = 0, sub,dist,kmem=0;
     valeur_t higher_value;
     couleur_t couleurc;
     couleur_t i;
@@ -349,8 +349,8 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
     if (positionc != pli->entame) {
 	situation = NONENTAME;
 	couleurc = pli->carte[pli->entame].clcarte;
-	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0) {
-	    situation = DEFAUSSE;
+	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0 ) {
+	    situation = DEFAUSSE; //DEFAUSSE or TRUMP
 	}
     }
     phcarte.nocarte = pli->phcarte.nocarte;
@@ -374,7 +374,6 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                     ftrace();
                     higher_value=highest_value(cardplayed,i);
                     dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
-                    printf("higher_value=%d dist=%d value=%d\n",higher_value,dist, pli->carte[positionc].nocarte);
 
                     if(dist+1<tmpjeu[index]->nbcrt) {
                       add_item_head(l_item, pli);    
@@ -384,12 +383,18 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                   }
 		  nbcoups++;
 		} else {
-		    for (k = 0; k < tmpjeu[index]->nbcrt; k++) {
+		    for (k = 0;  k<tmpjeu[index]->nbcrt; k++) {
+                        if(k!=0) {
+                          if(pli->carte[positionc].nocarte-(1+kmem)==tmpjeu[index]->tabcoul[k]) {
+                            kmem++;
+                            continue;
+                          }
+                        }
 			pli->carte[positionc].clcarte = i;
 			pli->carte[positionc].nocarte =
 			    tmpjeu[index]->tabcoul[k];
 			nbcoups++;
-			add_item_head(l_item, pli);
+			add_item_tail(l_item, pli);
 		    }
 		}
 	    }

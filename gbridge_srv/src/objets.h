@@ -135,6 +135,7 @@ typedef struct _thread_jeu
   int prof;
   int prof_max;
   gboolean *cardplayed;
+  int nbcard;
 } thread_jeu_t;
 
 typedef struct _contrat_t
