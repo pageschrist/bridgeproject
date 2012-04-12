@@ -457,33 +457,31 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 	   thread_jeu->score, thread_jeu->prof, thread_jeu->prof_max);
 }
 
-void affiche_pli(pli_t * pli)
+void affiche_pli(pli_t * pli,gboolean display)
 {
-    position_t i;
-    char *affca, *affco;
-    ligne_t j;
+  position_t i;
+  char *affca, *affco;
+  ligne_t j;
+  if (display) {
     /*return(0); */
+    printf("DSP  nop=%d,noj %d, ", pli->nopli,pli->noj);
     for (i = sud; i < est + 1; i++) {
-	if (pli->carte[i].nocarte == pdc) {
-	    printf("probleme dans affiche_pli pour %d\n", i);
-
-	}
-	printf("pos %d,  %s%s\n", i, affca =
+	printf("pos %d  %s%s,", i, affca =
 	       affichage(pli->carte[i].nocarte, CARTE), affco =
 	       affichage(pli->carte[i].clcarte, COULEUR));
 	free(affca);
 	free(affco);
     }
-    printf("Vci  pli.noj %d\n", pli->noj);
-    printf("Vci  pli.phcarte %d\n", pli->phcarte.nocarte);
-    printf("Vci  pli.lastcarte %d\n", pli->lastcarte.nocarte);
-    printf("Vci  pli.entame %d\n", pli->entame);
-    printf("Vci  pli.nextpos %d\n", pli->nextpos);
-    printf("Vci  pli.nopli %d\n", pli->nopli);
-    printf("Vci  pli.leader %d\n", pli->leader);
+    printf("higher %d,", pli->phcarte.nocarte);
+    //printf("lastcarte %d,", pli->lastcarte.nocarte);
+    printf("lead %d,", pli->entame);
+    printf("npos %d,", pli->nextpos);
+    printf("leader %d,", pli->leader);
     for (j = ns; j < eo + 1; j++) {
-	printf("Vci pli.nbpli_ligne[%d] %d\n", j, pli->nbpli_ligne[j]);
+	printf("nbpli_ligne[%d] %d ", j, pli->nbpli_ligne[j]);
     }
+    printf("\n");
+  }
 
 }
 

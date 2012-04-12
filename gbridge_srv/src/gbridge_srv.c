@@ -203,7 +203,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		if (notour > 5) {
 		    prof = (game->nbcard - notour) * 4;
 		}
-		if ((notour == 0 && t == 0)&&hopestat && game->nbcard == NBPCOULEURS) {	// On est à l'entame
+		if ((notour == 155555 && t == 0)&&hopestat && game->nbcard == NBPCOULEURS) {	// On est à l'entame
 		    search_best_color(pli->nextpos, hopestat,choice_color);
                     printf("color->toavoid=%d,color->interessant=%d\n",choice_color->toavoid,choice_color->interessant);
 		    best_coup = malloc(sizeof(carte_t));
@@ -213,6 +213,8 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    gettimeofday(timeap, NULL);
 		} else {
 		    if (t != 0 && game->tabjeu[INDEX(pli->nextpos, pli->carte[pli->entame].clcarte)]->nbcrt != 0) {	// On a entame et on a de la couleur d'entame
+			if (game->debug)
+                          printf("look in analyse_hand\n");
 			best_coup =
 			    analyse_hand(game, pli,
 					 pli->carte[pli->entame].clcarte);

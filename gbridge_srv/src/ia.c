@@ -14,7 +14,36 @@
 int prof_start = 0;
 int flag_debug = 0;
 
-
+int  best_elem_best_l(elem_best_t *elem_best,pli_t *pli) {
+  char *affca,*affcl;
+  int score;
+  score=-15*((pli->nextpos+1)%2) +(15*((pli->nextpos)%2));
+  while (elem_best) {
+    if((pli->nextpos)%2==1) {
+      if(elem_best->best->score<score)
+        score=elem_best->best->score;
+    }
+    else {
+      if(elem_best->best->score>score)
+        score=elem_best->best->score;
+    }
+    affca=affichage(elem_best->best->carte->nocarte,CARTE),
+    affcl=affichage(elem_best->best->carte->clcarte,COULEUR),
+    printf ("card=%s%s score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n",
+                     affca,affcl,
+		     elem_best->best->score,
+		     elem_best->best->nbline[IALINE],
+		     elem_best->best->nbline[(IALINE+1)%2]);
+   free(affca);
+   free(affcl);
+   elem_best = elem_best->next;
+   }
+   printf("best_elem_score=%d\n",score);
+   return(score);
+}
+//void display_l_item_l(l_item_t *l_item) {
+ // while(
+//}
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		    hopestat_t * hopestat,pli_t *pli)
 {
@@ -24,31 +53,22 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     carte_t *carte = malloc(sizeof(carte_t));
     unsigned int jline = (IALINE + 1) % 2;
 
-    couleur_t i;
+    couleur_t i,score,score_ref;
     elem_best_t *elem_best = l_best->first;
+    elem_best_t *disp_elem_best = l_best->first;
     for (i = 0; i < pique + 1; i++)
 	tabval[i] = pdc;
     for (i = 0; i < pique + 1; i++)
 	suplead[i] = TRUE;
-    int score = l_best->first->best->score;
+    score_ref = best_elem_best_l(disp_elem_best,pli);
+    //score_ref = l_best->first->best->score;
+    
     if (game->debug)
 	printf("On a %d bons coups\n", *nb_best);
 
+
     while (elem_best) {
-	if (elem_best->best->score == score) {
-	    //if (game->debug) {
-                char *affca,*affcl;
-		affca=affichage(elem_best->best->carte->nocarte,CARTE),
-		affcl=affichage(elem_best->best->carte->clcarte,COULEUR),
-		printf
-		    ("card=%s%s score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n",
-                     affca,affcl,
-		     elem_best->best->score,
-		     elem_best->best->nbline[IALINE],
-		     elem_best->best->nbline[jline]);
-	       free(affca);
-	       free(affcl);
-	   // }
+	if (elem_best->best->score == score_ref) {
 	    if (hopestat) {
 		hopestat->score = elem_best->best->score;
 		hopestat->nbline[IALINE] = elem_best->best->nbline[IALINE];
@@ -99,7 +119,7 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	}
 	elem_best = elem_best->next;
     }
-    carte=pop_item_head(l_item);
+    carte=pop_item_tail(l_item);
     clean_l_item(l_item);
     return (carte);
 
@@ -388,7 +408,7 @@ void *new_explore(void *arg)
 	thread_jeu->status = 1;
 	free(rettmp);
 	if (thread_jeu->t_jeu[0]->debug) {
-	    affiche_pli(pli_cur);
+	    affiche_pli(pli_cur,TRUE);
 	    fprintf(stderr, "End newplore, prof=%d pli_cur->nopli=%d\n",
 		    prof, pli_cur->nopli);
 	}

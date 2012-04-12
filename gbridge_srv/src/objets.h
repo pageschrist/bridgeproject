@@ -186,7 +186,7 @@ int max(int a,int b);
 void *duplique_pli (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
-void affiche_pli (pli_t * ppli);
+void affiche_pli (pli_t * pli,gboolean display);
 void *copy_carte (void *data);
 void init_tabjeu(game_t *game);
 int remove_index (tablist_t **t_jeu,position_t position, couleur_t couleur, int pos_index);

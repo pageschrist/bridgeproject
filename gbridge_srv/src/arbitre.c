@@ -371,7 +371,6 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                   }
                   else {
                     //correspond to the highest value not played
-                    ftrace();
                     higher_value=highest_value(cardplayed,i);
                     dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
 
@@ -424,7 +423,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 			    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 			if (pli->carte[positionc].nocarte == pdc) {
 			    int h;
-			    affiche_pli(pli);
+			    affiche_pli(pli,TRUE);
 			    for (h = 0; h < NBJOUEURS; h++)
 				//affiche_tabjeu(h);
 				printf("Pb dans list_all_coups 1 \n");
@@ -447,7 +446,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		    if (pli->carte[positionc].nocarte == pdc) {
 			int h;
-			affiche_pli(pli);
+			affiche_pli(pli,TRUE);
 			for (h = 0; h < NBJOUEURS; h++)
 			    //affiche_tmpjeu(h);
 			    printf("Pb dans list_all_coups 2\n");
@@ -626,7 +625,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 		       carte->nocarte);
 	if (posindex == -1) {
 	    printf("Pb in joue_coup1\n");
-	    affiche_pli(pli);
+	    affiche_pli(pli,TRUE);
 	    affiche_carte(carte);
 	    return (0);
 	}
