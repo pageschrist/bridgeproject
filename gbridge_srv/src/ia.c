@@ -60,7 +60,11 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	tabval[i] = pdc;
     for (i = 0; i < pique + 1; i++)
 	suplead[i] = TRUE;
-    score_ref = best_elem_best_l(disp_elem_best,pli);
+    if(pli)
+      score_ref = best_elem_best_l(disp_elem_best,pli);
+    else 
+      score_ref = l_best->first->best->score;
+
     //score_ref = l_best->first->best->score;
     
     if (game->debug)
