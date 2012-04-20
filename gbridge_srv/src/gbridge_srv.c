@@ -234,18 +234,20 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    free(l_best);
 		    l_best = NULL;
 		}
-		pli->lastcarte.nocarte = best_coup->nocarte;
-		pli->lastcarte.clcarte = best_coup->clcarte;
-		if (game->debug) {
+                if(best_coup) {
+		  pli->lastcarte.nocarte = best_coup->nocarte;
+		  pli->lastcarte.clcarte = best_coup->clcarte;
+		  if (game->debug) {
 		    printf("Joue coup pli,best_coup\n");
 		    affiche_carte(best_coup);
-		}
-		if (joue_coup(pli, best_coup, game) == 0) {
+		  }
+		  if (joue_coup(pli, best_coup, game) == 0) {
 		    free(best_coup);
 		    game->transfert->status = WAITING;
 		    return (TRUE);
-		}
-		free(best_coup);
+		  }
+		  free(best_coup);
+                }
 	    } else {
                 if(game->debug)
 		  printf("Player  \n");
