@@ -103,7 +103,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
 
   char chaine[MAXCHAR];
   couleur_t couleur;
-  int res,contrat;
+  int contrat;
   button_bid_t **button_bid;
   button_bid_t **button_obid;
   init_ihm_pli(ihm_pli);
@@ -197,7 +197,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
                       G_CALLBACK (enter_callback_level),
                       (gpointer) ihm_pli);
   gtk_entry_set_max_length (GTK_ENTRY (entry_level), 5);
-  res=snprintf(chaine,MAXCHAR,"%d",DEFAULTLEVEL);
+  snprintf(chaine,MAXCHAR,"%d",DEFAULTLEVEL);
   gtk_entry_set_text (GTK_ENTRY (entry_level), chaine);
   gtk_entry_set_max_length (GTK_ENTRY (entry_level), 2);
   Label_text = gtk_label_new("level (1-10):");
@@ -209,7 +209,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   Label_text = gtk_label_new("Rnd (0-25000):");
   gtk_label_set_justify(GTK_LABEL(Label_text), GTK_JUSTIFY_CENTER);
   gtk_box_pack_start(GTK_BOX(HBox_Other), Label_text, FALSE, FALSE, 0);
-  res=snprintf(chaine,MAXCHAR,"%d",DEFAULTRANDOM);
+  snprintf(chaine,MAXCHAR,"%d",DEFAULTRANDOM);
   gtk_entry_set_text (GTK_ENTRY (entry_random), chaine);
   gtk_entry_set_max_length (GTK_ENTRY (entry_random), 5);
   gtk_box_pack_start (GTK_BOX (HBox_Other), entry_random, FALSE, FALSE, 0);

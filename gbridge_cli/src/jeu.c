@@ -254,7 +254,6 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   position_t poscour;
   char *cardname,*rescl,*resvl,*resps;
   GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
-  int status;
   char *reschaine;
   GdkGC *gc;
   
@@ -278,7 +277,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   if((ihm_pli->pli->nextpos%2)==(position_t)ihm_pli->ligneia) {
    
     printf("IA joue\n");
-    status = read_header(ihm_pli,ihm_pli->pli, 'p');
+    read_header(ihm_pli,ihm_pli->pli, 'p');
     cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
     gc = ihm_pli->Drawing_area->style->fg_gc[state];
     gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
@@ -341,7 +340,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
 
     
     write_data(ihm_pli,ihm_pli->pli,'p');
-    status = read_header (ihm_pli,ihm_pli->pli, 'p');
+    read_header (ihm_pli,ihm_pli->pli, 'p');
     resps=affichage(ihm_pli->pli->nextpos,POSITION); 
     gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
@@ -408,9 +407,9 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   carte_t *carte;
   char writebuf[NBPCOULEURS+2];
   char *colorref="TKCP";
-  int j=0;
+  int j=0,k;
   carte=malloc(sizeof(carte_t));
-  int i, status;
+  int i;
   gchar *cardname=NULL;
   GdkGC *gc;
   GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
@@ -434,8 +433,10 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
     if(NULL==ihm_pli->fd) {
       snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_pli->random);
-      ihm_pli->fd=fopen(savefile,"a");
-
+      if(position==sud) 
+        ihm_pli->fd=fopen(savefile,"w");
+      else
+        ihm_pli->fd=fopen(savefile,"a");
     }
     if(position==sud){
       snprintf(writebuf,NBPCOULEURS+2,"%c",resp[0]);
@@ -448,7 +449,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
   }
   i=0;
   do {
-      status=read_header (ihm_pli, carte, 'c');
+      read_header (ihm_pli, carte, 'c');
       resvl=affichage(carte->nocarte,CARTE);
       rescl=affichage(carte->clcarte,COULEUR);
       sprintf(cardname, "%s/%s%s.xpm", ihm_pli->path,resvl ,rescl);
@@ -462,6 +463,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
               if(rescl[0] != colorref[j]) {
                 snprintf(writebuf,NBPCOULEURS+2,"\n%c",colorref[j]);
                 fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+                j++;
               }
               snprintf(writebuf,NBPCOULEURS+2,"\n%c%c",rescl[0],resvl[0]);
               fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
@@ -484,6 +486,14 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
       i++;
       
   } while (i<ihm_pli->nbcard);
+  if((ihm_pli->fd)&&(j<NBCOULEURS)) {
+    for(k=j;k<NBCOULEURS;k++) {
+       printf("k=%d\n",k);
+       snprintf(writebuf,NBPCOULEURS+2,"\n%c",colorref[k]);
+       fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+    }
+    
+  }
   if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&(TRUE==ihm_pli->savegame )&& (position==est) &&ihm_pli->fd) {
     snprintf(writebuf,NBPCOULEURS+2,"\n");
     fwrite(writebuf,1,1,ihm_pli->fd);

@@ -25,7 +25,7 @@ char * contrat_to_char ( couleur_t atout) {
     strcpy (type,"C ");
   if (atout==pique) 
     strcpy (type,"P ");
-  if (atout==aucun) 
+  if (atout==aucune) 
     strcpy (type,"SA");
   type[2]='\0';
   return type;  
@@ -42,19 +42,19 @@ char *affichage (int valeur, int type)
   char *pos=malloc(2*sizeof(char ));;
     
   if (type == CARTE) {
-      if(valeur<strlen(figure))
+      if(valeur<(int)strlen(figure))
       pos[0]=figure[valeur];
   }
   if (type == COULEUR) {
-    if(valeur<strlen(couleurtype))
+    if(valeur<(int)strlen(couleurtype))
     pos[0]=couleurtype[valeur];
   }
   if (type == POSITION) {
-    if(valeur<strlen(positiontype))
+    if(valeur<(int)strlen(positiontype))
     pos[0]=positiontype[valeur];
   }
   if (type == CONTRAT) {
-    if(valeur<strlen(contrattype))
+    if(valeur<(int)strlen(contrattype))
     pos[0]=contrattype[valeur];
   }
   pos[1]='\0';
