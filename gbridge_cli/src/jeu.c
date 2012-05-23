@@ -278,6 +278,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
    
     printf("IA joue\n");
     read_header(ihm_pli,ihm_pli->pli, 'p');
+    affiche_pli(ihm_pli->pli);
     cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
     gc = ihm_pli->Drawing_area->style->fg_gc[state];
     gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
@@ -341,6 +342,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
     
     write_data(ihm_pli,ihm_pli->pli,'p');
     read_header (ihm_pli,ihm_pli->pli, 'p');
+    affiche_pli(ihm_pli->pli);
     resps=affichage(ihm_pli->pli->nextpos,POSITION); 
     gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
     gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));

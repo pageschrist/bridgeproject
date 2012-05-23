@@ -218,6 +218,9 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 			best_coup =
 			    analyse_hand(game, pli,
 					 pli->carte[pli->entame].clcarte);
+                        if(!best_coup)
+                          printf("ERROR: best_coup empty  coming from analyse_hand!!\n");
+ 
 		    } else {
 			first_explore(pli, prof - pli->noj, &nb_best,
 					  l_best, game);
@@ -228,6 +231,8 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 				   (int) timeav->tv_sec);
 			best_coup =
 			    best_choice(&nb_best, l_best, game, NULL,pli);
+                        if(!best_coup)
+                          printf("ERROR: best_coup empty  coming from best_choice!!\n");
 		    }
 		    nb_best = 0;
 		    clear_list(l_best);
@@ -237,7 +242,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
                 if(best_coup) {
 		  pli->lastcarte.nocarte = best_coup->nocarte;
 		  pli->lastcarte.clcarte = best_coup->clcarte;
-		  if (game->debug) {
+		  if (game->debug || TRUE) {
 		    printf("Joue coup pli,best_coup\n");
 		    affiche_carte(best_coup);
 		  }
@@ -248,6 +253,8 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		  }
 		  free(best_coup);
                 }
+                else 
+                  printf("ERROR: best_coup empty !!\n");
 	    } else {
                 if(game->debug)
 		  printf("Player  \n");

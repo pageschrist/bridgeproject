@@ -105,10 +105,14 @@ void copy_pli (pli_t *ppliori, pli_t *pplicopie)
 void affiche_pli( pli_t *ppli)
 {
 	position_t i;
+        char *rescl,*resct;
 	ligne_t j;
 	for(i=sud;i<est+1;i++) {
-  printf("pos %d,  %s%s\n",i,affichage(ppli->carte[i].nocarte,CARTE),affichage(ppli->carte[i].clcarte,COULEUR));
-//  printf("pos %d,  %c%c\n",i,affichage(ppli->defausse[i].nocarte,CARTE),affichage(ppli->defausse[i].clcarte,COULEUR));
+        resct=affichage(ppli->carte[i].nocarte,CARTE);
+        rescl=affichage(ppli->carte[i].clcarte,COULEUR);
+        printf("pos %d,  %s%s\n",i,resct,rescl);
+        free(resct);
+        free(rescl);
 	}
 	printf("Vci  pli.entame %d\n",ppli->entame);
 	printf("Vci  pli.nextpos %d\n",ppli->nextpos);

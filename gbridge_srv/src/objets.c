@@ -205,7 +205,6 @@ void display_cardplayed(game_t *game) {
         printf("F");
     }
   }
-  printf("\nCARD PLAYED END\n");
   free(resco);
 
 }

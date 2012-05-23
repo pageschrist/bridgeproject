@@ -182,6 +182,7 @@ char  write_data(game_t * game, void *data, char type)
     switch (type) {
     case 'p':
 	pli = data;
+        affiche_pli(pli,TRUE);
 	write_header(game, type);
 	write(game->sockslv_id, pli, sizeof(pli_t));
 	break;

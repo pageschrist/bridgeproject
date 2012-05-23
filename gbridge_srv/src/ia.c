@@ -53,7 +53,8 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     carte_t *carte = malloc(sizeof(carte_t));
     unsigned int jline = (IALINE + 1) % 2;
 
-    couleur_t i,score,score_ref;
+    couleur_t i;
+    int score_ref;
     elem_best_t *elem_best = l_best->first;
     elem_best_t *disp_elem_best = l_best->first;
     for (i = 0; i < pique + 1; i++)
@@ -69,6 +70,13 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     
     if (game->debug)
 	printf("On a %d bons coups\n", *nb_best);
+    if(*nb_best==1) {
+
+      carte->clcarte=elem_best->best->carte->clcarte;
+      carte->nocarte=elem_best->best->carte->nocarte;
+      clean_l_item(l_item);
+      return (carte);
+    }
 
 
     while (elem_best) {
