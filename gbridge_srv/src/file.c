@@ -139,10 +139,10 @@ gboolean file_parse (game_t *game) {
         }
         k=strlen(game->buffile);
         for(j=1;j<strlen(game->buffile);j++) {
-          //game->tabjeu[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
-          //game->tabjeuref[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
-          game->tabjeu[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
-          game->tabjeuref[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
+          //game->tabjeu[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
+          //game->tabjeuref[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
+          game->tabjeu[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
+          game->tabjeuref[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
           game->tabjeu[index]->nbcrt++;
           game->tabjeuref[index]->nbcrt++;
           if(game->debug)

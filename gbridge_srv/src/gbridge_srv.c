@@ -110,6 +110,9 @@ void main_game(game_t * game)
     } while  (diststatus==FALSE || bidstatus==TRUE);
     game->status = 'g';
     rotation(game, hopestat);
+    printf("###################################################\n");
+    affiche_tabjeu_c(game->tabjeu);
+    printf("###################################################\n");
     newgame(game, hopestat);
     clear_game(game);
     if(hopestat) {

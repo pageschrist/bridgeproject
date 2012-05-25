@@ -364,7 +364,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                     points_per_color(tmpjeu[index]);
 		    pli->carte[positionc].clcarte = i;
 		    pli->carte[positionc].nocarte =
-			tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt-1];
+			tmpjeu[index]->tabcoul[0];
                   if(NULL==cardplayed || tmpjeu[index]->nbcrt ==1) {  //if tmpjeu[index]->nbcrt ==1 no choice
                     add_item_tail(l_item, pli);
 
