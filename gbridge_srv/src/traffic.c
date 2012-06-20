@@ -82,7 +82,7 @@ char read_header(game_t * game, void *data, char type)
 	}
     }
     if (header.status == 'e') {
-	//  if(game->debug)
+      if(game->debug)
 	printf("End of game\n");
 	return ('e');
     }

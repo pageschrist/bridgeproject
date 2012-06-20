@@ -86,7 +86,7 @@ gboolean file_parse (game_t *game) {
   couleur_t couleur=trefle;
   size_t j;
   int tabref[est+1][cA+1];
-  int index,k;
+  int index;
   char *buf;
   char *pos="SONE";
   char *coul="TKCP";
@@ -137,10 +137,7 @@ gboolean file_parse (game_t *game) {
           clear_buffile(game);
           return FALSE;
         }
-        k=strlen(game->buffile);
         for(j=1;j<strlen(game->buffile);j++) {
-          //game->tabjeu[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
-          //game->tabjeuref[index]->tabcoul[k-j-1]=convert_char_card(game->buffile[j]);
           game->tabjeu[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
           game->tabjeuref[index]->tabcoul[j-1]=convert_char_card(game->buffile[j]);
           game->tabjeu[index]->nbcrt++;

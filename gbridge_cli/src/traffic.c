@@ -114,7 +114,7 @@ ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) {
 int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
   net_header_t header;
   int ret;
-  if(ihm_pli->debug||TRUE) { 
+  if(ihm_pli->debug) { 
     j++;
     fprintf(stderr,"read_header %d :%c\n",j,type);
   }
@@ -152,7 +152,6 @@ void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
     case 'p':
       pli= data;
       read (ihm_pli->socketid,  pli, sizeof (pli_t));
-      fprintf(stdout,"leader=%d\n",pli->leader);
       break;
     case 'c':
       carte= data;
