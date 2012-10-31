@@ -14,7 +14,8 @@ all:
 	cc `pkg-config glib-2.0 gtk+-2.0 --cflags` -g -Wall -W -c jeu.c
 	cc `pkg-config glib-2.0 gtk+-2.0 --cflags` -g -Wall -W -c free.c
 	cc `pkg-config glib-2.0 gtk+-2.0 --cflags` -g -Wall -W -c find.c
-	cc `pkg-config glib-2.0 gtk+-2.0 --cflags --libs` -g -Wall -W -lm -o gbridge_cli traffic.o gbridge_cli.o load.o find.o  free.o create_config.o callbacks.o objets.o  ihmbridge.o client.o jeu.o draw.o alloc.o
+	cc `pkg-config glib-2.0 gtk+-2.0 --cflags` -g -Wall -W -c file.c
+	cc `pkg-config glib-2.0 gtk+-2.0 --cflags --libs` -g -Wall -W -lm -o gbridge_cli file.o traffic.o gbridge_cli.o load.o find.o  free.o create_config.o callbacks.o objets.o  ihmbridge.o client.o jeu.o draw.o alloc.o
 
 clean:
 
