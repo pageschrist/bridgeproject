@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glib/ghash.h>
+//#include <glib/ghash.h>
+#include <glib.h>
 #include <gdk/gdkkeysyms.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -19,6 +20,7 @@
 #include "callbacks.h"
 #include "alloc.h"
 #include "traffic.h"
+#include "file.h"
 
 void fdebug (void) {
  int i;

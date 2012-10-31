@@ -2,7 +2,8 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
-#include <glib/gstring.h>
+//#include <glib/gstring.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 //#include "mask.xbm"
 #include "objets.h"

@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glib/ghash.h>
+//#include <glib/ghash.h>
+#include <glib.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include "objets.h"

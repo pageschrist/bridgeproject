@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <glib/gtypes.h>
+//#include <glib/gtypes.h>
 #include <glib/gprintf.h>
+#include <glib.h>
 #include "objets.h"
 #include "traffic.h"
+#include "file.h"
 #define _GNU_SOURCE
 
 #include <stdarg.h>
@@ -27,8 +29,11 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
       else
         strcat(transbuf,buf);
     }
-      if(ihm_pli->debug) 
-        printf("send_file: transbuf=%s",transbuf);
+    ret=check_parse(ihm_pli ,transbuf);
+    if(FALSE==ret)
+      return FALSE;
+    if(ihm_pli->debug) 
+      printf("send_file: transbuf=%s",transbuf);
     ret=write_data(ihm_pli,transbuf,'f',strlen(transbuf));
     
 
