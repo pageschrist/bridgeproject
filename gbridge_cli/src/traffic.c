@@ -18,7 +18,9 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
   ssize_t ret;
   char buf[MAXFILE];
   char transbuf[MAXFILE];
+  char transbufcheck[MAXFILE];
   transbuf[0]='\0';
+  transbufcheck[0]='\0';
   fd=fopen(ihm_pli->filename,"r");
   if(NULL==fd) 
     perror("fopen()");
@@ -29,9 +31,10 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
       else
         strcat(transbuf,buf);
     }
-    ret=check_parse(ihm_pli ,transbuf);
+    memcpy(transbufcheck,transbuf,MAXFILE);
+    ret=check_parse(ihm_pli ,transbufcheck);
     if(FALSE==ret)
-      return FALSE;
+      return FALSE; 
     if(ihm_pli->debug) 
       printf("send_file: transbuf=%s",transbuf);
     ret=write_data(ihm_pli,transbuf,'f',strlen(transbuf));

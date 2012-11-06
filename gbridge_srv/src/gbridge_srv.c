@@ -15,7 +15,6 @@
 #include <mcheck.h>
 #include <unistd.h>		/* fork(), write(), close() */
 #include <glib.h>		/* For Glib functions */
-#include <glib/gtypes.h>	/* For Glib functions */
 
 #include "create_config.h"
 #include "objets.h"

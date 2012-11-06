@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
-#include <glib/gtypes.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "distribution.h"

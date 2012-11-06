@@ -68,7 +68,6 @@ gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
 }
 
 gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
-  char *bufref;
   position_t position;
   couleur_t couleur=trefle;
   int tabref[est+1][cA+1];
@@ -76,7 +75,6 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
   char *pos="SONE";
   char *coul="TKCP";
   memset(tabref,0,(cA+1)*(est+1)*sizeof(int));
-  bufref=transbuf;
 
 
   for (position = sud; position < est + 1; position++) {
@@ -128,9 +126,7 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
 
     }
   }
-  if(bufref)
-    free(bufref);
-  transbuf=NULL;
+  //transbuf=NULL;
   return TRUE;
 
 }

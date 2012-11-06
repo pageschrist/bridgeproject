@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdio.h>
-#include <glib/gtypes.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "stack.h"

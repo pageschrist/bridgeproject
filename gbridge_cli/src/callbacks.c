@@ -22,10 +22,6 @@
 #include "traffic.h"
 #include "file.h"
 
-void fdebug (void) {
- int i;
- i=i*3;
-}
 
 void enter_callback_level( GtkWidget *entry,
                             ihm_pli_t *ihm_pli )
@@ -383,7 +379,6 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
         gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Bids:\nS \tW \tN \tE \n%s\n",dis_bid));
         if((ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-1])=='P' &&(ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-2])=='P' && (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-3])=='P'&& (ihm_pli->cur_bid[strlen(ihm_pli->cur_bid)-4])=='P') {
           printf("Game Starting\n");
-          fdebug();
                    
           for(i=strlen(ihm_pli->cur_bid)-1;i>0;i=i-2) {
 

@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <glib/gtypes.h>
+//#include <glib/gtypes.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "traffic.h"
