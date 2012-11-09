@@ -109,7 +109,7 @@ void main_game(game_t * game)
     newgame(game, hopestat);
     clear_game(game);
     if(hopestat) {
-      for (couleur = trefle; couleur < pique + 1; couleur++) {
+      for (couleur = club; couleur < spade + 1; couleur++) {
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
             
@@ -149,7 +149,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 
 
     if (game->debug && hopestat) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 
 	    for (position = sud; position < est + 1; position++) {
 		index = INDEX(position, couleur);

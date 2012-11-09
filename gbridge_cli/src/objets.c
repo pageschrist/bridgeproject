@@ -17,13 +17,13 @@ void debugaff(void) {
 char * contrat_to_char ( couleur_t atout) {
   char *type;
   type=malloc (3*sizeof(char));
-  if (atout==trefle) 
+  if (atout==club) 
     strcpy (type,"T ");
-  if (atout==carreau) 
+  if (atout==diamond) 
     strcpy (type,"K ");
-  if (atout==coeur) 
+  if (atout==heart) 
     strcpy (type,"C ");
-  if (atout==pique) 
+  if (atout==spade) 
     strcpy (type,"P ");
   if (atout==aucune) 
     strcpy (type,"SA");
@@ -161,7 +161,7 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->pli=malloc(sizeof(pli_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
   for (position=sud;position<est+1;position++ ) {
-    for (couleur=trefle;couleur<pique+1;couleur++) {
+    for (couleur=club;couleur<spade+1;couleur++) {
       ihm_pli->tab_couleur[position][couleur]=0;
     }
   }
@@ -194,7 +194,7 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   memset(ihm_pli->transfert,0,sizeof(transfert_t));
   ihm_pli->socketid=tcpclient();
   for (position=sud;position<est+1;position++ ) {
-    for (couleur=trefle;couleur<pique+1;couleur++) {
+    for (couleur=club;couleur<spade+1;couleur++) {
       ihm_pli->tab_couleur[position][couleur]=0;
     }
   }
@@ -238,7 +238,7 @@ void init_bid(ihm_pli_t *ihm_pli) {
   ihm_pli->Allbid=g_malloc(sizeof(ihm_bid_t*)*NBENCHERES);
   ihm_pli->Othbid=g_malloc(sizeof(ihm_bid_t*)*4);
   if(ihm_pli->Allbid) {
-    for(i=trefle;i<aucune+1;i++) {
+    for(i=club;i<aucune+1;i++) {
       for(k=0;k<7;k++) {
         ihm_pli->Allbid[i*7+k]=g_malloc(sizeof(ihm_bid_t));
         ihm_pli->Allbid[i*7+k]->bid=g_malloc(sizeof(bid_t));

@@ -8,13 +8,13 @@
 #include "distribution.h"
 #include "analyse.h"
 #include "gbridge_srv.h"
-extern coord_t tab_cartes[cA + 1][pique + 1];
+extern coord_t tab_cartes[cA + 1][spade + 1];
 void initialisation(void)
 {
     couleur_t j;
     valeur_t k;
 
-    for (j = trefle; j < aucune; j++) {
+    for (j = club; j < aucune; j++) {
 	for (k = c2; k < pdc; k++) {
 	    tab_cartes[k][j].detenteur = aucun;
 	}
@@ -37,7 +37,7 @@ int tirage(int diviseur)
 char *affichage(int valeur, int type)
 {
     char figure[cA + 1];
-    char couleurtype[pique + 1];
+    char couleurtype[spade + 1];
     char positiontype[aucun + 1];
     char *pos;
     if (type == CARTE) {
@@ -52,7 +52,7 @@ char *affichage(int valeur, int type)
     if (type == COULEUR) {
 	strcpy(couleurtype, "TKCPS");
 	pos = malloc(sizeof(char) * 2);
-        if(valeur>pique+1) 
+        if(valeur>spade+1) 
           *pos='W';
         else
 	  memcpy(pos, couleurtype + valeur, sizeof(char));
@@ -60,7 +60,7 @@ char *affichage(int valeur, int type)
     if (type == POSITION) {
 	strcpy(positiontype, "SONEZ");
 	pos = malloc(sizeof(char) * 2);
-        if(valeur>pique+1) 
+        if(valeur>spade+1) 
           *pos='W';
         else
 	  memcpy(pos, positiontype + valeur, sizeof(char));
@@ -144,7 +144,7 @@ void evalmain(game_t * game)
     couleur_t couleur;
     for (position = sud; position < aucun; position++) {
 	game->mainjoueur[position].nbpoints = 0;
-	for (couleur = trefle; couleur < aucune; couleur++) {
+	for (couleur = club; couleur < aucune; couleur++) {
 	    game->mainjoueur[position].nbcartes[couleur] = 0;
 	    game->mainjoueur[position].nbpointshonneurs[couleur] = 0;
 	    game->mainjoueur[position].nbcartesmax = 0;
@@ -153,7 +153,7 @@ void evalmain(game_t * game)
     }
     for (position = sud; position < aucun; position++) {
 	for (valeur = c2; valeur < pdc; valeur++) {
-	    for (couleur = trefle; couleur < aucune; couleur++) {
+	    for (couleur = club; couleur < aucune; couleur++) {
 		if (valeur >= cV) {
 		    game->mainjoueur[tab_cartes[valeur][couleur].
 				     detenteur].nbpoints =
@@ -174,7 +174,7 @@ void evalmain(game_t * game)
 	    }
 	}
 	for (position = sud; position < aucun; position++) {
-	    for (couleur = trefle; couleur < aucune; couleur++) {
+	    for (couleur = club; couleur < aucune; couleur++) {
 		if (game->mainjoueur[position].nbcartes[couleur] >
 		    game->mainjoueur[position].nbcartesmax)
 		    game->mainjoueur[position].nbcartesmax =
@@ -201,7 +201,7 @@ void envoi_jeu(position_t position, game_t * game)
     carte = malloc(sizeof(carte_t));
     int valeur;
     int index;
-    for (couleur = trefle; couleur < aucune; couleur++) {
+    for (couleur = club; couleur < aucune; couleur++) {
 	index = INDEX(position, couleur);
 	carte->clcarte = couleur;
 	if (game->tabjeuref[index]->nbcrt != 0) {
@@ -231,7 +231,7 @@ void remplit_liste_jeu(game_t * game)
     couleur_t couleur;
     int index, nbcrt, nbcrtref;
     init_tabjeu(game);
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
 	for (valeur = c2; valeur < pdc; valeur++) {
 	    position = tab_cartes[valeur][couleur].detenteur;
 	    position = (position) % 4;

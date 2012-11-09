@@ -9,7 +9,7 @@
 #include "ia.h"
 #include "stack.h"
 #include "arbitre.h"
-coord_t tab_cartes[cA + 1][pique + 1];
+coord_t tab_cartes[cA + 1][spade + 1];
 void mark(void)
 {
     printf("mark\n");
@@ -121,12 +121,12 @@ void init_tabjeu(game_t * game)
 {
     position_t position;
     int index, i;
-    game->tabjeu = malloc((sizeof(tablist_t *)) * (est + 1) * (pique + 1));
+    game->tabjeu = malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1));
     game->tabjeuref =
-	malloc((sizeof(tablist_t *)) * (est + 1) * (pique + 1));
+	malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1));
     couleur_t couleur;
     for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
 	    game->tabjeu[index] = malloc(sizeof(tablist_t));
 	    game->tabjeuref[index] = malloc(sizeof(tablist_t));
@@ -154,7 +154,7 @@ void clear_tabjeu(game_t * game)
     int index;
     couleur_t couleur;
     for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
             if(game->tabjeuref[index])
 	      free(game->tabjeuref[index]);
@@ -178,7 +178,7 @@ void clear_cardplayed(game_t * game,int type){
   if(FREE==type) 
     free(game->cardplayed);
   else {
-    for (color=trefle;color<pique+1;color++) {
+    for (color=club;color<spade+1;color++) {
       for(value=c2;value<cA+1;value++){
         indcard=INDCARD(color,value);
         game->cardplayed[indcard]=FALSE;
@@ -193,7 +193,7 @@ void display_cardplayed(game_t *game) {
   int indcard;
   char *resco;
   printf("CARD PLAYED \n");
-  for (color=trefle;color<pique+1;color++) {
+  for (color=club;color<spade+1;color++) {
     resco=affichage(color,COULEUR);
     printf("\n%s ",resco);
     for(value=c2;value<cA+1;value++) {
@@ -361,7 +361,7 @@ void affiche_tabjeuref(game_t * game, position_t position)
     int i;
     printf("\n%s ", affp = affichage(position, POSITION));
     free(affp);
-    for (couleur = trefle; couleur < aucune; couleur++) {
+    for (couleur = club; couleur < aucune; couleur++) {
 	printf("\n%s ", affco = affichage(couleur, COULEUR));
 	free(affco);
 /* Prints data in list */
@@ -388,7 +388,7 @@ void affiche_tabjeu_c(tablist_t ** t_jeu)
     for (position = sud; position < est + 1; position++) {
 	printf("\n%s ", affp = affichage(position, POSITION));
 	free(affp);
-	for (couleur = trefle; couleur < aucune; couleur++) {
+	for (couleur = club; couleur < aucune; couleur++) {
 	    printf("\n%s ", affco = affichage(couleur, COULEUR));
 	    free(affco);
 /* Prints data in list */
@@ -411,7 +411,7 @@ void init_cartes(void)
     valeur_t i;
     couleur_t j;
     for (i = 0; i < cA + 1; i++) {
-	for (j = 0; j < pique + 1; j++) {
+	for (j = 0; j < spade + 1; j++) {
 	    tab_cartes[i][j].nol = aucun;
 	    tab_cartes[i][j].noc = aucun;
 	    tab_cartes[i][j].detenteur = aucun;
@@ -497,12 +497,12 @@ void affiche_carte(carte_t * carte)
 
 void affiche_tab_cartes(void)
 {
-    extern coord_t tab_cartes[cA + 1][pique + 1];
+    extern coord_t tab_cartes[cA + 1][spade + 1];
     position_t i;
     valeur_t v;
     couleur_t c;
     for (i = sud; i < est + 1; i++) {
-	for (c = trefle; c < pique + 1; c++) {
+	for (c = club; c < spade + 1; c++) {
 	    for (v = c2; v < cA + 1; v++) {
 		if (tab_cartes[v][c].detenteur == i)
 		    printf("tab_cartes[%s][%s].det=%s\n",

@@ -12,18 +12,18 @@
 void search_best_color(position_t position, hopestat_t ** hopestat,choice_color_t *choice_color)
 {
     couleur_t color;
-    int refdiff[pique+1]; //Any value
+    int refdiff[spade+1]; //Any value
     int index;
     position_t pos;
     choice_color->interessant=aucune;
     choice_color->toavoid=aucune;
   
-    for (color = trefle; color < pique + 1; color++) {
+    for (color = club; color < spade + 1; color++) {
       index = INDEX(position, color);
       refdiff[color]=hopestat[index]->nbline[position % 2]-hopestat[index]->nbline[(position+1) % 2];
     }
 
-    for (color = trefle; color < pique + 1; color++) {
+    for (color = club; color < spade + 1; color++) {
       for(pos=sud;pos<est+1;pos++) {
         if(pos!=position) {
 	  index = INDEX(pos, color);
@@ -44,7 +44,7 @@ void changeeval(game_t * game, couleur_t couleureval)
     couleur_t couleur;
     position_t position;
     int index;
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
 	    game->tabjeu[index]->couleureval = couleureval;
@@ -109,7 +109,7 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
     int index;
     hopestat_t **hopestat = malloc(16 * sizeof(hopestat_t *));
     pli_t *pli;
-    int sizemax[pique + 1];
+    int sizemax[spade + 1];
     l_best_t *l_best = NULL;
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
@@ -120,7 +120,7 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
       pli=cur_pli;
     position_t position;
     couleur_t couleur;
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
 	sizemax[couleur] = 0;
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
@@ -128,7 +128,7 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
 		sizemax[couleur] = game->tabjeu[index]->nbcrt;
 	}
     }
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
 	changeeval(game, couleur);
 
 	for (position = sud; position < est + 1; position++) {
@@ -190,23 +190,23 @@ int small_condition(game_t * game, char *s_smallref)
       printf("voici s_small:%s\n", s_small);
     switch (s_smallref[0]) {
     case 'p':
-	index = INDEX(game->bid->position, pique);
+	index = INDEX(game->bid->position, spade);
 	meml = game->tabjeuref[index]->nbcrt;
 	break;
     case 'c':
-	index = INDEX(game->bid->position, coeur);
+	index = INDEX(game->bid->position, heart);
 	meml = game->tabjeuref[index]->nbcrt;
 	break;
     case 'k':
-	index = INDEX(game->bid->position, carreau);
+	index = INDEX(game->bid->position, diamond);
 	meml = game->tabjeuref[index]->nbcrt;
 	break;
     case 't':
-	index = INDEX(game->bid->position, trefle);
+	index = INDEX(game->bid->position, club);
 	meml = game->tabjeuref[index]->nbcrt;
 	break;
     case 'h':
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(game->bid->position, couleur);
 	    for (i = 0; i < game->tabjeuref[index]->nbcrt; i++) {
 		if (game->tabjeuref[index]->tabcoul[i] == cA)
@@ -221,7 +221,7 @@ int small_condition(game_t * game, char *s_smallref)
 	}
 	break;
     case 'd':
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(game->bid->position, couleur);
 	    for (i = 0; i < game->tabjeuref[index]->nbcrt; i++) {
 		if (game->tabjeuref[index]->tabcoul[i] == cA)
@@ -244,23 +244,23 @@ int small_condition(game_t * game, char *s_smallref)
     } else {
 	switch (s_smallref[2]) {
 	case 'p':
-	    index = INDEX(game->bid->position, pique);
+	    index = INDEX(game->bid->position, spade);
 	    memr = game->tabjeuref[index]->nbcrt;
 	    break;
 	case 'c':
-	    index = INDEX(game->bid->position, coeur);
+	    index = INDEX(game->bid->position, heart);
 	    memr = game->tabjeuref[index]->nbcrt;
 	    break;
 	case 'k':
-	    index = INDEX(game->bid->position, carreau);
+	    index = INDEX(game->bid->position, diamond);
 	    memr = game->tabjeuref[index]->nbcrt;
 	    break;
 	case 't':
-	    index = INDEX(game->bid->position, trefle);
+	    index = INDEX(game->bid->position, club);
 	    memr = game->tabjeuref[index]->nbcrt;
 	    break;
 	case 'h':
-	    for (couleur = trefle; couleur < pique + 1; couleur++) {
+	    for (couleur = club; couleur < spade + 1; couleur++) {
 		index = INDEX(game->bid->position, couleur);
 		for (i = 0; i < game->tabjeuref[index]->nbcrt; i++) {
 		    if (game->tabjeuref[index]->tabcoul[i] == cA)
@@ -277,7 +277,7 @@ int small_condition(game_t * game, char *s_smallref)
 	    memr = sum;
 	    break;
 	case 'd':
-	    for (couleur = trefle; couleur < pique + 1; couleur++) {
+	    for (couleur = club; couleur < spade + 1; couleur++) {
 		index = INDEX(game->bid->position, couleur);
 		for (i = 0; i < game->tabjeuref[index]->nbcrt; i++) {
 		    if (game->tabjeuref[index]->tabcoul[i] == cA)
@@ -388,31 +388,31 @@ couleur_t fit(main_t * mainjoueur, int position)
 {
     int nbmaxcarte = 0, i;
     couleur_t refcouleur;
-    if (mainjoueur[position].nbcartes[pique] +
-	mainjoueur[position + 2].nbcartes[pique] >= FIT)
-	return (pique);
+    if (mainjoueur[position].nbcartes[spade] +
+	mainjoueur[position + 2].nbcartes[spade] >= FIT)
+	return (spade);
 
-    if (mainjoueur[position].nbcartes[coeur] +
-	mainjoueur[position + 2].nbcartes[coeur] >= FIT)
-	return (coeur);
+    if (mainjoueur[position].nbcartes[heart] +
+	mainjoueur[position + 2].nbcartes[heart] >= FIT)
+	return (heart);
 
-    if ((mainjoueur[position].nbpointshonneurs[pique] +
-	 mainjoueur[position + 2].nbpointshonneurs[pique] >= ARRET)
-	&& (mainjoueur[position].nbpointshonneurs[coeur] +
-	    mainjoueur[position + 2].nbpointshonneurs[coeur] >= ARRET)
-	&& (mainjoueur[position].nbpointshonneurs[carreau] +
-	    mainjoueur[position + 2].nbpointshonneurs[carreau] >= ARRET)
-	&& (mainjoueur[position].nbpointshonneurs[trefle] +
-	    mainjoueur[position + 2].nbpointshonneurs[trefle] >= ARRET))
+    if ((mainjoueur[position].nbpointshonneurs[spade] +
+	 mainjoueur[position + 2].nbpointshonneurs[spade] >= ARRET)
+	&& (mainjoueur[position].nbpointshonneurs[heart] +
+	    mainjoueur[position + 2].nbpointshonneurs[heart] >= ARRET)
+	&& (mainjoueur[position].nbpointshonneurs[diamond] +
+	    mainjoueur[position + 2].nbpointshonneurs[diamond] >= ARRET)
+	&& (mainjoueur[position].nbpointshonneurs[club] +
+	    mainjoueur[position + 2].nbpointshonneurs[club] >= ARRET))
 	return (aucune);
 
-    if (mainjoueur[position].nbcartes[carreau] +
-	mainjoueur[position + 2].nbcartes[carreau] >= FIT)
-	return (carreau);
-    if (mainjoueur[position].nbcartes[trefle] +
-	mainjoueur[position + 2].nbcartes[trefle] >= FIT)
-	return (trefle);
-    for (i = pique; i >= trefle; i--) {
+    if (mainjoueur[position].nbcartes[diamond] +
+	mainjoueur[position + 2].nbcartes[diamond] >= FIT)
+	return (diamond);
+    if (mainjoueur[position].nbcartes[club] +
+	mainjoueur[position + 2].nbcartes[club] >= FIT)
+	return (club);
+    for (i = spade; i >= club; i--) {
 	if (mainjoueur[position].nbcartes[i] +
 	    mainjoueur[position + 2].nbcartes[i] >= nbmaxcarte) {
 	    nbmaxcarte =

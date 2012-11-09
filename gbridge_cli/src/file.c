@@ -105,7 +105,7 @@ gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
 
 gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
   position_t position;
-  couleur_t couleur=trefle;
+  couleur_t couleur=club;
   int tabref[est+1][cA+1];
   char *buf;
   char *pos="SONE";
@@ -130,7 +130,7 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
         if(ihm_pli->debug|TRUE)
       fprintf(stdout,"Load of pos=%c\n",pos[position]);
 
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
       if(NULL!=(buf=strchr(transbuf,'\n'))) {
         buf[0]='\0';
         if(transbuf[0]!=coul[couleur]) {

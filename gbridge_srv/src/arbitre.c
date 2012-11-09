@@ -10,7 +10,7 @@
 #include "analyse.h"
 #include "ia.h"
 #include "arbitre.h"
-extern coord_t tab_cartes[cA + 1][pique + 1];
+extern coord_t tab_cartes[cA + 1][spade + 1];
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
 /*pli.entame doit etre initialise */
 void ftrace(void)
@@ -20,7 +20,7 @@ void ftrace(void)
  
 gboolean test_reprise(position_t position,tablist_t **t_jeu) {
   couleur_t color;
-  for (color=trefle;color<pique+1;color++) {
+  for (color=club;color<spade+1;color++) {
     if(color==t_jeu[0]->couleureval)
       continue;
     else {
@@ -107,7 +107,7 @@ void rotation(game_t * game, hopestat_t ** hopestat)
 	tablist_t **tmpjeu = malloc(4 * sizeof(tablist_t *));
 	hopestat_t **tmphope = malloc(4 * sizeof(hopestat_t *));
 	for (position = sud; position < ouest + 1; position++) {
-	    for (couleur = trefle; couleur < pique + 1; couleur++) {
+	    for (couleur = club; couleur < spade + 1; couleur++) {
 		tmpjeu[couleur] = malloc(sizeof(tablist_t));
 		memcpy(tmpjeu[couleur],
 		       game->tabjeu[INDEX((position + rot) % 4, couleur)],
@@ -128,7 +128,7 @@ void rotation(game_t * game, hopestat_t ** hopestat)
 	}
 	free(tmpjeu);
 	for (position = sud; position < ouest + 1; position++) {
-	    for (couleur = trefle; couleur < pique + 1; couleur++) {
+	    for (couleur = club; couleur < spade + 1; couleur++) {
 		tmphope[couleur] = malloc(sizeof(hopestat_t));
 		memcpy(tmphope[couleur],
 		       hopestat[INDEX((position + rot) % 4, couleur)],
@@ -158,7 +158,7 @@ void dup_game(thread_jeu_t * thread_jeu, game_t * game)
     int index;
     if (NULL ==
 	(thread_jeu->t_jeu =
-	 malloc((sizeof(tablist_t *)) * (est + 1) * (pique + 1)))) {
+	 malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1)))) {
         perror("malloc");
 	exit(EXIT_FAILURE);
     }
@@ -170,7 +170,7 @@ void dup_game(thread_jeu_t * thread_jeu, game_t * game)
     }
     memcpy(thread_jeu->cardplayed,game->cardplayed,sizeof( gboolean) * NBPCOULEURS*NBCOULEURS);
     for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
 	    thread_jeu->t_jeu[index] = malloc(sizeof(tablist_t));
 	    memcpy(thread_jeu->t_jeu[index], game->tabjeu[index],
@@ -184,7 +184,7 @@ void destroy_jeu(thread_jeu_t * thread_jeu)
     couleur_t couleur;
     int index;
     for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
 	    free(thread_jeu->t_jeu[index]);
 	}
@@ -357,7 +357,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
     phcarte.clcarte = pli->phcarte.clcarte;
 
     if (situation == DEFAUSSE) {
-	for (i = trefle; i < pique + 1; i++) {
+	for (i = club; i < spade + 1; i++) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
 		if (i != pli->atout) {
@@ -405,7 +405,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 
     if (situation == ENTAME) {
 
-	for (i = trefle; i < pique + 1; i++) {
+	for (i = club; i < spade + 1; i++) {
 	    presence = NON;
 	    index = INDEX(positionc, i);
 	    k = tmpjeu[INDEX(positionc, i)]->nbcrt;

@@ -136,7 +136,7 @@ void init_game(ihm_pli_t *ihm_pli) {
   recuperation_jeu(ihm_pli,0);
   draw_container_ihm(ihm_pli);
   for(contrat=0;contrat<7;contrat++){
-    for(couleur=trefle;couleur<aucune+1;couleur++)
+    for(couleur=club;couleur<aucune+1;couleur++)
                 gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
   }
 
@@ -155,7 +155,7 @@ void position_list(GList *ptr, int x, int y, enum eposition ep, float coef)
         int step,i;
         int num;
         couleur_t couleurref=aucune;
-        int tab_coul[pique+1];
+        int tab_coul[spade+1];
         imgcard_t *data_ptr;
         GList *ptrref;
         ptrref=ptr;
@@ -430,7 +430,7 @@ recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
                                 cardname);
     }
   }
-  for( couleur=trefle;couleur<pique+1;couleur++)
+  for( couleur=club;couleur<spade+1;couleur++)
     ihm_pli->tab_couleur[position][couleur]=0;
   if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
     if(NULL==ihm_pli->fd) {

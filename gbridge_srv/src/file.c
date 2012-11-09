@@ -64,7 +64,7 @@ gboolean check_tabjeu(game_t *game) {
   int nbref[est+1];
   for (position=sud;position<est+1;position++) {
     nbref[position]=0;
-    for (color=trefle;color<pique+1;color++){
+    for (color=club;color<spade+1;color++){
       index=INDEX(position,color);
       nbref[position]=nbref[position]+game->tabjeu[index]->nbcrt;
     }
@@ -83,7 +83,7 @@ gboolean check_tabjeu(game_t *game) {
 gboolean file_parse (game_t *game) {
   char *bufref;
   position_t position;
-  couleur_t couleur=trefle;
+  couleur_t couleur=club;
   size_t j;
   int tabref[est+1][cA+1];
   int index;
@@ -121,7 +121,7 @@ gboolean file_parse (game_t *game) {
     if(game->debug)
       fprintf(stdout,"Load of pos=%c\n",pos[position]);
 
-    for (couleur = trefle; couleur < pique + 1; couleur++) {
+    for (couleur = club; couleur < spade + 1; couleur++) {
       if(NULL!=(buf=strchr(game->buffile,'\n'))) {
         buf[0]='\0';
         if(game->buffile[0]!=coul[couleur]) {

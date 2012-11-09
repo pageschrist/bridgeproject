@@ -20,7 +20,7 @@ typedef  enum
 { c2, c3, c4, c5, c6, c7, c8, c9, cX, cV, cD, cR, cA, pdc } valeur_t;
 
 typedef  enum  
-{ trefle, carreau, coeur, pique, aucune } couleur_t;
+{ club, diamond, heart, spade, aucune } couleur_t;
 
 typedef  enum 
 { sud, ouest, nord, est, aucun } position_t;
@@ -84,8 +84,8 @@ typedef struct _l_best
 typedef struct _main_t
 {
   int nbpoints;
-  int nbcartes[pique + 1];
-  int nbpointshonneurs[pique + 1];
+  int nbcartes[spade + 1];
+  int nbpointshonneurs[spade + 1];
   int nbcartesmax;
 } main_t;
 

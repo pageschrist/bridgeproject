@@ -77,7 +77,7 @@ char read_header(game_t * game, void *data, char type)
 	fprintf(stderr, "read_header %d :%c\n", j, type);
     }
     for (position = sud; position < est + 1; position++) {
-	for (couleur = trefle; couleur < pique + 1; couleur++) {
+	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
 	    game->tabjeu[index]->debug = header.debug;
 	}

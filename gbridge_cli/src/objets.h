@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #define INIT 0
 #define RESET 1
-#define INDEX ((position*(pique+1))+couleur)*sizeof(GList)
+#define INDEX ((position*(spade+1))+couleur)*sizeof(GList)
 #define STARTING 1
 #define GAMEOVER 0
 #define PLI 2
@@ -56,7 +56,7 @@ typedef enum
 { c2, c3, c4, c5, c6, c7, c8, c9, cX, cV, cD, cR, cA, pdc } valeur_t;
 
 typedef enum
-{ trefle, carreau, coeur, pique, aucune } couleur_t;
+{ club, diamond, heart, spade, aucune } couleur_t;
 
 typedef enum
 { sud, ouest, nord, est, aucun } position_t;
@@ -84,8 +84,8 @@ typedef struct _carte_t
 typedef struct _main_t
 {
   int nbpoints;
-  int nbcartes[pique+1];
-  int nbpointshonneurs[pique+1];
+  int nbcartes[spade+1];
+  int nbpointshonneurs[spade+1];
   int nbcartesmax;
 } main_t;
 
@@ -187,7 +187,7 @@ typedef struct _ihm_pli_t
   int nbcard;
   char status ; 
   gboolean debug;
-  int tab_couleur[est+1][pique+1];
+  int tab_couleur[est+1][spade+1];
   contrat_t *contrat;
   char *scontrat;
   GList *allcardslist;

@@ -53,8 +53,8 @@ guint id_sig_connect;
 char *dir_imgs = NULL;
  
 ligne_t ligneia;
-int tab_couleur[est+1][pique+1];
-int ref_couleur[pique+1];
+int tab_couleur[est+1][spade+1];
+int ref_couleur[spade+1];
 
 
 
@@ -219,7 +219,7 @@ void create_ihm (ihm_pli_t *ihm_pli) {
   gtk_container_add (GTK_CONTAINER(BNew_Dist),Label_text);
   g_signal_connect( G_OBJECT(BNew_Dist), "clicked", G_CALLBACK(new_dist), ihm_pli);
   gtk_box_pack_start (GTK_BOX (Comment_VBox), HBox_Other, FALSE, FALSE, 0);
-  for(couleur=trefle;couleur<aucune+1;couleur++) {
+  for(couleur=club;couleur<aucune+1;couleur++) {
     HBox_Encheres[couleur] = gtk_hbox_new (TRUE, 1);
     gtk_box_pack_start(GTK_BOX(Comment_VBox),HBox_Encheres[couleur],FALSE, TRUE, 2);
     for(contrat=0;contrat<7;contrat++){

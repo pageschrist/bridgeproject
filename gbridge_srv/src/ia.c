@@ -47,8 +47,8 @@ int  best_elem_best_l(elem_best_t *elem_best,pli_t *pli) {
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		    hopestat_t * hopestat,pli_t *pli)
 {
-    gboolean suplead[pique+1];
-    valeur_t tabval[pique + 1];
+    gboolean suplead[spade+1];
+    valeur_t tabval[spade + 1];
     l_item_t *l_item=create_l_item(copy_card);
     carte_t *carte = malloc(sizeof(carte_t));
     unsigned int jline = (IALINE + 1) % 2;
@@ -57,9 +57,9 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     int score_ref;
     elem_best_t *elem_best = l_best->first;
     elem_best_t *disp_elem_best = l_best->first;
-    for (i = 0; i < pique + 1; i++)
+    for (i = 0; i < spade + 1; i++)
 	tabval[i] = pdc;
-    for (i = 0; i < pique + 1; i++)
+    for (i = 0; i < spade + 1; i++)
 	suplead[i] = TRUE;
     if(pli)
       score_ref = best_elem_best_l(disp_elem_best,pli);
