@@ -110,7 +110,7 @@ typedef struct _bid_t
 typedef struct _pli_t
 {
   carte_t carte[est + 1];
-  carte_t defausse[est + 1];
+  carte_t discard[est + 1];
   position_t entame;
   position_t nextpos;
   carte_t phcarte;

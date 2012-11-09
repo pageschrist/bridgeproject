@@ -5,7 +5,7 @@
 #define FIN 3
 #define CARTESEULE 2
 #define ENTAME 0
-#define DEFAUSSE 1
+#define DISCARD 1
 #define NONENTAME 2
 int check (couleur_t couleur);
 void ftrace(void);
@@ -20,6 +20,6 @@ int list_all_coups_eval (position_t positionc, l_item_t *l_item, pli_t * pli,tab
 void define_leader(pli_t *pli);
 position_t evaluation_pli (pli_t * pli);
 int joue_coup (pli_t * pli,carte_t *carte,game_t *game );
-retpli_t * check_plis (pli_t * pli);
+rettrick_t * check_plis (pli_t * pli);
 void  dup_game(thread_jeu_t *thread_jeu,game_t *game) ;
 void  destroy_jeu(thread_jeu_t *thread_jeu) ;

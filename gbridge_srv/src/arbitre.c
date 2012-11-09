@@ -656,9 +656,9 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 }
 
 
-retpli_t *check_plis(pli_t * pli)
+rettrick_t *check_plis(pli_t * pli)
 {
-    retpli_t *retpli = malloc(sizeof(retpli_t));
+    rettrick_t *retpli = malloc(sizeof(rettrick_t));
     ligne_t lignej;
     lignej = (IALINE + 1) % 2;
     retpli->score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[IALINE];

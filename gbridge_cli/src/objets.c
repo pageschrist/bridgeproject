@@ -79,29 +79,6 @@ void affiche_carte (carte_t *carte)
   printf("La couleur de la carte est: %d\n",carte->clcarte);
   printf("La valeur de la carte est: %d\n",carte->nocarte);
 }
-void copy_pli (pli_t *ppliori, pli_t *pplicopie)
-{
-  position_t i;
-  ligne_t j;
-
-  for (i = sud; i < est + 1; i++)
-    {
-      pplicopie->carte[i].nocarte = ppliori->carte[i].nocarte;
-      pplicopie->carte[i].clcarte = ppliori->carte[i].clcarte;
-      pplicopie->defausse[i].nocarte = ppliori->defausse[i].nocarte;
-      pplicopie->defausse[i].clcarte = ppliori->defausse[i].clcarte;
-    }
-  pplicopie->entame = ppliori->entame;
-  pplicopie->nextpos = ppliori->nextpos;
-  pplicopie->nopli = ppliori->nopli;
-  pplicopie->phcarte.nocarte = ppliori->phcarte.nocarte;
-  pplicopie->phcarte.clcarte = ppliori->phcarte.clcarte;
-  for (j = ns; j < eo + 1; j++)
-    {
-      pplicopie->nbpli_ligne[j] = ppliori->nbpli_ligne[j];
-    }
-
-}
 void affiche_pli( pli_t *ppli)
 {
 	position_t i;
@@ -337,8 +314,8 @@ void init_pli (pli_t * pli, int maniere)
     {
       pli->carte[i].nocarte = pdc;
       pli->carte[i].clcarte = aucune;
-      pli->defausse[i].nocarte = pdc;
-      pli->defausse[i].clcarte = aucune;
+      pli->discard[i].nocarte = pdc;
+      pli->discard[i].clcarte = aucune;
     }
   pli->phcarte.nocarte = pdc;
   pli->phcarte.clcarte = aucune;

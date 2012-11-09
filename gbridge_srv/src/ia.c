@@ -154,7 +154,7 @@ int minimax(int score_courant, int best_score, position_t positionc)
 
 
 }
-retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
+rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 		      tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
@@ -164,8 +164,8 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     position_t positionc;
     int pos_index;
     pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
-    retpli_t *ret;
-    retpli_t *retup;
+    rettrick_t *ret;
+    rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -244,7 +244,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     //vidage(stk);
     clean_l_item(l_item);
 
-    retup = malloc(sizeof(retpli_t));
+    retup = malloc(sizeof(rettrick_t));
     retup->score = best_score;
     retup->nbline[0] = best_nbline[0];
     retup->nbline[1] = best_nbline[1];
@@ -265,7 +265,7 @@ retpli_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 
 }
 
-retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
+rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 			   tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
@@ -276,8 +276,8 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
     position_t positionc;
     int pos_index;
     pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
-    retpli_t *ret;
-    retpli_t *retup;
+    rettrick_t *ret;
+    rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -359,7 +359,7 @@ retpli_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
     clean_l_item(l_item);
     //vidage(stk);
 
-    retup = malloc(sizeof(retpli_t));
+    retup = malloc(sizeof(rettrick_t));
     retup->score = best_score;
     retup->nbline[0] = best_nbline[0];
     retup->nbline[1] = best_nbline[1];
@@ -393,8 +393,8 @@ void *new_explore(void *arg)
 
     position_t positionc;
     int curscore;
-    retpli_t *ret;
-    retpli_t *rettmp;
+    rettrick_t *ret;
+    rettrick_t *rettmp;
     int pos_index;
     pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];

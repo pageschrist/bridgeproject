@@ -654,8 +654,7 @@ gint motion_notify_event (GtkWidget *widget, GdkEventMotion *event, gpointer dat
 }
 
 
-
-void button_release_event (GtkWidget *widget,
+gboolean  button_release_event (GtkWidget *widget,
         GdkEventButton *event, gpointer data)
 {
         widget=widget;
@@ -704,6 +703,7 @@ void button_release_event (GtkWidget *widget,
 
 
           }
+          return TRUE;
 }
 
 gboolean game_drop_enable(ihm_pli_t *ihm_pli)
