@@ -393,7 +393,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 			pli->carte[positionc].nocarte =
 			    tmpjeu[index]->tabcoul[k];
 			nbcoups++;
-			add_item_tail(l_item, pli);
+			add_item_head(l_item, pli);
 		    }
 		}
 	    }

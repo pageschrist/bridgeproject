@@ -30,14 +30,8 @@ void debug_info(void);
 
 void print_usage(void);
 extern GHashTable *configHash;
-/*
- * prototypes
- */
 int _gethostname(char *buffer, int length);
 
-/*
- * constants
- */
 void debug_info(void)
 {
     printf("Debug\n");
@@ -151,7 +145,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     pli = malloc(sizeof(pli_t));
     init_pli(pli, INIT);
     if (game->debug)
-	printf("On est dans newgame random=%d level=%d\n", random, prof);
+	printf("We are in newgame random=%d level=%d\n", random, prof);
 
 
     if (game->debug && hopestat) {
