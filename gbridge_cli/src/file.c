@@ -48,14 +48,50 @@ valeur_t convert_char_card(char c ) {
     }
 }
 
+gboolean check_order(char *buffer) {
+  size_t i;
+  int n,ref;
+  if(strlen(buffer) <=0 ) {
+    fprintf(stderr,"buffer is empty\n");
+    return (FALSE);
+  }
+  for (i=1;i<strlen(buffer);i++) {
+    if(1==i) {
+      if(pdc==(ref=convert_char_card(buffer[i]))) {
+        fprintf(stderr,"some cards are wrong i=%d\n",(int)i);
+        return(FALSE);
+      }
+    }
+    else {
+      if(pdc==(n=convert_char_card(buffer[i]))) {
+        fprintf(stderr,"some cards are wrong i=%d\n",(int)i);
+        return(FALSE);
+      }
+      else if(n<ref) {
+        fprintf(stderr,"Wrong order of the card,\nPlease smaller to greater cards i=%d\n",(int)i);
+        return (FALSE);
+      }
+      else {
+        ref=n; 
+      }
+    }
+
+  }
+
+  return(TRUE);
+}
+
+
 gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
   size_t i;
   int n;
   if(strlen(buffer) <=0 )
     return (FALSE);
   for (i=1;i<strlen(buffer);i++) {
-    if(pdc==(n=convert_char_card(buffer[i])))
+    if(pdc==(n=convert_char_card(buffer[i]))){
+      fprintf(stderr,"some cards are wrong i=%d\n",(int)i);
       return(FALSE);
+    }
     tabref[couleur][n]++;
     if(tabref[couleur][n]>1 ) {
       fprintf(stderr,"some cards are in double\n");
@@ -82,7 +118,6 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
       buf[0]='\0';
       if((strlen(transbuf)!=1) || transbuf[0]!=pos[position]) {
         fprintf(stderr,"Error in file parsing, strlen(buffer)=%d, %c!=%c\n",(int)strlen(transbuf),transbuf[0],(char)pos[position]);
-        free(transbuf);
         return FALSE;
       }
       transbuf=buf+1;
@@ -90,7 +125,6 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
 
     else {
       fprintf(stderr,"Error in file parsing, No \\n at the end of a line probably\n");
-      free(transbuf);
       return FALSE;
     }
         if(ihm_pli->debug|TRUE)
@@ -106,10 +140,13 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
         }
 
         if(!check_value(transbuf,couleur,tabref)){
-          free(transbuf);
-          transbuf=NULL;
           return FALSE;
         }
+        if(!check_order(transbuf)){
+          return FALSE;
+        }
+        
+        
 
         if(ihm_pli->debug)
           fprintf(stdout,"Load of col=%c\n",coul[couleur]);
@@ -117,8 +154,6 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
       }
       else {
         fprintf(stderr,"Error in file parsing, buf=NULL\n");
-        free(transbuf);
-        transbuf=NULL;
         return FALSE;
 
       }
@@ -126,7 +161,6 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
 
     }
   }
-  //transbuf=NULL;
   return TRUE;
 
 }
