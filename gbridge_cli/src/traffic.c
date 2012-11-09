@@ -16,11 +16,15 @@ int j=0;
 gboolean send_file(ihm_pli_t *ihm_pli) {
   FILE *fd;
   ssize_t ret;
+  int i=0,j=0;
+  int nb[NBPLAYER];
+  int total=0;
   char buf[MAXFILE];
   char transbuf[MAXFILE];
   char transbufcheck[MAXFILE];
   transbuf[0]='\0';
   transbufcheck[0]='\0';
+  memset (nb,0,NBPLAYER*sizeof(int));
   fd=fopen(ihm_pli->filename,"r");
   if(NULL==fd) 
     perror("fopen()");
@@ -30,11 +34,26 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
         strncpy(transbuf,buf,MAXFILE);
       else
         strcat(transbuf,buf);
+      total=(strlen(buf)-1)+total; //-1 to remove \n
+      i++;
+      if(NBLINES==i) {
+        i=0;
+        nb[j]=total;
+        total=0;
+        j++;
+      }
     }
     memcpy(transbufcheck,transbuf,MAXFILE);
     ret=check_parse(ihm_pli ,transbufcheck);
     if(FALSE==ret)
       return FALSE; 
+    j=nb[0]; // just to fix the ref of the amount of cards;
+    for (i=0;i<NBPLAYER;i++)
+      if(j!=nb[i]) {
+        fprintf(stderr,"Wrong number of cards %d != nb[%d]=%d \n",j,i,nb[i]);
+        return FALSE;
+      }
+
     if(ihm_pli->debug) 
       printf("send_file: transbuf=%s",transbuf);
     ret=write_data(ihm_pli,transbuf,'f',strlen(transbuf));

@@ -1,5 +1,7 @@
 #define BRIDGE "gbridge"
 #define MAXFILE 1024
+#define NBPLAYER 4
+#define NBLINES 5
 
 typedef struct _net_header_t
 {
