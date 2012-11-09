@@ -209,13 +209,13 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
     if (positionc != pli->entame) {
 	situation = NONENTAME;
 	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0) {
-	    situation = DEFAUSSE;
+	    situation = DISCARD;
 	}
     }
     phcarte.nocarte = pli->phcarte.nocarte;
     phcarte.clcarte = pli->phcarte.clcarte;
 
-    if (situation == DEFAUSSE) {
+    if (situation == DISCARD) {
 	for (i = (couleurc + 1) % 4; (i) % 4 != couleurc; i = (i + 1) % 4) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
@@ -350,13 +350,13 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 	situation = NONENTAME;
 	couleurc = pli->carte[pli->entame].clcarte;
 	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0 ) {
-	    situation = DEFAUSSE; //DEFAUSSE or TRUMP
+	    situation = DISCARD; //DISCARD or TRUMP
 	}
     }
     phcarte.nocarte = pli->phcarte.nocarte;
     phcarte.clcarte = pli->phcarte.clcarte;
 
-    if (situation == DEFAUSSE) {
+    if (situation == DISCARD) {
 	for (i = club; i < spade + 1; i++) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
