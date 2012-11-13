@@ -426,7 +426,7 @@ void *copy_card(void *data) {
   return((void*) card);
 }
 
-void *duplique_pli(void *data)
+void *duplicate_trick(void *data)
 {
     pli_t *plicopie;
     plicopie = malloc(sizeof(pli_t));

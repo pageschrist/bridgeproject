@@ -183,7 +183,7 @@ struct stack_box
 typedef struct stack_box *stackia_t;
 
 int max(int a,int b);
-void *duplique_pli (void *data);
+void *duplicate_trick (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
 void affiche_pli (pli_t * pli,gboolean display);

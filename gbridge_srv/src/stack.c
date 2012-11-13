@@ -77,14 +77,12 @@ void *pop_item_head(l_item_t *l_item) {
   if(l_item->upper_item==NULL || l_item->upper_item==NULL)
     return NULL;
   item=l_item->upper_item;
-  //data=l_item->dup_item(l_item->upper_item->data);
   data=item->data;
   l_item->upper_item=item->next;
   if(NULL==l_item->upper_item)
     l_item->lower_item=NULL;
   if(item->next) 
     item->next->prev=NULL;
-  //free(item->data);
   free(item);
   return(data);
 }
@@ -95,14 +93,12 @@ void *pop_item_tail(l_item_t *l_item) {
   if(l_item->lower_item==NULL ||l_item->upper_item==NULL)
     return NULL;
   item=l_item->lower_item;
-  //data=l_item->dup_item(item->data);
   data=item->data;
   l_item->lower_item=item->prev;
   if(NULL==l_item->lower_item)
     l_item->upper_item=NULL;
   if(item->prev) 
     item->prev->next=NULL;
-  //free(item->data);
   free(item);
   return(data);
 }

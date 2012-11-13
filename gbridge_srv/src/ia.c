@@ -178,7 +178,7 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 	retup = check_plis(pli_cur);
 	return (retup);
     }
-    l_item=create_l_item(duplique_pli);
+    l_item=create_l_item(duplicate_trick);
     list_all_coups(positionc, l_item, pli_cur, t_jeu,NULL);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
@@ -283,8 +283,8 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
     positionc = pli_cur->nextpos;	/*C'est la nouvelle position */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    //stk = create_stack(duplique_pli);
-    l_item=create_l_item(duplique_pli);
+    //stk = create_stack(duplicate_trick);
+    l_item=create_l_item(duplicate_trick);
     if (t_jeu[0]->couleureval == aucune)
 	nbcoups = list_all_coups(positionc, l_item, pli_cur, t_jeu,NULL);
     else
@@ -425,8 +425,8 @@ void *new_explore(void *arg)
 	}
     }
 
-    //stk = create_stack(duplique_pli);
-    l_item=create_l_item(duplique_pli);
+    //stk = create_stack(duplicate_trick);
+    l_item=create_l_item(duplicate_trick);
     if (thread_jeu->t_jeu[0]->couleureval == aucune)
 	list_all_coups(positionc, l_item, pli_cur, thread_jeu->t_jeu,thread_jeu->cardplayed);
     else
@@ -521,8 +521,8 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
     /*choix du joueur qui joue en fonction de la profondeur  */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    //stk = create_stack(duplique_pli);
-    l_item=create_l_item(duplique_pli); 
+    //stk = create_stack(duplicate_trick);
+    l_item=create_l_item(duplicate_trick); 
     if (game->tabjeu[0]->couleureval == aucune) {	//Tous les jeux contiennes la couleur d'evaluation si necessaire
 	nbcoups = list_all_coups(positionc, l_item, pli_cur, game->tabjeu,game->cardplayed);
         /////////////////////////////////
