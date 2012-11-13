@@ -428,10 +428,10 @@ void *copy_card(void *data) {
 
 void *duplicate_trick(void *data)
 {
-    pli_t *plicopie;
-    plicopie = malloc(sizeof(pli_t));
-    memcpy(plicopie, (pli_t *) data, sizeof(pli_t));
-    return ((void *) plicopie);
+    pli_t *copytrick;
+    copytrick = malloc(sizeof(pli_t));
+    memcpy(copytrick, (pli_t *) data, sizeof(pli_t));
+    return ((void *) copytrick);
 
 }
 
