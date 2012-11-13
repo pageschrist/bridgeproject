@@ -12,17 +12,6 @@ item_t *lower_item ;
 void *(*dup_item)(void *data);
 }l_item_t; 
 
-l_item_t *create_item_l(void *(*gen_copy)(void *data));
-
-
-
-/* stack */
-
-stackia_t create_stack (void *(*gen_copy) (void *data));
-
-int push (stackia_t stack, void *data);
-void *pop (stackia_t stack);
-void vidage (stackia_t stack);
 
 l_item_t * create_l_item(void *(*gen_copy) (void *data));
 void add_item_head(l_item_t *l_item,void *data);

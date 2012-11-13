@@ -19,74 +19,12 @@
 
 
 
-/* stack.c 
-   core of the generic stack
-*/
 
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include "objets.h"
 #include "stack.h"
-
-stackia_t create_stack(void *(*gen_copy) (void *data))
-{
-    stackia_t stack;
-
-    stack = malloc(sizeof(struct stack_box));
-    stack->stack = NULL;
-    stack->copy_data = gen_copy;
-
-    return (stack);
-}
-
-int push(stackia_t stack, void *data)
-{
-    struct box *box;
-    void *data_dup = data;
-
-    box = malloc(sizeof(struct box));
-    data_dup = stack->copy_data(data);
-
-    box->data = data_dup;
-    box->next = stack->stack;
-
-    stack->stack = box;
-
-    return (0);
-}
-
-void *pop(stackia_t stack)
-{
-    void *data;
-    struct box *tmp;
-
-    if (stack->stack == NULL)
-	return (NULL);
-
-    data = stack->copy_data(stack->stack->data);
-    tmp = stack->stack->next;
-
-    free(stack->stack->data);
-    free(stack->stack);
-    stack->stack = tmp;
-
-    return (data);
-}
-
-void vidage(stackia_t stack)
-{
-    struct box *tmp;
-
-    while (stack->stack != NULL) {
-	tmp = stack->stack->next;
-	free(stack->stack->data);
-	free(stack->stack);
-	stack->stack = tmp;
-    }
-    free(stack);
-
-}
 
 
 

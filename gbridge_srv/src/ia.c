@@ -178,7 +178,6 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 	retup = check_plis(pli_cur);
 	return (retup);
     }
-    //stk = create_stack(duplique_pli);
     l_item=create_l_item(duplique_pli);
     list_all_coups(positionc, l_item, pli_cur, t_jeu,NULL);
 
