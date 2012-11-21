@@ -1,4 +1,5 @@
 #define MAXFILE 1024
+#define DEFAULTDIRNAME  "/home/cpages/dev/bridgeproject-0.9/donne.t04"
 void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) ;
 void file_ok_sel( GtkWidget        *w, ihm_pli_t *ihm_pli );
 void open_file (GtkButton *button,ihm_pli_t *ihm_pli); 
