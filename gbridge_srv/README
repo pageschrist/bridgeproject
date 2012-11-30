@@ -1,0 +1,13 @@
+This software has been written in two parts, gbridge_srv for the server which manage the IA and gbridge_cli which manage the IHM.
+
+To compile and to build it perform in each subdirectory gbridge_*
+./configure
+make 
+sudo make install
+
+
+Principe of the game:
+It is a bridge software where where train with prepared games (option File in the menu) or use a random number.
+It is possible to fix the depth of the search in the IA. By default it is fixed to 5 (5 tricks) but it can been changed depending of your wish. 
+
+ 
