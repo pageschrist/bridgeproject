@@ -81,8 +81,6 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
       free_ihm_pli(ihm_pli);
       reset_ihm_pli(ihm_pli);
       recuperation_jeu(ihm_pli,0);
-      //if(ihm_pli->debug) 
-      //free_ihm_pli(ihm_pli);
       draw_container_ihm(ihm_pli);
       for(contrat=0;contrat<7;contrat++){
         for(couleur=club;couleur<aucune+1;couleur++) 
@@ -116,7 +114,7 @@ void open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
     /* Lets set the filename, as if this were a save dialog, and we are giving
      a default filename */
     gtk_file_selection_set_filename (GTK_FILE_SELECTION(ihm_pli->File_S),
-                                     "penguin.png");
+                                     DEFAULTDIRNAME);
 
     gtk_widget_show (ihm_pli->File_S);
 

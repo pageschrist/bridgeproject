@@ -48,7 +48,7 @@ valeur_t convert_char_card(char c ) {
     }
 }
 
-gboolean check_order(char *buffer) {
+gboolean check_order(ihm_pli_t *ihm_pli, char *buffer) {
   size_t i;
   int n,ref;
   if(strlen(buffer) <=0 ) {
@@ -142,7 +142,7 @@ gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
         if(!check_value(transbuf,couleur,tabref)){
           return FALSE;
         }
-        if(!check_order(transbuf)){
+        if(!check_order(ihm_pli,transbuf)){
           return FALSE;
         }
         
