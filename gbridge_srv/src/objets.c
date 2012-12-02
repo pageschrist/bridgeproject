@@ -455,14 +455,14 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 	   thread_jeu->score, thread_jeu->prof, thread_jeu->prof_max);
 }
 
-void affiche_pli(pli_t * pli,gboolean display)
+void display_trick(pli_t * pli,gboolean display)
 {
   position_t i;
   char *affca, *affco;
   ligne_t j;
   if (display) {
     /*return(0); */
-    printf("DSP  nop=%d,noj %d, ", pli->nopli,pli->noj);
+    printf("DSP  nop=%d,noj %d, ", pli->nbtrick,pli->noj);
     for (i = sud; i < est + 1; i++) {
 	printf("pos %d  %s%s,", i, affca =
 	       affichage(pli->carte[i].nocarte, CARTE), affco =
@@ -476,7 +476,7 @@ void affiche_pli(pli_t * pli,gboolean display)
     printf("npos %d,", pli->nextpos);
     printf("leader %d,", pli->leader);
     for (j = ns; j < eo + 1; j++) {
-	printf("nbpli_ligne[%d] %d ", j, pli->nbpli_ligne[j]);
+	printf("nbtrick_line[%d] %d ", j, pli->nbtrick_line[j]);
     }
     printf("\n");
   }
@@ -523,10 +523,10 @@ void init_pli(pli_t * pli, int maniere)
 	pli->entame = aucun;
 	pli->leader = aucun;
 	pli->nextpos = aucun;
-	pli->nopli = 0;
+	pli->nbtrick = 0;
 	pli->noj = 0;
 	for (j = ns; j < eo + 1; j++) {
-	    pli->nbpli_ligne[j] = 0;
+	    pli->nbtrick_line[j] = 0;
 	}
 	pli->lastcarte.nocarte = pdc;
 	pli->lastcarte.clcarte = aucune;

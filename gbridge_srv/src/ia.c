@@ -174,7 +174,7 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     /*choix du joueur qui joue en fonction de la profondeur  */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    if ((prof == prof_max) || (pli_cur->nopli == nbcard)) {
+    if ((prof == prof_max) || (pli_cur->nbtrick == nbcard)) {
 	retup = check_plis(pli_cur);
 	return (retup);
     }
@@ -291,7 +291,7 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	nbcoups = list_all_coups_eval(positionc, l_item, pli_cur, t_jeu);
     if ((nbcoups == 0) && (t_jeu[0]->couleureval != aucune))
 	prof_max = prof;
-    if ((prof == prof_max) || (pli_cur->nopli == nbcard)) {
+    if ((prof == prof_max) || (pli_cur->nbtrick == nbcard)) {
 
 	retup = check_plis(pli_cur);
 	return (retup);
@@ -410,7 +410,7 @@ void *new_explore(void *arg)
     /*choix du joueur qui joue en fonction de la profondeur  */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
-    if ((prof == prof_max) || (pli_cur->nopli == thread_jeu->nbcard)) {
+    if ((prof == prof_max) || (pli_cur->nbtrick == thread_jeu->nbcard)) {
 	rettmp = check_plis(pli_cur);
         printf("new_explore: score=%d\n",rettmp->score);
 	thread_jeu->score = rettmp->score;
@@ -419,9 +419,9 @@ void *new_explore(void *arg)
 	thread_jeu->status = 1;
 	free(rettmp);
 	if (thread_jeu->t_jeu[0]->debug) {
-	    affiche_pli(pli_cur,TRUE);
-	    fprintf(stderr, "End newplore, prof=%d pli_cur->nopli=%d\n",
-		    prof, pli_cur->nopli);
+	    display_trick(pli_cur,TRUE);
+	    fprintf(stderr, "End newplore, prof=%d pli_cur->nbtrick=%d\n",
+		    prof, pli_cur->nbtrick);
 	}
     }
 

@@ -115,8 +115,8 @@ typedef struct _pli_t
   position_t nextpos;
   carte_t phcarte;
   carte_t lastcarte;
-  int nopli;
-  int nbpli_ligne[eo + 1];
+  int nbtrick;
+  int nbtrick_line[eo + 1];
   int noj; //Numero du joueur qui joue
   couleur_t atout;
   position_t leader;
@@ -186,7 +186,7 @@ int max(int a,int b);
 void *duplicate_trick (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
-void affiche_pli (pli_t * pli,gboolean display);
+void display_trick (pli_t * pli,gboolean display);
 void *copy_carte (void *data);
 void init_tabjeu(game_t *game);
 int remove_index (tablist_t **t_jeu,position_t position, couleur_t couleur, int pos_index);

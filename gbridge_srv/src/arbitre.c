@@ -375,10 +375,10 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
                     dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
 
                     if(dist+1<tmpjeu[index]->nbcrt) {
-                      add_item_head(l_item, pli);    
+                      add_item_tail(l_item, pli);
                     }
                     else 
-                      add_item_tail(l_item, pli);
+                      add_item_head(l_item, pli);    
                   }
 		  nbcoups++;
 		} else {
@@ -423,7 +423,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 			    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 			if (pli->carte[positionc].nocarte == pdc) {
 			    int h;
-			    affiche_pli(pli,TRUE);
+			    display_trick(pli,TRUE);
 			    for (h = 0; h < NBJOUEURS; h++)
 				//affiche_tabjeu(h);
 				printf("Pb dans list_all_coups 1 \n");
@@ -446,7 +446,7 @@ list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		    if (pli->carte[positionc].nocarte == pdc) {
 			int h;
-			affiche_pli(pli,TRUE);
+			display_trick(pli,TRUE);
 			for (h = 0; h < NBJOUEURS; h++)
 			    //affiche_tmpjeu(h);
 			    printf("Pb dans list_all_coups 2\n");
@@ -582,11 +582,11 @@ position_t evaluation_pli(pli_t * pli)
 	}
 	pli->entame = posgagnante;
 	pli->nextpos = posgagnante;
-	pli->nopli++;
-	pli->nbpli_ligne[(posgagnante % 2)]++;
+	pli->nbtrick++;
+	pli->nbtrick_line[(posgagnante % 2)]++;
 
 	init_pli(pli, RESET);	/*on reinitialise le pli */
-	//affiche_pli (pli);
+	//display_trick (pli);
     } else {
 	if (pli->phcarte.nocarte == pdc) {
 	    pli->phcarte.nocarte = pli->carte[pli->nextpos].nocarte;
@@ -625,7 +625,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 		       carte->nocarte);
 	if (posindex == -1) {
 	    printf("Pb in joue_coup1\n");
-	    affiche_pli(pli,TRUE);
+	    display_trick(pli,TRUE);
 	    affiche_carte(carte);
 	    return (0);
 	}
@@ -661,9 +661,9 @@ rettrick_t *check_plis(pli_t * pli)
     rettrick_t *retpli = malloc(sizeof(rettrick_t));
     ligne_t lignej;
     lignej = (IALINE + 1) % 2;
-    retpli->score = pli->nbpli_ligne[lignej] - pli->nbpli_ligne[IALINE];
-    retpli->nbline[lignej] = pli->nbpli_ligne[lignej];
-    retpli->nbline[IALINE] = pli->nbpli_ligne[IALINE];
+    retpli->score = pli->nbtrick_line[lignej] - pli->nbtrick_line[IALINE];
+    retpli->nbline[lignej] = pli->nbtrick_line[lignej];
+    retpli->nbline[IALINE] = pli->nbtrick_line[IALINE];
     retpli->alpha_or_beta = 0;
     /* printf ("Voici le score dans check_plis: %d\n", score); */
     return (retpli);
