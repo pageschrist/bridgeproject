@@ -21,11 +21,11 @@ typedef struct _choice_color_t
   couleur_t toavoid;
 } choice_color_t;
 
-carte_t  *analyse_hand (game_t *game,pli_t *plic,couleur_t couleur);
+carte_t  *analyse_hand (game_t *game,trick_t *plic,couleur_t couleur);
 void search_best_color(position_t position,hopestat_t **hopestat,choice_color_t *choice_color);
 couleur_t fit (main_t *mainjoueur, int position);
 position_t eval_contrat (game_t *game);
-hopestat_t ** analyse_tabjeu(game_t *game,pli_t *pli);
+hopestat_t ** analyse_tabjeu(game_t *game,trick_t *pli);
 int small_condition(game_t *game,char *s_small);
 int test_condition(game_t *game,char *s_condition); 
 gboolean analyse_bid(game_t *game);

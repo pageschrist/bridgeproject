@@ -99,7 +99,7 @@ ihm_about(GtkWidget *Wdgt, guint value)
 
 
 
-void create_ihm (ihm_pli_t *ihm_pli) {
+void create_ihm (ihm_trick_t *ihm_pli) {
 
   char chaine[MAXCHAR];
   couleur_t couleur;
@@ -257,11 +257,11 @@ void create_ihm (ihm_pli_t *ihm_pli) {
 
 }
 
-void ihm_debug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
+void ihm_debug(GtkWidget *E,ihm_trick_t  *ihm_pli) {
   E=E;
   ihm_pli->debug=TRUE;
 }
-void ihm_undebug(GtkWidget *E,ihm_pli_t  *ihm_pli) {
+void ihm_undebug(GtkWidget *E,ihm_trick_t  *ihm_pli) {
   E=E;
   ihm_pli->debug=FALSE;
 }

@@ -79,7 +79,7 @@ void affiche_carte (carte_t *carte)
   printf("La couleur de la carte est: %d\n",carte->clcarte);
   printf("La valeur de la carte est: %d\n",carte->nocarte);
 }
-void affiche_pli( pli_t *ppli)
+void affiche_pli( trick_t *ppli)
 {
 	position_t i;
         char *rescl,*resct;
@@ -102,7 +102,7 @@ void affiche_pli( pli_t *ppli)
     }
 
 }
-void free_ihm_pli( ihm_pli_t *ihm_pli) {
+void free_ihm_pli( ihm_trick_t *ihm_pli) {
   position_t position; 
   free(ihm_pli->pli);
   ihm_pli->pli=NULL;
@@ -127,7 +127,7 @@ void free_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->read=FALSE;
   ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
 }
-void reset_ihm_pli( ihm_pli_t *ihm_pli) {
+void reset_ihm_pli( ihm_trick_t *ihm_pli) {
 #ifdef DEBUG
   ihm_pli->debug=TRUE;
 #else
@@ -135,7 +135,7 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
 #endif
   couleur_t couleur; 
   position_t position; 
-  ihm_pli->pli=malloc(sizeof(pli_t));
+  ihm_pli->pli=malloc(sizeof(trick_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
   for (position=sud;position<est+1;position++ ) {
     for (couleur=club;couleur<spade+1;couleur++) {
@@ -146,12 +146,12 @@ void reset_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->filename[0]='\0';
    
   ihm_pli->read=FALSE;
-  memset(ihm_pli->pli,0,sizeof(pli_t));
+  memset(ihm_pli->pli,0,sizeof(trick_t));
   memset(ihm_pli->contrat,0,sizeof(contrat_t));
   //init_bid(ihm_pli);
 }
 
-void init_ihm_pli( ihm_pli_t *ihm_pli) {
+void init_ihm_pli( ihm_trick_t *ihm_pli) {
   couleur_t couleur; 
   position_t position; 
 
@@ -163,8 +163,8 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
   ihm_pli->status='n';
   ihm_pli->level=DEFAULTLEVEL;
   ihm_pli->random=DEFAULTRANDOM;
-  ihm_pli->pli=malloc(sizeof(pli_t));
-  memset(ihm_pli->pli,0,sizeof(pli_t));
+  ihm_pli->pli=malloc(sizeof(trick_t));
+  memset(ihm_pli->pli,0,sizeof(trick_t));
   ihm_pli->contrat=malloc(sizeof(contrat_t));
   memset(ihm_pli->contrat,0,sizeof(contrat_t));
   ihm_pli->transfert=malloc(sizeof(transfert_t));
@@ -208,7 +208,7 @@ void init_ihm_pli( ihm_pli_t *ihm_pli) {
 
 
 
-void init_bid(ihm_pli_t *ihm_pli) {
+void init_bid(ihm_trick_t *ihm_pli) {
   int i,k;
   char *rescl,*resct;
   gchar *enchname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*sizeof(gchar));
@@ -306,7 +306,7 @@ char *display_str(char *str ) {
   ret_str[3*((strlen(str))/2)]='\0';
   return(ret_str);  
 }
-void init_pli (pli_t * pli, int maniere)
+void init_trick (trick_t * pli, int maniere)
 {
   position_t i;
   ligne_t j;

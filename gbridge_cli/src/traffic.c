@@ -13,7 +13,7 @@
 
 int i=0;
 int j=0;
-gboolean send_file(ihm_pli_t *ihm_pli) {
+gboolean send_file(ihm_trick_t *ihm_pli) {
   FILE *fd;
   ssize_t ret;
   int i=0,j=0;
@@ -67,7 +67,7 @@ gboolean send_file(ihm_pli_t *ihm_pli) {
 }
 
 
-ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) { 
+ssize_t write_header( ihm_trick_t *ihm_pli,char type,...) { 
   va_list args;
   ssize_t ret;
   net_header_t header;
@@ -91,12 +91,12 @@ ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) {
     break;
   case 'g':
     header.type='g';
-    header.lenght=sizeof(pli_t);
+    header.lenght=sizeof(trick_t);
     ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'p':
     header.type='p';
-    header.lenght=sizeof(pli_t);
+    header.lenght=sizeof(trick_t);
     ret=write (ihm_pli->socketid,  &header,sizeof(net_header_t));
     break;
   case 'c':
@@ -138,7 +138,7 @@ ssize_t write_header( ihm_pli_t *ihm_pli,char type,...) {
 
 
 //return -1 Pb of type  0 End 1 OK 
-int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
+int  read_header (ihm_trick_t *ihm_pli,void *data,char type) {
   net_header_t header;
   int ret;
   if(ihm_pli->debug) { 
@@ -170,15 +170,15 @@ int  read_header (ihm_pli_t *ihm_pli,void *data,char type) {
   return(1);
 }
   
-void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
-  pli_t *pli;
+void read_data( ihm_trick_t *ihm_pli,void *data, char type) {
+  trick_t *pli;
   carte_t *carte;
   bid_t *bid;
   char *cur_bid;
   switch(type) {
     case 'p':
       pli= data;
-      read (ihm_pli->socketid,  pli, sizeof (pli_t));
+      read (ihm_pli->socketid,  pli, sizeof (trick_t));
       break;
     case 'c':
       carte= data;
@@ -199,12 +199,12 @@ void read_data( ihm_pli_t *ihm_pli,void *data, char type) {
   }
 
 }
-ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
+ssize_t write_data(ihm_trick_t *ihm_pli,void  *data,char type,...) {
 
   va_list args;
   ssize_t ret=0;
   va_start (args, type);
-  pli_t *pli;
+  trick_t *pli;
   int size;
   carte_t *carte;
   bid_t *bid;
@@ -215,9 +215,9 @@ ssize_t write_data(ihm_pli_t *ihm_pli,void  *data,char type,...) {
   
   switch(type) {
     case 'p':
-      pli=(pli_t *) data;
+      pli=(trick_t *) data;
       write_header(ihm_pli,type);
-      ret=write (ihm_pli->socketid,  pli, sizeof (pli_t));
+      ret=write (ihm_pli->socketid,  pli, sizeof (trick_t));
       break;
     case 'f':
       size=va_arg(args,int);      

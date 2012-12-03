@@ -46,7 +46,7 @@ gboolean test_reprise(position_t position,tablist_t **t_jeu) {
   
 
 }
-gboolean check_invert_lead(pli_t *pli,tablist_t **t_jeu) {
+gboolean check_invert_lead(trick_t *pli,tablist_t **t_jeu) {
   couleur_t coloreval=t_jeu[0]->couleureval; 
   if((pli->noj)%4==0) {
     if(t_jeu[INDEX(pli->nextpos,coloreval)]->nbcrt==0 && t_jeu[INDEX((pli->nextpos+2)%4,coloreval)]->nbcrt!=0) {
@@ -195,7 +195,7 @@ void destroy_jeu(thread_jeu_t * thread_jeu)
 
 
 int
-list_all_coups_eval(position_t positionc, l_item_t *l_item, pli_t * pli,
+list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * pli,
 		    tablist_t ** tmpjeu)
 {
     couleur_t couleurc = tmpjeu[0]->couleureval;
@@ -334,7 +334,7 @@ int points_per_color(tablist_t *tablist ) {
 }
 
 int
-list_all_coups(position_t positionc, l_item_t *l_item, pli_t * pli,
+list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
 	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
@@ -535,7 +535,7 @@ void *copy_carte(void *data)
 }
 
 /*Cette fonction determine qui sera le suivant a jouer et met a jour les scores*/
-position_t evaluation_pli(pli_t * pli)
+position_t evaluation_trick(trick_t * pli)
 {
 
     carte_t carte_atout;
@@ -585,7 +585,7 @@ position_t evaluation_pli(pli_t * pli)
 	pli->nbtrick++;
 	pli->nbtrick_line[(posgagnante % 2)]++;
 
-	init_pli(pli, RESET);	/*on reinitialise le pli */
+	init_trick(pli, RESET);	/*on reinitialise le pli */
 	//display_trick (pli);
     } else {
 	if (pli->phcarte.nocarte == pdc) {
@@ -610,7 +610,7 @@ position_t evaluation_pli(pli_t * pli)
     return (pli->nextpos);
 }
 
-int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
+int joue_coup(trick_t * pli, carte_t * carte, game_t * game)
 {
     int posindex;
     position_t position;
@@ -656,7 +656,7 @@ int joue_coup(pli_t * pli, carte_t * carte, game_t * game)
 }
 
 
-rettrick_t *check_plis(pli_t * pli)
+rettrick_t *check_trick(trick_t * pli)
 {
     rettrick_t *retpli = malloc(sizeof(rettrick_t));
     ligne_t lignej;
@@ -665,11 +665,11 @@ rettrick_t *check_plis(pli_t * pli)
     retpli->nbline[lignej] = pli->nbtrick_line[lignej];
     retpli->nbline[IALINE] = pli->nbtrick_line[IALINE];
     retpli->alpha_or_beta = 0;
-    /* printf ("Voici le score dans check_plis: %d\n", score); */
+    /* printf ("Voici le score dans check_trick: %d\n", score); */
     return (retpli);
 
 }
-void define_leader(pli_t *pli) {
+void define_leader(trick_t *pli) {
   if(pli->entame==pli->nextpos) {
    pli->leader=pli->entame;
   }

@@ -9,7 +9,7 @@
 #include "objets.h"
 #include "load.h"
 extern GHashTable *configHash;
-imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_pli_t *ihm_pli,position_t position) {
+imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_trick_t *ihm_pli,position_t position) {
 
   imgcard_t *imgcard = (imgcard_t *) g_malloc(sizeof(imgcard_t) );
 

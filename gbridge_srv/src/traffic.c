@@ -27,7 +27,7 @@ void write_header(game_t * game, char type)
     switch (type) {
     case 'p':
 	header.type = 'p';
-	header.lenght = sizeof(pli_t);
+	header.lenght = sizeof(trick_t);
 	write(game->sockslv_id, &header, sizeof(net_header_t));
 	break;
     case 'c':
@@ -137,7 +137,7 @@ char read_header(game_t * game, void *data, char type)
 void read_data(game_t * game, void *data, char type,...)
 {
     va_list args;
-    pli_t *pli;
+    trick_t *pli;
     ssize_t size;
     va_start (args, type);
     carte_t *carte;
@@ -145,8 +145,8 @@ void read_data(game_t * game, void *data, char type,...)
     char *cur_bid;
     switch (type) {
     case 'p':
-	pli = (pli_t *) data;
-	read(game->sockslv_id, pli, sizeof(pli_t));
+	pli = (trick_t *) data;
+	read(game->sockslv_id, pli, sizeof(trick_t));
 	break;
     case 'c':
 	carte = (carte_t *) data;
@@ -174,7 +174,7 @@ void read_data(game_t * game, void *data, char type,...)
 char  write_data(game_t * game, void *data, char type)
 {
 
-    pli_t *pli;
+    trick_t *pli;
     carte_t *carte;
     bid_t *bid;
     char *cur_bid;
@@ -185,7 +185,7 @@ char  write_data(game_t * game, void *data, char type)
 	pli = data;
         display_trick(pli,TRUE);
 	write_header(game, type);
-	write(game->sockslv_id, pli, sizeof(pli_t));
+	write(game->sockslv_id, pli, sizeof(trick_t));
 	break;
     case 'c':
 	carte = data;

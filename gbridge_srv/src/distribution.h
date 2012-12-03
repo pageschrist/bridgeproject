@@ -37,7 +37,7 @@ typedef struct _joueur
   int position;			/*ouvreur, repondant, intervenant ou reponse intervenant */
   int numero;			/*corrspond au nord sud est ouest */
   struct jeu main;
-  int nbplitotal;
+  int nbtotaltrick;
   int minpoints;
   int maxpoints;
 } joueur_t;
@@ -52,6 +52,6 @@ void qintsort (int arr[], int lidx, int ridx);
 void evalmain (game_t *game);
 void presentation (main_t * mainjoueur);
 void envoi_jeu (position_t position, game_t *game);
-void remplit_liste_jeu (game_t *game);
+void fill_list_game (game_t *game);
 void distribution (void);
 void init_distrib (game_t *game);

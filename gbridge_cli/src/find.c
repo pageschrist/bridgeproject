@@ -17,7 +17,7 @@ void set_moveable(GList *ptr, gboolean value)
         }
 }
 
-gboolean test_card(ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
+gboolean test_card(ihm_trick_t *ihm_pli,imgcard_t *imgcard) {
   position_t poscour;
   couleur_t couleurentame;
 
@@ -47,7 +47,7 @@ gboolean test_card(ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
 }
 
 gboolean find_moveable_card(GList *ptr, GdkEventButton *event,
-        ihm_pli_t *ihm_pli)
+        ihm_trick_t *ihm_pli)
 {
         imgcard_t *data_ptr;
         gboolean found = FALSE;

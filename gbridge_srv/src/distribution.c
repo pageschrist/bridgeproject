@@ -224,7 +224,7 @@ void envoi_jeu(position_t position, game_t * game)
 
 }
 
-void remplit_liste_jeu(game_t * game)
+void fill_list_game(game_t * game)
 {
     position_t position;
     valeur_t valeur;
@@ -273,7 +273,7 @@ void init_distrib(game_t * game)
     bzero((char *) phrase, sizeof(char));
     if (game->debug)
 	printf("randomdist =%d\n", random);
-    //init_pli(pli,INIT);
+    //init_trick(pli,INIT);
     initialisation();
     //initstate (time (NULL), phrase, sizeof (phrase)); 
     if (random <= 0)
@@ -284,5 +284,5 @@ void init_distrib(game_t * game)
     distribution();
     evalmain(game);
     //rotation=eval_contrat (game);
-    remplit_liste_jeu(game);
+    fill_list_game(game);
 }

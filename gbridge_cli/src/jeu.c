@@ -52,7 +52,7 @@ void game_middle_offset_dynamic(position_t position, int *midx, int *midy,
 
 }
 
-void position_middle( ihm_pli_t *ihm_pli,imgcard_t *card,position_t position) {
+void position_middle( ihm_trick_t *ihm_pli,imgcard_t *card,position_t position) {
   int midx,midy;
   if (card==NULL) {
    printf ("Erreur in position_middle\n");
@@ -79,7 +79,7 @@ void position_middle( ihm_pli_t *ihm_pli,imgcard_t *card,position_t position) {
  
 
 }
-void position_targetzone(ihm_pli_t *ihm_pli)
+void position_targetzone(ihm_trick_t *ihm_pli)
 {
         
         if(ihm_pli->dropping != NULL)
@@ -116,7 +116,7 @@ void position_targetzone(ihm_pli_t *ihm_pli)
 
 
 
-void destroy_ihm_pli (ihm_pli_t *ihm_pli) {
+void destroy_ihm_pli (ihm_trick_t *ihm_pli) {
  position_t position;
  free( ihm_pli->contrat);
  for (position=sud;position>est+1;position++ ) 
@@ -125,7 +125,7 @@ void destroy_ihm_pli (ihm_pli_t *ihm_pli) {
  free(ihm_pli->pli);
 }
 
-void init_game(ihm_pli_t *ihm_pli) {
+void init_game(ihm_trick_t *ihm_pli) {
    
   int contrat; 
   couleur_t couleur;
@@ -249,7 +249,7 @@ void position_list(GList *ptr, int x, int y, enum eposition ep, float coef)
 }
 
 
-int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
+int game_turn (ihm_trick_t *ihm_pli,imgcard_t *imgcard) {
 
   position_t poscour;
   char *cardname,*rescl,*resvl,*resps;
@@ -355,7 +355,7 @@ int game_turn (ihm_pli_t *ihm_pli,imgcard_t *imgcard) {
   free(resps);
 }
 
-void locate_cards(GList *listplayer,position_t position,ihm_pli_t *ihm_pli) {
+void locate_cards(GList *listplayer,position_t position,ihm_trick_t *ihm_pli) {
 
   int x, y, w, h;
   int coef;
@@ -401,7 +401,7 @@ void locate_cards(GList *listplayer,position_t position,ihm_pli_t *ihm_pli) {
 }
 
 void
-recuperation_jeu (ihm_pli_t *ihm_pli, position_t position)
+recuperation_jeu (ihm_trick_t *ihm_pli, position_t position)
 {
   imgcard_t *imgcard;
   char *rescl,*resvl,refcoul='O',*resp;

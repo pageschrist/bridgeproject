@@ -24,7 +24,7 @@
 
 
 void enter_callback_level( GtkWidget *entry,
-                            ihm_pli_t *ihm_pli )
+                            ihm_trick_t *ihm_pli )
 {
   const gchar *entry_text_level;
   entry_text_level = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -32,14 +32,14 @@ void enter_callback_level( GtkWidget *entry,
   printf ("Level : %d\n", ihm_pli->level);
 }
 void enter_callback_random( GtkWidget *entry,
-                            ihm_pli_t *ihm_pli )
+                            ihm_trick_t *ihm_pli )
 {
   const gchar *entry_text_random;
   entry_text_random = gtk_entry_get_text (GTK_ENTRY (entry));
   ihm_pli->random=atoi(entry_text_random);
   printf ("Random : %d\n", ihm_pli->random);
 }
-void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
+void new_dist (GtkButton *button,ihm_trick_t *ihm_pli) {
   button=button;
   int contrat;
   couleur_t couleur;
@@ -59,7 +59,7 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
 }
 
  void file_ok_sel( GtkWidget        *w,
-                         ihm_pli_t *ihm_pli )
+                         ihm_trick_t *ihm_pli )
 {
     w=w;
     int contrat;
@@ -91,13 +91,13 @@ void new_dist (GtkButton *button,ihm_pli_t *ihm_pli) {
     gtk_widget_destroy(ihm_pli->File_S);
 }
 
-void save_game (GtkButton *button,ihm_pli_t *ihm_pli) {
+void save_game (GtkButton *button,ihm_trick_t *ihm_pli) {
   button=button;
   ihm_pli->savegame=TRUE;
 
 }
 
-void open_file (GtkButton *button,ihm_pli_t *ihm_pli) {
+void open_file (GtkButton *button,ihm_trick_t *ihm_pli) {
   button=button;
   ihm_pli->File_S=gtk_file_selection_new (g_locale_to_utf8( "Select a file", -1, NULL, NULL, NULL));
   g_signal_connect (G_OBJECT (ihm_pli->File_S), "destroy",
@@ -147,7 +147,7 @@ gboolean key_down(GtkWidget *widget,
         gpointer user_data)
 {
         widget=widget;
-        ihm_pli_t *ihm_pli = user_data;
+        ihm_trick_t *ihm_pli = user_data;
 
         if(event->type == GDK_KEY_PRESS && event->keyval == GDK_Escape)
         {
@@ -173,7 +173,7 @@ gboolean key_down(GtkWidget *widget,
 
 gboolean event_blink(gpointer data)
 {
-        ihm_pli_t *ihm_pli = (ihm_pli_t*) data;
+        ihm_trick_t *ihm_pli = (ihm_trick_t*) data;
   if(ihm_pli->debug) 
     printf("Event blinck\n");
 
@@ -237,7 +237,7 @@ gboolean event_blink(gpointer data)
 }
 
 
-void clear_blink(ihm_pli_t *ihm_pli)
+void clear_blink(ihm_trick_t *ihm_pli)
 {
         if(ihm_pli->debug)
           printf("On est dans blink_clear\n");
@@ -264,7 +264,7 @@ void clear_blink(ihm_pli_t *ihm_pli)
 }
 
 
-gboolean mise_en_place ( GtkWidget *Drawing_area,ihm_pli_t *ihm_pli) {
+gboolean mise_en_place ( GtkWidget *Drawing_area,ihm_trick_t *ihm_pli) {
   Drawing_area=Drawing_area;
   int contrat;
   couleur_t couleur;
@@ -292,7 +292,7 @@ gboolean mise_en_place ( GtkWidget *Drawing_area,ihm_pli_t *ihm_pli) {
 
   return TRUE;
 }
-void action_click(ihm_pli_t *ihm_pli)
+void action_click(ihm_trick_t *ihm_pli)
 {
 
         draw_container_ihm(ihm_pli);
@@ -302,7 +302,7 @@ void action_click(ihm_pli_t *ihm_pli)
 gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
   widget=widget;
-  ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
+  ihm_trick_t *ihm_pli = (ihm_trick_t *)data;
   position_t position;
   if(ihm_pli->status=='b'  ) 
     return FALSE;
@@ -349,7 +349,7 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   return(TRUE);
 }
 
-gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *ihm_pli)
+gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_trick_t *ihm_pli)
 {
   event=event;
   Fenetre=Fenetre;
@@ -440,7 +440,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_pli_t *i
   return FALSE;
 
 }
-gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_pli_t *ihm_pli)
+gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_trick_t *ihm_pli)
 {
       event=event;
       Drawing_area=Drawing_area;
@@ -465,7 +465,7 @@ gboolean rafraichissement( GtkWidget *Drawing_area, GdkEventExpose *event, ihm_p
         return FALSE;
 }
 
-gboolean quit(GtkWidget *window, ihm_pli_t *ihm_pli)
+gboolean quit(GtkWidget *window, ihm_trick_t *ihm_pli)
 {
         window=window;
         ihm_pli->status='e';
@@ -482,7 +482,7 @@ gboolean quit(GtkWidget *window, ihm_pli_t *ihm_pli)
 gint motion_notify_event (GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
         widget=widget;
-        ihm_pli_t *ihm_pli = (ihm_pli_t*)data;
+        ihm_trick_t *ihm_pli = (ihm_trick_t*)data;
         if(ihm_pli->debug)
           printf("On est dans motion_notify_event\n");
 
@@ -656,7 +656,7 @@ gboolean  button_release_event (GtkWidget *widget,
         GdkEventButton *event, gpointer data)
 {
         widget=widget;
-        ihm_pli_t *ihm_pli = (ihm_pli_t *)data;
+        ihm_trick_t *ihm_pli = (ihm_trick_t *)data;
         int ligne;
         if(NULL==ihm_pli->pli)
           return FALSE;
@@ -704,7 +704,7 @@ gboolean  button_release_event (GtkWidget *widget,
           return TRUE;
 }
 
-gboolean game_drop_enable(ihm_pli_t *ihm_pli)
+gboolean game_drop_enable(ihm_trick_t *ihm_pli)
 {
         rectangle_t *zone = get_active_targetzone(ihm_pli->dropping);
 

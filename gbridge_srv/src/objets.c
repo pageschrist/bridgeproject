@@ -428,9 +428,9 @@ void *copy_card(void *data) {
 
 void *duplicate_trick(void *data)
 {
-    pli_t *copytrick;
-    copytrick = malloc(sizeof(pli_t));
-    memcpy(copytrick, (pli_t *) data, sizeof(pli_t));
+    trick_t *copytrick;
+    copytrick = malloc(sizeof(trick_t));
+    memcpy(copytrick, (trick_t *) data, sizeof(trick_t));
     return ((void *) copytrick);
 
 }
@@ -455,7 +455,7 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 	   thread_jeu->score, thread_jeu->prof, thread_jeu->prof_max);
 }
 
-void display_trick(pli_t * pli,gboolean display)
+void display_trick(trick_t * pli,gboolean display)
 {
   position_t i;
   char *affca, *affco;
@@ -514,7 +514,7 @@ void affiche_tab_cartes(void)
     }
 }
 
-void init_pli(pli_t * pli, int maniere)
+void init_trick(trick_t * pli, int maniere)
 {
     position_t i;
     ligne_t j;

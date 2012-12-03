@@ -12,7 +12,7 @@
 #include "draw.h"
 #include "callbacks.h"
 
-void trash_list ( ihm_pli_t *ihm_pli) {
+void trash_list ( ihm_trick_t *ihm_pli) {
   GList *ptrwait;
   imgcard_t *data_ptr;
   for(ptrwait=ihm_pli->waiting;ptrwait;ptrwait=ptrwait->next) {

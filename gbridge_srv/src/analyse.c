@@ -52,12 +52,12 @@ void changeeval(game_t * game, couleur_t couleureval)
     }
 }
 
-carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
+carte_t *analyse_hand(game_t * game, trick_t * plic, couleur_t couleur)
 {
 
     int index;
-    pli_t *plin = malloc(sizeof(pli_t));
-    memcpy(plin, plic, sizeof(pli_t));
+    trick_t *plin = malloc(sizeof(trick_t));
+    memcpy(plin, plic, sizeof(trick_t));
     plin->atout = aucune;
     hopestat_t *hopestat = malloc(sizeof(hopestat_t));
     int sizemax;
@@ -103,19 +103,19 @@ carte_t *analyse_hand(game_t * game, pli_t * plic, couleur_t couleur)
 }
 
 
-hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
+hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_pli)
 {
 
     int index;
     hopestat_t **hopestat = malloc(16 * sizeof(hopestat_t *));
-    pli_t *pli;
+    trick_t *pli;
     int sizemax[spade + 1];
     l_best_t *l_best = NULL;
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
     if(!cur_pli)
-      pli = malloc(sizeof(pli_t));
+      pli = malloc(sizeof(trick_t));
     else
       pli=cur_pli;
     position_t position;
@@ -138,7 +138,7 @@ hopestat_t **analyse_tabjeu(game_t * game, pli_t *cur_pli)
 	    hopestat[index]->position = position;
 	    hopestat[index]->couleur = couleur;
             if(!cur_pli) {
-	    init_pli(pli, INIT);
+	    init_trick(pli, INIT);
 	      pli->entame = position;
 	      pli->nextpos = position;
 	     pli->atout = aucune;

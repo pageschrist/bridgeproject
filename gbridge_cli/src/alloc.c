@@ -32,7 +32,7 @@
  * stdout.
  */
 
-void alloc_pixmap(ihm_pli_t *ihm_pli)
+void alloc_pixmap(ihm_trick_t *ihm_pli)
 {
 	if(ihm_pli->target != NULL)
 	{
@@ -81,7 +81,7 @@ void alloc_pixmap(ihm_pli_t *ihm_pli)
  * NULL in case of an error.
  */
 
-rectangle_t * alloc_targetzone(ihm_pli_t *ihm_pli)
+rectangle_t * alloc_targetzone(ihm_trick_t *ihm_pli)
 {
 	rectangle_t *zone = (rectangle_t *) g_malloc(sizeof(rectangle_t) );
 	
@@ -139,7 +139,7 @@ rectangle_t * alloc_targetzone(ihm_pli_t *ihm_pli)
  * 
  * 
  */
-void alloc_ihm(ihm_pli_t *ihm_pli)
+void alloc_ihm(ihm_trick_t *ihm_pli)
 {
 	
 	alloc_pixmap(ihm_pli);

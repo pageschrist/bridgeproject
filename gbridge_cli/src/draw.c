@@ -4,7 +4,7 @@
 #include "draw.h"
 
 
-void draw_cards(ihm_pli_t *ihm_pli, GList *list, GdkPixmap *target)
+void draw_cards(ihm_trick_t *ihm_pli, GList *list, GdkPixmap *target)
 {
         if(ihm_pli->debug)
           printf("Draw cards\n");
@@ -53,7 +53,7 @@ void draw_cards(ihm_pli_t *ihm_pli, GList *list, GdkPixmap *target)
 }
 
 
-void draw_moving_card(ihm_pli_t *ihm_pli, GdkPixmap *target)
+void draw_moving_card(ihm_trick_t *ihm_pli, GdkPixmap *target)
 {   
         GdkGC *gc;
         GdkPixmap *img;
@@ -86,7 +86,7 @@ void draw_moving_card(ihm_pli_t *ihm_pli, GdkPixmap *target)
 }
 
 
-gboolean player_can_drop(ihm_pli_t *ihm_pli)
+gboolean player_can_drop(ihm_trick_t *ihm_pli)
 {
         return
         
@@ -111,7 +111,7 @@ gboolean card_touch_dropzone(movingcard_t *movecard, rectangle_t *rectangle)
 
 
 
-rectangle_t * draw_dropping_zone(ihm_pli_t *ihm_pli, GdkPixmap *target)
+rectangle_t * draw_dropping_zone(ihm_trick_t *ihm_pli, GdkPixmap *target)
 {
         GList *lst;
         rectangle_t *rectangle = NULL;
@@ -139,7 +139,7 @@ rectangle_t * draw_dropping_zone(ihm_pli_t *ihm_pli, GdkPixmap *target)
 
 
 
-void draw_container_ihm(ihm_pli_t *ihm_pli)
+void draw_container_ihm(ihm_trick_t *ihm_pli)
 {
         printf("Draw !!\n");
         if(ihm_pli->target != NULL)
@@ -181,7 +181,7 @@ void draw_container_ihm(ihm_pli_t *ihm_pli)
         }
 }
 
-void draw_copy(ihm_pli_t *ihm_pli)
+void draw_copy(ihm_trick_t *ihm_pli)
 {
 
         if(!ihm_pli->copy)
@@ -200,7 +200,7 @@ void draw_copy(ihm_pli_t *ihm_pli)
 
 }
 
-void draw_to(ihm_pli_t *ihm_pli, GdkPixmap *target)
+void draw_to(ihm_trick_t *ihm_pli, GdkPixmap *target)
 {
         if(target != NULL)
         {

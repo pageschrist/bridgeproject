@@ -14,7 +14,7 @@
 int prof_start = 0;
 int flag_debug = 0;
 
-int  best_elem_best_l(elem_best_t *elem_best,pli_t *pli) {
+int  best_elem_best_l(elem_best_t *elem_best,trick_t *pli) {
   char *affca,*affcl;
   int score;
   score=-15*((pli->nextpos+1)%2) +(15*((pli->nextpos)%2));
@@ -45,7 +45,7 @@ int  best_elem_best_l(elem_best_t *elem_best,pli_t *pli) {
  // while(
 //}
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
-		    hopestat_t * hopestat,pli_t *pli)
+		    hopestat_t * hopestat,trick_t *pli)
 {
     gboolean suplead[spade+1];
     valeur_t tabval[spade + 1];
@@ -154,7 +154,7 @@ int minimax(int score_courant, int best_score, position_t positionc)
 
 
 }
-rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
+rettrick_t *cur_explore(int prof, trick_t * pli_cur, int prof_max,
 		      tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
@@ -163,7 +163,7 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -175,14 +175,14 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
     if ((prof == prof_max) || (pli_cur->nbtrick == nbcard)) {
-	retup = check_plis(pli_cur);
+	retup = check_trick(pli_cur);
 	return (retup);
     }
     l_item=create_l_item(duplicate_trick);
     list_all_coups(positionc, l_item, pli_cur, t_jeu,NULL);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (pli_t *) pop_item_head(l_item)) != NULL) {
+    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	nocarte = pli_new->carte[positionc].nocarte;
 	nocouleur = pli_new->carte[positionc].clcarte;
@@ -197,7 +197,7 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 	    exit(1);
 	}
 	pos_index = remove_index(t_jeu, positionc, nocouleur, pos_index);
-	evaluation_pli(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
 
 	//on duplique le jeu
 
@@ -264,7 +264,7 @@ rettrick_t *cur_explore(int prof, pli_t * pli_cur, int prof_max,
 
 }
 
-rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
+rettrick_t *cur_explore_eval(int prof, trick_t * pli_cur, int prof_max,
 			   tablist_t ** t_jeu, int orialpha, int oribeta,int nbcard)
 {
     //stackia_t stk;
@@ -274,7 +274,7 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -293,11 +293,11 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	prof_max = prof;
     if ((prof == prof_max) || (pli_cur->nbtrick == nbcard)) {
 
-	retup = check_plis(pli_cur);
+	retup = check_trick(pli_cur);
 	return (retup);
     }
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (pli_t *) pop_item_head(l_item)) != NULL) {
+    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	nocarte = pli_new->carte[positionc].nocarte;
 	nocouleur = pli_new->carte[positionc].clcarte;
@@ -312,7 +312,7 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 	    exit(1);
 	}
 	pos_index = remove_index(t_jeu, positionc, nocouleur, pos_index);
-	evaluation_pli(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
         check_invert_lead(pli_new,t_jeu); //If we have no more cards we change the lead if we have a reprise
 
 	ret =
@@ -385,7 +385,7 @@ rettrick_t *cur_explore_eval(int prof, pli_t * pli_cur, int prof_max,
 void *new_explore(void *arg)
 {
     int prof, prof_max;
-    pli_t *pli_cur;
+    trick_t *pli_cur;
     thread_jeu_t *thread_jeu = arg;
     //stackia_t stk;
     l_item_t *l_item;
@@ -395,7 +395,7 @@ void *new_explore(void *arg)
     rettrick_t *ret;
     rettrick_t *rettmp;
     int pos_index;
-    pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -411,7 +411,7 @@ void *new_explore(void *arg)
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
     if ((prof == prof_max) || (pli_cur->nbtrick == thread_jeu->nbcard)) {
-	rettmp = check_plis(pli_cur);
+	rettmp = check_trick(pli_cur);
         printf("new_explore: score=%d\n",rettmp->score);
 	thread_jeu->score = rettmp->score;
 	thread_jeu->nbline[0] = rettmp->nbline[0];
@@ -433,7 +433,7 @@ void *new_explore(void *arg)
 	list_all_coups_eval(positionc, l_item, pli_cur, thread_jeu->t_jeu);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (pli_t *) pop_item_head(l_item)) != NULL) {
+    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	// On sauvegarde le pli en cours (pliori,plicopie) 
 	//tab_cartes[pli_new->carte[positionc].nocarte][pli_new->carte[positionc].
@@ -454,7 +454,7 @@ void *new_explore(void *arg)
 	pos_index =
 	    remove_index(thread_jeu->t_jeu, positionc, nocouleur,
 			 pos_index);
-	evaluation_pli(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
 	if (thread_jeu->t_jeu[0]->couleureval != aucune)
 	    ret =
 		cur_explore_eval(prof + 1, pli_new, prof_max,
@@ -501,7 +501,7 @@ void *new_explore(void *arg)
 
 
 int
-first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
+first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	      game_t * game)
 {
     thread_jeu_t **thread_jeu = NULL;
@@ -512,7 +512,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
     int nbcoups, i, threads_remaining = 1;
     position_t positionc;
     int pos_index;
-    pli_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
     int best_score;
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -529,8 +529,8 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
         printf("first_explore:   nbcoups=%d\n",nbcoups);
         ////////////////////////////////
 	if (nbcoups == 1) {
-	    //pli_new = (pli_t *) pop(stk);
-	    pli_new = (pli_t *) pop_item_head(l_item);
+	    //pli_new = (trick_t *) pop(stk);
+	    pli_new = (trick_t *) pop_item_head(l_item);
 	    best = malloc(sizeof(best_t));
 	    best->score = 1;
 	    best->numero = 1;
@@ -550,7 +550,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 		nbcoups);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (pli_t *) pop_item_head(l_item)) != NULL) {
+    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	thread_jeu =
 	    realloc(thread_jeu, (sizeof(thread_jeu_t *)) * (nothr + 1));
@@ -580,7 +580,7 @@ first_explore(pli_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	    pli_new->carte[positionc].nocarte;
 	thread_jeu[nothr]->best_cartepot->clcarte =
 	    pli_new->carte[positionc].clcarte;
-	evaluation_pli(thread_jeu[nothr]->pli);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(thread_jeu[nothr]->pli);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
 
 
 

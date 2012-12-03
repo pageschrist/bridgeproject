@@ -140,10 +140,10 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
-    pli_t *pli;
+    trick_t *pli;
     int t, notour = 0 ;
-    pli = malloc(sizeof(pli_t));
-    init_pli(pli, INIT);
+    pli = malloc(sizeof(trick_t));
+    init_trick(pli, INIT);
     if (game->debug)
 	printf("We are in newgame random=%d level=%d\n", random, prof);
 
@@ -258,7 +258,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    end_session(game);
 		joue_coup(pli, NULL, game);
 	    }
-	    pli->nextpos = evaluation_pli(pli);
+	    pli->nextpos = evaluation_trick(pli);
 
 	    if('e'==write_data(game, pli, 'p'))
               end_session(game);

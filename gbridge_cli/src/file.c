@@ -48,7 +48,7 @@ valeur_t convert_char_card(char c ) {
     }
 }
 
-gboolean check_order(ihm_pli_t *ihm_pli, char *buffer) {
+gboolean check_order(ihm_trick_t *ihm_pli, char *buffer) {
   size_t i;
   int n,ref;
   if(strlen(buffer) <=0 ) {
@@ -103,7 +103,7 @@ gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
   return(TRUE);
 }
 
-gboolean check_parse (ihm_pli_t *ihm_pli ,char *transbuf) {
+gboolean check_parse (ihm_trick_t *ihm_pli ,char *transbuf) {
   position_t position;
   couleur_t couleur=club;
   int tabref[est+1][cA+1];
