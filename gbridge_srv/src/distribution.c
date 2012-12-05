@@ -79,7 +79,7 @@ void affiche_contrat(contrat_t * contrat)
     fprintf(stdout, "type: %d\n", contrat->nom);
     fprintf(stdout, "atout: %d\n", contrat->atout);
     fprintf(stdout, "declarant: %d\n", contrat->declarant);
-    fprintf(stdout, "nbplis: %d\n", contrat->nbplis);
+    fprintf(stdout, "nbtricks: %d\n", contrat->nbtricks);
 
 }
 
