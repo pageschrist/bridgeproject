@@ -15,5 +15,5 @@
 void create_config (void);
 void skipspace (char *line);
 void skipcomment (char *line);
-void rempli_config(void);
+void fill_config(void);
 void verifie_config (void);

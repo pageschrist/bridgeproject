@@ -89,7 +89,7 @@ typedef struct _main_t
   int nbcartesmax;
 } main_t;
 
-typedef struct _pli_t
+typedef struct _trick_t
 {
   carte_t carte[est + 1];
   carte_t discard[est + 1];
@@ -102,8 +102,10 @@ typedef struct _pli_t
   int noj; //Numero du joueur qui joue
   couleur_t atout;
   position_t leader;
+  gboolean eval;
+  couleur_t coloreval;
 
-} pli_t;
+} trick_t;
 
 typedef struct _transfert_t
 {
@@ -177,9 +179,9 @@ typedef struct _ihm_bid_t
 } ihm_bid_t;
 
 
-typedef struct _ihm_pli_t
+typedef struct _ihm_trick_t
 {
-  pli_t *pli;
+  trick_t *pli;
   int socketid;
   int level;
   int random;
@@ -220,7 +222,7 @@ typedef struct _ihm_pli_t
   int state ; 
   transfert_t *transfert;
   gboolean read;
-} ihm_pli_t;
+} ihm_trick_t;
 
 typedef struct _tablist
 {
@@ -232,23 +234,23 @@ typedef struct _tablist
 
 typedef struct _button_bid_t
 {
-  ihm_pli_t *ihm_pli;
+  ihm_trick_t *ihm_pli;
   ihm_bid_t *ihm_bid;
 } button_bid_t;
 
 void bouge_carte(position_t position,carte_t *carte,int maxl);
 void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int maxl) ;
-void affiche_pli(pli_t *pli);
+void affiche_pli(trick_t *pli);
 char *affichage (int valeur,int type);
 
 char * contrat_to_char ( couleur_t atout); 
 char *affichage (int valeur, int type);
 void affiche_carte (carte_t *carte);
-void copy_pli (pli_t *ppliori, pli_t *pplicopie);
-void affiche_pli( pli_t *ppli);
-void init_pli (pli_t * pli, int maniere);
-void free_ihm_pli( ihm_pli_t *ihm_pli) ;
-void reset_ihm_pli (ihm_pli_t *ihm_pli);
-void init_ihm_pli (ihm_pli_t *ihm_pli);
-void init_bid (ihm_pli_t *ihm_pli);
+void copy_pli (trick_t *ppliori, trick_t *pplicopie);
+void affiche_pli( trick_t *ppli);
+void init_trick (trick_t * pli, int maniere);
+void free_ihm_pli( ihm_trick_t *ihm_pli) ;
+void reset_ihm_pli (ihm_trick_t *ihm_pli);
+void init_ihm_pli (ihm_trick_t *ihm_pli);
+void init_bid (ihm_trick_t *ihm_pli);
 char *display_str(char *str ); 

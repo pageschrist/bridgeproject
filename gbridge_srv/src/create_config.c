@@ -114,7 +114,7 @@ void skipcomment(char *line)
     }
 }
 
-void rempli_config(void)
+void fill_config(void)
 {
     FILE *prconf;
     char buf[MAX_LINE_SIZE];
