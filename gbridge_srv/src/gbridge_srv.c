@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     game->level = DEFAULTLEVEL;
     game->random = DEFAULTRANDOM;
     create_config();
-    rempli_config();
+    fill_config();
     verifie_config();
     random = atoi(g_hash_table_lookup(configHash, "random"));
     prof = atoi(g_hash_table_lookup(configHash, "profondeur"));

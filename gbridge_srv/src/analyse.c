@@ -498,7 +498,7 @@ position_t eval_contrat(game_t * game)
     if (refpts >= 37)
 	game->contrat->nom = 7;
     game->contrat->atout = color;
-    game->contrat->nbplis = 6 + game->contrat->nom;
+    game->contrat->nbtricks = 6 + game->contrat->nom;
     game->contrat->declarant = 0;	//modification pour faire pivoter le jeu   =jouepar
     printf("Dans eval_contrat\n");
     return (4 - jouepar);

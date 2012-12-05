@@ -163,7 +163,7 @@ rettrick_t *cur_explore(int prof, trick_t * pli_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -182,10 +182,10 @@ rettrick_t *cur_explore(int prof, trick_t * pli_cur, int prof_max,
     list_all_coups(positionc, l_item, pli_cur, t_jeu,NULL);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
+    while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
-	nocarte = pli_new->carte[positionc].nocarte;
-	nocouleur = pli_new->carte[positionc].clcarte;
+	nocarte = trick_new->carte[positionc].nocarte;
+	nocouleur = trick_new->carte[positionc].clcarte;
 	if (nocarte == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
@@ -197,11 +197,11 @@ rettrick_t *cur_explore(int prof, trick_t * pli_cur, int prof_max,
 	    exit(1);
 	}
 	pos_index = remove_index(t_jeu, positionc, nocouleur, pos_index);
-	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(trick_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
 
 	//on duplique le jeu
 
-	ret = cur_explore(prof + 1, pli_new, prof_max, t_jeu, alpha, beta,nbcard);
+	ret = cur_explore(prof + 1, trick_new, prof_max, t_jeu, alpha, beta,nbcard);
 	if ((prof != prof_start) && (prof != prof_max - 1)) {
 	    if (positionc % 2 == 1)
 		beta = ret->alpha_or_beta;
@@ -229,7 +229,7 @@ rettrick_t *cur_explore(int prof, trick_t * pli_cur, int prof_max,
 
 
 	/* on efface l'element de la pile */
-	free(pli_new);
+	free(trick_new);
 
 	//coupe alpha/beta
 	if (positionc % 2 == 1 && (best_score <= alpha)
@@ -274,7 +274,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * pli_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -297,10 +297,10 @@ rettrick_t *cur_explore_eval(int prof, trick_t * pli_cur, int prof_max,
 	return (retup);
     }
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
+    while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
-	nocarte = pli_new->carte[positionc].nocarte;
-	nocouleur = pli_new->carte[positionc].clcarte;
+	nocarte = trick_new->carte[positionc].nocarte;
+	nocouleur = trick_new->carte[positionc].clcarte;
 	if (nocarte == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
@@ -312,11 +312,11 @@ rettrick_t *cur_explore_eval(int prof, trick_t * pli_cur, int prof_max,
 	    exit(1);
 	}
 	pos_index = remove_index(t_jeu, positionc, nocouleur, pos_index);
-	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
-        check_invert_lead(pli_new,t_jeu); //If we have no more cards we change the lead if we have a reprise
+	evaluation_trick(trick_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
+        check_invert_lead(trick_new,t_jeu); //If we have no more cards we change the lead if we have a reprise
 
 	ret =
-	    cur_explore_eval(prof + 1, pli_new, prof_max, t_jeu, alpha,
+	    cur_explore_eval(prof + 1, trick_new, prof_max, t_jeu, alpha,
 			     beta,nbcard);
 	if ((prof != prof_start) && (prof != prof_max - 1)) {
 	    if (positionc % 2 == 1)
@@ -345,7 +345,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * pli_cur, int prof_max,
 
 
 	/* on efface l'element de la pile */
-	free(pli_new);
+	free(trick_new);
 
 	//coupe alpha/beta
 	if (positionc % 2 == 1 && (best_score <= alpha)
@@ -395,7 +395,7 @@ void *new_explore(void *arg)
     rettrick_t *ret;
     rettrick_t *rettmp;
     int pos_index;
-    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -433,13 +433,13 @@ void *new_explore(void *arg)
 	list_all_coups_eval(positionc, l_item, pli_cur, thread_jeu->t_jeu);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
+    while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	// On sauvegarde le pli en cours (pliori,plicopie) 
-	//tab_cartes[pli_new->carte[positionc].nocarte][pli_new->carte[positionc].
+	//tab_cartes[trick_new->carte[positionc].nocarte][trick_new->carte[positionc].
 	//                                          clcarte].detenteur;
-	nocarte = pli_new->carte[positionc].nocarte;
-	nocouleur = pli_new->carte[positionc].clcarte;
+	nocarte = trick_new->carte[positionc].nocarte;
+	nocouleur = trick_new->carte[positionc].clcarte;
 	if (nocarte == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
@@ -454,15 +454,15 @@ void *new_explore(void *arg)
 	pos_index =
 	    remove_index(thread_jeu->t_jeu, positionc, nocouleur,
 			 pos_index);
-	evaluation_trick(pli_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	evaluation_trick(trick_new);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
 	if (thread_jeu->t_jeu[0]->couleureval != aucune)
 	    ret =
-		cur_explore_eval(prof + 1, pli_new, prof_max,
+		cur_explore_eval(prof + 1, trick_new, prof_max,
 				 thread_jeu->t_jeu, ALPHA_START,
 				 BETA_START,thread_jeu->nbcard);
 	else
 	    ret =
-		cur_explore(prof + 1, pli_new, prof_max, thread_jeu->t_jeu,
+		cur_explore(prof + 1, trick_new, prof_max, thread_jeu->t_jeu,
 			    ALPHA_START, BETA_START,thread_jeu->nbcard);
 	curscore = ret->score;
 	if (minimax(curscore, best_score, positionc)) {
@@ -484,7 +484,7 @@ void *new_explore(void *arg)
 
 
 	/* on efface l'element de la pile */
-	free(pli_new);
+	free(trick_new);
     }
 
     //vidage(stk);
@@ -512,7 +512,7 @@ first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
     int nbcoups, i, threads_remaining = 1;
     position_t positionc;
     int pos_index;
-    trick_t *pli_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
     int best_score;
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -529,14 +529,14 @@ first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
         printf("first_explore:   nbcoups=%d\n",nbcoups);
         ////////////////////////////////
 	if (nbcoups == 1) {
-	    //pli_new = (trick_t *) pop(stk);
-	    pli_new = (trick_t *) pop_item_head(l_item);
+	    //trick_new = (trick_t *) pop(stk);
+	    trick_new = (trick_t *) pop_item_head(l_item);
 	    best = malloc(sizeof(best_t));
 	    best->score = 1;
 	    best->numero = 1;
 	    best->carte = malloc(sizeof(carte_t));
-	    best->carte->nocarte = pli_new->carte[positionc].nocarte;
-	    best->carte->clcarte = pli_new->carte[positionc].clcarte;
+	    best->carte->nocarte = trick_new->carte[positionc].nocarte;
+	    best->carte->clcarte = trick_new->carte[positionc].clcarte;
 	    add_list_l(l_best, best);
 	    //vidage(stk);
             clean_l_item(l_item);
@@ -550,7 +550,7 @@ first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 		nbcoups);
 
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
-    while ((pli_new = (trick_t *) pop_item_head(l_item)) != NULL) {
+    while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
 	thread_jeu =
 	    realloc(thread_jeu, (sizeof(thread_jeu_t *)) * (nothr + 1));
@@ -558,13 +558,13 @@ first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	dup_game(thread_jeu[nothr], game);
 	thread_jeu[nothr]->carte = malloc(sizeof(carte_t));
 	thread_jeu[nothr]->best_cartepot = malloc(sizeof(carte_t));
-	nocarte = pli_new->carte[positionc].nocarte;
-	nocouleur = pli_new->carte[positionc].clcarte;
+	nocarte = trick_new->carte[positionc].nocarte;
+	nocouleur = trick_new->carte[positionc].clcarte;
 	thread_jeu[nothr]->carte->nocarte =
-	    pli_new->carte[positionc].nocarte;
+	    trick_new->carte[positionc].nocarte;
 	thread_jeu[nothr]->carte->clcarte =
-	    pli_new->carte[positionc].clcarte;
-	thread_jeu[nothr]->pli = pli_new;
+	    trick_new->carte[positionc].clcarte;
+	thread_jeu[nothr]->pli = trick_new;
 	thread_jeu[nothr]->status = 0;
 	thread_jeu[nothr]->prof_max = prof_max;
 	thread_jeu[nothr]->prof = 1;
@@ -577,10 +577,10 @@ first_explore(trick_t * pli_cur, int prof_max, int *nb_best, l_best_t * l_best,
 	    remove_index(thread_jeu[nothr]->t_jeu, positionc, nocouleur,
 			 pos_index);
 	thread_jeu[nothr]->best_cartepot->nocarte =
-	    pli_new->carte[positionc].nocarte;
+	    trick_new->carte[positionc].nocarte;
 	thread_jeu[nothr]->best_cartepot->clcarte =
-	    pli_new->carte[positionc].clcarte;
-	evaluation_trick(thread_jeu[nothr]->pli);	/*on incremente nextpos ou on fixe la prochaine entame et nbpli++ */
+	    trick_new->carte[positionc].clcarte;
+	evaluation_trick(thread_jeu[nothr]->pli);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
 
 
 

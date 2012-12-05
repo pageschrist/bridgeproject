@@ -143,7 +143,7 @@ typedef struct _thread_jeu
 typedef struct _contrat_t
 {
   couleur_t atout;
-  valeur_t nbplis;		/* decrit le nombre de plis a realiser */
+  valeur_t nbtricks;		/* decrit le nombre de plis a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
   int maxc[4];
