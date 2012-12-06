@@ -264,14 +264,14 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     trash_list(ihm_setup);
   }
   // C'est la fin au a deja ihm_setup->nbcard plis 
-  if((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard ) {
+  if((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard ) {
     printf("The end recuperation_jeu\n");
       
    return 0;
   }
   poscour = ihm_setup->pli->nextpos;
   if(ihm_setup->debug)
-    fprintf(stdout,"ihm_setup->pli->nbpli_ligne[1]=%d\nihm_setup->pli->nbpli_ligne[0]=%d\nposcour=%d\n",ihm_setup->pli->nbpli_ligne[1],ihm_setup->pli->nbpli_ligne[0],poscour);
+    fprintf(stdout,"ihm_setup->pli->nbtricks_line[1]=%d\nihm_setup->pli->nbtricks_line[0]=%d\nposcour=%d\n",ihm_setup->pli->nbtricks_line[1],ihm_setup->pli->nbtricks_line[0],poscour);
 
 
   if((ihm_setup->pli->nextpos%2)==(position_t)ihm_setup->ligneia) {
@@ -317,7 +317,7 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     draw_container_ihm(ihm_setup);
     resps=affichage(ihm_setup->pli->nextpos,POSITION); 
       reschaine=malloc(30*sizeof(char));
-      sprintf(reschaine,"NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbpli_ligne[0],ihm_setup->pli->nbpli_ligne[1],resps[0]);
+      sprintf(reschaine,"NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbtricks_line[0],ihm_setup->pli->nbtricks_line[1],resps[0]);
     gtk_label_set_text (GTK_LABEL (ihm_setup->Score),reschaine );
     free(reschaine);
     free(resps);
@@ -344,7 +344,7 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     read_header (ihm_setup,ihm_setup->pli, 'p');
     display_trick(ihm_setup->pli);
     resps=affichage(ihm_setup->pli->nextpos,POSITION); 
-    gtk_label_set_text (GTK_LABEL (ihm_setup->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbpli_ligne[0],ihm_setup->pli->nbpli_ligne[1],resps[0] ));
+    gtk_label_set_text (GTK_LABEL (ihm_setup->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbtricks_line[0],ihm_setup->pli->nbtricks_line[1],resps[0] ));
     gtk_label_set_text (GTK_LABEL (ihm_setup->Label),g_strdup_printf("Contrat Final:%s",ihm_setup->scontrat));
     return(ihm_setup->pli->nextpos%2);
 
@@ -432,7 +432,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
   }
   for( couleur=club;couleur<spade+1;couleur++)
     ihm_setup->tab_couleur[position][couleur]=0;
-  if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
+  if(((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
     if(NULL==ihm_setup->fd) {
       snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_setup->random);
       if(position==sud) 
@@ -459,7 +459,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
         imgcard=load_imgcard(cardname,carte,ihm_setup,position); 
          ihm_setup->players[position]=g_list_prepend(ihm_setup->players[position], (gpointer)imgcard);
-        if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
+        if(((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
           if(ihm_setup->fd) {
             if(refcoul!=rescl[0]){ 
               if(rescl[0] != colorref[j]) {
@@ -496,7 +496,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
     }
     
   }
-  if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&(TRUE==ihm_setup->savegame )&& (position==est) &&ihm_setup->fd) {
+  if(((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard)&&(TRUE==ihm_setup->savegame )&& (position==est) &&ihm_setup->fd) {
     snprintf(writebuf,NBPCOULEURS+2,"\n");
     fwrite(writebuf,1,1,ihm_setup->fd);
   }

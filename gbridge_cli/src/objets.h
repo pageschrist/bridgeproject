@@ -98,7 +98,7 @@ typedef struct _trick_t
   carte_t phcarte;
   carte_t lastcarte;
   int nopli;
-  int nbpli_ligne[eo + 1];
+  int nbtricks_line[eo + 1];
   int noj; //Numero du joueur qui joue
   couleur_t atout;
   position_t leader;

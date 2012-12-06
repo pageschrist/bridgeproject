@@ -98,7 +98,7 @@ void display_trick( trick_t *ppli)
 	printf("Vci  pli.nopli %d\n",ppli->nopli);
   for (j = ns; j < eo + 1; j++)
     {
-      printf("Vci pli.nbpli_ligne[%d] %d\n",j,ppli->nbpli_ligne[j]); 
+      printf("Vci pli.nbtricks_line[%d] %d\n",j,ppli->nbtricks_line[j]); 
     }
 
 }
@@ -327,7 +327,7 @@ void init_trick (trick_t * pli, int maniere)
       pli->noj = 0;
       for (j = ns; j < eo + 1; j++)
 	{
-	  pli->nbpli_ligne[j] = 0;
+	  pli->nbtricks_line[j] = 0;
 	}
     }
 }

@@ -309,7 +309,7 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   if(NULL==ihm_setup->pli  ) 
     return FALSE;
   // C'est la fin on a deja 13 plis 
-  if((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard ) {
+  if((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard ) {
     //if(ihm_setup->read==FALSE  ) 
      // return TRUE;
       printf("The end \n");
