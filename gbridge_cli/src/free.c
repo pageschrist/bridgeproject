@@ -12,19 +12,19 @@
 #include "draw.h"
 #include "callbacks.h"
 
-void trash_list ( ihm_trick_t *ihm_pli) {
+void trash_list ( ihm_trick_t *ihm_setup) {
   GList *ptrwait;
   imgcard_t *data_ptr;
-  for(ptrwait=ihm_pli->waiting;ptrwait;ptrwait=ptrwait->next) {
+  for(ptrwait=ihm_setup->waiting;ptrwait;ptrwait=ptrwait->next) {
     
 
     data_ptr=ptrwait->data;
 
-    ihm_pli->trash=g_list_prepend(ihm_pli->trash, (gpointer)data_ptr);
-    ihm_pli->waiting=g_list_remove(ihm_pli->waiting, data_ptr);
+    ihm_setup->trash=g_list_prepend(ihm_setup->trash, (gpointer)data_ptr);
+    ihm_setup->waiting=g_list_remove(ihm_setup->waiting, data_ptr);
     
   }
-  ihm_pli->waiting=NULL;
+  ihm_setup->waiting=NULL;
 
 
 }

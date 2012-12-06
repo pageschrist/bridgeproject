@@ -76,7 +76,7 @@ ihm_about(GtkWidget *Wdgt, guint value)
   gtk_window_set_position(GTK_WINDOW(Dialogue), GTK_WIN_POS_CENTER);
 
   gtk_container_set_border_width(GTK_CONTAINER(Dialogue), 8);
-  //gtk_window_set_transient_for(GTK_WINDOW(Dialogue), GTK_WINDOW(ihm_pli->Fenetre));
+  //gtk_window_set_transient_for(GTK_WINDOW(Dialogue), GTK_WINDOW(ihm_setup->Fenetre));
 
   Box = gtk_vbox_new(FALSE, 6);
   gtk_container_add(GTK_CONTAINER(Dialogue), Box);
@@ -99,25 +99,25 @@ ihm_about(GtkWidget *Wdgt, guint value)
 
 
 
-void create_ihm (ihm_trick_t *ihm_pli) {
+void create_ihm (ihm_trick_t *ihm_setup) {
 
   char chaine[MAXCHAR];
   couleur_t couleur;
   int contrat;
   button_bid_t **button_bid;
   button_bid_t **button_obid;
-  init_ihm_pli(ihm_pli);
-  ihm_pli->Fenetre = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (ihm_pli->Fenetre), "gbridge_cli");
-  gtk_window_set_position (GTK_WINDOW (ihm_pli->Fenetre), GTK_WIN_POS_CENTER);
-  gtk_window_set_resizable (GTK_WINDOW (ihm_pli->Fenetre), FALSE);
+  init_ihm_setup(ihm_setup);
+  ihm_setup->Fenetre = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (ihm_setup->Fenetre), "gbridge_cli");
+  gtk_window_set_position (GTK_WINDOW (ihm_setup->Fenetre), GTK_WIN_POS_CENTER);
+  gtk_window_set_resizable (GTK_WINDOW (ihm_setup->Fenetre), FALSE);
   HBox_Encheres=g_malloc(sizeof(GtkWidget *)*5);
   button_obid=g_malloc(sizeof(button_bid_t *)*3);
   button_bid=g_malloc(sizeof(button_bid_t *)*NBENCHERES);
 
   Menu_VBox = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (Menu_VBox), 1);
-  gtk_container_add (GTK_CONTAINER (ihm_pli->Fenetre), Menu_VBox);
+  gtk_container_add (GTK_CONTAINER (ihm_setup->Fenetre), Menu_VBox);
 
   Menu=gtk_menu_new();
   Root_menu = gtk_menu_item_new_with_label("Configuration");
@@ -126,34 +126,34 @@ void create_ihm (ihm_trick_t *ihm_pli) {
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (new_dist),
-                               ihm_pli);
+                               ihm_setup);
   Menu_items = gtk_menu_item_new_with_label("Open File");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (open_file),
-                               ihm_pli);
+                               ihm_setup);
   Menu_items = gtk_menu_item_new_with_label("Debug");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (ihm_debug),
-                               ihm_pli);
+                               ihm_setup);
   Menu_items = gtk_menu_item_new_with_label("UnDebug");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (ihm_undebug),
-                               ihm_pli);
+                               ihm_setup);
   Menu_items = gtk_menu_item_new_with_label("SaveGame");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (save_game),
-                               ihm_pli);
+                               ihm_setup);
   Menu_items = gtk_menu_item_new_with_label("Random");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   Menu_items = gtk_menu_item_new_with_label("Quit");
   gtk_menu_append(GTK_MENU (Menu), Menu_items);
   g_signal_connect (G_OBJECT (Menu_items), "activate",
                               G_CALLBACK (quit),
-                              ihm_pli);
+                              ihm_setup);
   gtk_menu_item_set_submenu(GTK_MENU_ITEM (Root_menu), Menu);
 
   
@@ -177,25 +177,25 @@ void create_ihm (ihm_trick_t *ihm_pli) {
   Bouton_board= gtk_button_new ();
   gtk_button_set_relief(GTK_BUTTON(Bouton_board), GTK_RELIEF_NONE);
   gtk_box_pack_start(GTK_BOX(Board_HBox), Bouton_board, FALSE, FALSE, 0);
-  ihm_pli->Drawing_area=gtk_drawing_area_new();
-  gtk_box_pack_start (GTK_BOX (Board_HBox),  ihm_pli->Drawing_area, TRUE, TRUE, 2);
-  gtk_widget_set_size_request( ihm_pli->Drawing_area, LARGEUR, HAUTEUR);
+  ihm_setup->Drawing_area=gtk_drawing_area_new();
+  gtk_box_pack_start (GTK_BOX (Board_HBox),  ihm_setup->Drawing_area, TRUE, TRUE, 2);
+  gtk_widget_set_size_request( ihm_setup->Drawing_area, LARGEUR, HAUTEUR);
 
 
   Comment_VBox = gtk_vbox_new (FALSE, 0);
   gtk_box_pack_start(GTK_BOX(Board_HBox), Comment_VBox, TRUE, FALSE, 0);
-  ihm_pli->Label = gtk_label_new("");
-  gtk_label_set_justify(GTK_LABEL(ihm_pli->Label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_end(GTK_BOX(Comment_VBox), ihm_pli->Label, FALSE, FALSE, 0);
+  ihm_setup->Label = gtk_label_new("");
+  gtk_label_set_justify(GTK_LABEL(ihm_setup->Label), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_end(GTK_BOX(Comment_VBox), ihm_setup->Label, FALSE, FALSE, 0);
 
-  ihm_pli->Score = gtk_label_new("");
-  gtk_label_set_justify(GTK_LABEL(ihm_pli->Score), GTK_JUSTIFY_CENTER);
-  gtk_box_pack_start(GTK_BOX(Comment_VBox), ihm_pli->Score, FALSE, FALSE, 0);
+  ihm_setup->Score = gtk_label_new("");
+  gtk_label_set_justify(GTK_LABEL(ihm_setup->Score), GTK_JUSTIFY_CENTER);
+  gtk_box_pack_start(GTK_BOX(Comment_VBox), ihm_setup->Score, FALSE, FALSE, 0);
   
   entry_level = gtk_entry_new ();
   g_signal_connect (G_OBJECT (entry_level), "activate",
                       G_CALLBACK (enter_callback_level),
-                      (gpointer) ihm_pli);
+                      (gpointer) ihm_setup);
   gtk_entry_set_max_length (GTK_ENTRY (entry_level), 5);
   snprintf(chaine,MAXCHAR,"%d",DEFAULTLEVEL);
   gtk_entry_set_text (GTK_ENTRY (entry_level), chaine);
@@ -217,53 +217,53 @@ void create_ihm (ihm_trick_t *ihm_pli) {
   BNew_Dist=gtk_button_new();
   gtk_box_pack_start (GTK_BOX (HBox_Other), BNew_Dist, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER(BNew_Dist),Label_text);
-  g_signal_connect( G_OBJECT(BNew_Dist), "clicked", G_CALLBACK(new_dist), ihm_pli);
+  g_signal_connect( G_OBJECT(BNew_Dist), "clicked", G_CALLBACK(new_dist), ihm_setup);
   gtk_box_pack_start (GTK_BOX (Comment_VBox), HBox_Other, FALSE, FALSE, 0);
   for(couleur=club;couleur<aucune+1;couleur++) {
     HBox_Encheres[couleur] = gtk_hbox_new (TRUE, 1);
     gtk_box_pack_start(GTK_BOX(Comment_VBox),HBox_Encheres[couleur],FALSE, TRUE, 2);
     for(contrat=0;contrat<7;contrat++){
       button_bid[couleur*7+contrat]=g_malloc(sizeof(button_bid_t));
-      button_bid[couleur*7+contrat]->ihm_pli=ihm_pli;
-      button_bid[couleur*7+contrat]->ihm_bid=ihm_pli->Allbid[couleur*7+contrat];
-      gtk_box_pack_start(GTK_BOX(HBox_Encheres[couleur]),ihm_pli->Allbid[couleur*7+contrat]->bwidget,FALSE,TRUE,2);
-      gtk_container_add( GTK_CONTAINER(ihm_pli->Allbid[couleur*7+contrat]->bwidget), ihm_pli->Allbid[couleur*7+contrat]->widget);
-      g_signal_connect( G_OBJECT(ihm_pli->Allbid[couleur*7+contrat]->bwidget), "clicked", G_CALLBACK(click_bid), button_bid[couleur*7+contrat]);
+      button_bid[couleur*7+contrat]->ihm_setup=ihm_setup;
+      button_bid[couleur*7+contrat]->ihm_bid=ihm_setup->Allbid[couleur*7+contrat];
+      gtk_box_pack_start(GTK_BOX(HBox_Encheres[couleur]),ihm_setup->Allbid[couleur*7+contrat]->bwidget,FALSE,TRUE,2);
+      gtk_container_add( GTK_CONTAINER(ihm_setup->Allbid[couleur*7+contrat]->bwidget), ihm_setup->Allbid[couleur*7+contrat]->widget);
+      g_signal_connect( G_OBJECT(ihm_setup->Allbid[couleur*7+contrat]->bwidget), "clicked", G_CALLBACK(click_bid), button_bid[couleur*7+contrat]);
     }
  } 
  HBox_BidO=gtk_hbox_new(TRUE,1);
  gtk_box_pack_start(GTK_BOX(Comment_VBox),HBox_BidO,FALSE, TRUE, 2);
  for (contrat=0;contrat<3;contrat++) {
    button_obid[contrat]=g_malloc(sizeof(button_bid_t));
-   button_obid[contrat]->ihm_pli=ihm_pli;
-   button_obid[contrat]->ihm_bid=ihm_pli->Othbid[contrat];
-   gtk_box_pack_start(GTK_BOX(HBox_BidO),ihm_pli->Othbid[contrat]->bwidget,FALSE,TRUE,2);
-   gtk_container_add( GTK_CONTAINER(ihm_pli->Othbid[contrat]->bwidget), ihm_pli->Othbid[contrat]->widget);
-   g_signal_connect( G_OBJECT(ihm_pli->Othbid[contrat]->bwidget), "clicked", G_CALLBACK(click_bid), button_obid[contrat]);
+   button_obid[contrat]->ihm_setup=ihm_setup;
+   button_obid[contrat]->ihm_bid=ihm_setup->Othbid[contrat];
+   gtk_box_pack_start(GTK_BOX(HBox_BidO),ihm_setup->Othbid[contrat]->bwidget,FALSE,TRUE,2);
+   gtk_container_add( GTK_CONTAINER(ihm_setup->Othbid[contrat]->bwidget), ihm_setup->Othbid[contrat]->widget);
+   g_signal_connect( G_OBJECT(ihm_setup->Othbid[contrat]->bwidget), "clicked", G_CALLBACK(click_bid), button_obid[contrat]);
 
  }
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"realize",G_CALLBACK(mise_en_place),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"expose_event",G_CALLBACK(rafraichissement),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(Comment_VBox),"expose_event",G_CALLBACK(expose_comment),ihm_pli);
-  gtk_widget_add_events(ihm_pli->Drawing_area, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_MOTION_MASK );
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"button_press_event",G_CALLBACK(button_press_event),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"button_release_event",G_CALLBACK(button_release_event),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"motion_notify_event",G_CALLBACK(motion_notify_event),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Drawing_area),"key_press_event",G_CALLBACK(key_down),ihm_pli);
-  id_sig_connect = g_signal_connect (G_OBJECT(ihm_pli->Fenetre),"destroy",G_CALLBACK(quit),ihm_pli);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"realize",G_CALLBACK(mise_en_place),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"expose_event",G_CALLBACK(rafraichissement),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(Comment_VBox),"expose_event",G_CALLBACK(expose_comment),ihm_setup);
+  gtk_widget_add_events(ihm_setup->Drawing_area, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_MOTION_MASK );
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"button_press_event",G_CALLBACK(button_press_event),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"button_release_event",G_CALLBACK(button_release_event),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"motion_notify_event",G_CALLBACK(motion_notify_event),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Drawing_area),"key_press_event",G_CALLBACK(key_down),ihm_setup);
+  id_sig_connect = g_signal_connect (G_OBJECT(ihm_setup->Fenetre),"destroy",G_CALLBACK(quit),ihm_setup);
   id_sig_connect = g_signal_connect (G_OBJECT (entry_random), "activate",
                       G_CALLBACK (enter_callback_random),
-                      ihm_pli);
+                      ihm_setup);
 
 }
 
-void ihm_debug(GtkWidget *E,ihm_trick_t  *ihm_pli) {
+void ihm_debug(GtkWidget *E,ihm_trick_t  *ihm_setup) {
   E=E;
-  ihm_pli->debug=TRUE;
+  ihm_setup->debug=TRUE;
 }
-void ihm_undebug(GtkWidget *E,ihm_trick_t  *ihm_pli) {
+void ihm_undebug(GtkWidget *E,ihm_trick_t  *ihm_setup) {
   E=E;
-  ihm_pli->debug=FALSE;
+  ihm_setup->debug=FALSE;
 }
 
 

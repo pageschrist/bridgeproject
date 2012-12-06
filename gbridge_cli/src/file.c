@@ -48,7 +48,7 @@ valeur_t convert_char_card(char c ) {
     }
 }
 
-gboolean check_order(ihm_trick_t *ihm_pli, char *buffer) {
+gboolean check_order(ihm_trick_t *ihm_setup, char *buffer) {
   size_t i;
   int n,ref;
   if(strlen(buffer) <=0 ) {
@@ -103,7 +103,7 @@ gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
   return(TRUE);
 }
 
-gboolean check_parse (ihm_trick_t *ihm_pli ,char *transbuf) {
+gboolean check_parse (ihm_trick_t *ihm_setup ,char *transbuf) {
   position_t position;
   couleur_t couleur=club;
   int tabref[est+1][cA+1];
@@ -127,7 +127,7 @@ gboolean check_parse (ihm_trick_t *ihm_pli ,char *transbuf) {
       fprintf(stderr,"Error in file parsing, No \\n at the end of a line probably\n");
       return FALSE;
     }
-        if(ihm_pli->debug|TRUE)
+        if(ihm_setup->debug|TRUE)
       fprintf(stdout,"Load of pos=%c\n",pos[position]);
 
     for (couleur = club; couleur < spade + 1; couleur++) {
@@ -142,13 +142,13 @@ gboolean check_parse (ihm_trick_t *ihm_pli ,char *transbuf) {
         if(!check_value(transbuf,couleur,tabref)){
           return FALSE;
         }
-        if(!check_order(ihm_pli,transbuf)){
+        if(!check_order(ihm_setup,transbuf)){
           return FALSE;
         }
         
         
 
-        if(ihm_pli->debug)
+        if(ihm_setup->debug)
           fprintf(stdout,"Load of col=%c\n",coul[couleur]);
         transbuf=buf+1;
       }

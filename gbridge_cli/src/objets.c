@@ -79,7 +79,7 @@ void affiche_carte (carte_t *carte)
   printf("La couleur de la carte est: %d\n",carte->clcarte);
   printf("La valeur de la carte est: %d\n",carte->nocarte);
 }
-void affiche_pli( trick_t *ppli)
+void display_trick( trick_t *ppli)
 {
 	position_t i;
         char *rescl,*resct;
@@ -102,179 +102,179 @@ void affiche_pli( trick_t *ppli)
     }
 
 }
-void free_ihm_pli( ihm_trick_t *ihm_pli) {
+void free_ihm_setup( ihm_trick_t *ihm_setup) {
   position_t position; 
-  free(ihm_pli->pli);
-  ihm_pli->pli=NULL;
-  free(ihm_pli->contrat);
-  ihm_pli->contrat=NULL;
-  ihm_pli->scontrat=NULL;
-  g_list_free(ihm_pli->waiting);
-  ihm_pli->waiting=NULL;
-  //g_list_free(ihm_pli->dropping);
-  //ihm_pli->dropping=NULL;
-  ihm_pli->movecard=NULL;
+  free(ihm_setup->pli);
+  ihm_setup->pli=NULL;
+  free(ihm_setup->contrat);
+  ihm_setup->contrat=NULL;
+  ihm_setup->scontrat=NULL;
+  g_list_free(ihm_setup->waiting);
+  ihm_setup->waiting=NULL;
+  //g_list_free(ihm_setup->dropping);
+  //ihm_setup->dropping=NULL;
+  ihm_setup->movecard=NULL;
   for (position=sud;position<est+1;position++ ) {
-    free_list(&ihm_pli->players[position]);
-    ihm_pli->players[position]=NULL;
+    free_list(&ihm_setup->players[position]);
+    ihm_setup->players[position]=NULL;
   }
-  free_list(&ihm_pli->trash);
-  ihm_pli->trash=NULL;
-  ihm_pli->ligneia=1;
-  ihm_pli->blinkid=-1;
-  ihm_pli->state=BID;
-  ihm_pli->status='n';
-  ihm_pli->read=FALSE;
-  ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
+  free_list(&ihm_setup->trash);
+  ihm_setup->trash=NULL;
+  ihm_setup->ligneia=1;
+  ihm_setup->blinkid=-1;
+  ihm_setup->state=BID;
+  ihm_setup->status='n';
+  ihm_setup->read=FALSE;
+  ihm_setup->path=g_hash_table_lookup (configHash, "dir_imgs");
 }
-void reset_ihm_pli( ihm_trick_t *ihm_pli) {
+void reset_ihm_setup( ihm_trick_t *ihm_setup) {
 #ifdef DEBUG
-  ihm_pli->debug=TRUE;
+  ihm_setup->debug=TRUE;
 #else
-  ihm_pli->debug=FALSE;
+  ihm_setup->debug=FALSE;
 #endif
   couleur_t couleur; 
   position_t position; 
-  ihm_pli->pli=malloc(sizeof(trick_t));
-  ihm_pli->contrat=malloc(sizeof(contrat_t));
+  ihm_setup->pli=malloc(sizeof(trick_t));
+  ihm_setup->contrat=malloc(sizeof(contrat_t));
   for (position=sud;position<est+1;position++ ) {
     for (couleur=club;couleur<spade+1;couleur++) {
-      ihm_pli->tab_couleur[position][couleur]=0;
+      ihm_setup->tab_couleur[position][couleur]=0;
     }
   }
-  if(ihm_pli->filename) 
-  ihm_pli->filename[0]='\0';
+  if(ihm_setup->filename) 
+  ihm_setup->filename[0]='\0';
    
-  ihm_pli->read=FALSE;
-  memset(ihm_pli->pli,0,sizeof(trick_t));
-  memset(ihm_pli->contrat,0,sizeof(contrat_t));
-  //init_bid(ihm_pli);
+  ihm_setup->read=FALSE;
+  memset(ihm_setup->pli,0,sizeof(trick_t));
+  memset(ihm_setup->contrat,0,sizeof(contrat_t));
+  //init_bid(ihm_setup);
 }
 
-void init_ihm_pli( ihm_trick_t *ihm_pli) {
+void init_ihm_setup( ihm_trick_t *ihm_setup) {
   couleur_t couleur; 
   position_t position; 
 
 #ifdef DEBUG
-  ihm_pli->debug=TRUE;
+  ihm_setup->debug=TRUE;
 #else
-  ihm_pli->debug=FALSE;
+  ihm_setup->debug=FALSE;
 #endif
-  ihm_pli->status='n';
-  ihm_pli->level=DEFAULTLEVEL;
-  ihm_pli->random=DEFAULTRANDOM;
-  ihm_pli->pli=malloc(sizeof(trick_t));
-  memset(ihm_pli->pli,0,sizeof(trick_t));
-  ihm_pli->contrat=malloc(sizeof(contrat_t));
-  memset(ihm_pli->contrat,0,sizeof(contrat_t));
-  ihm_pli->transfert=malloc(sizeof(transfert_t));
-  memset(ihm_pli->transfert,0,sizeof(transfert_t));
-  ihm_pli->socketid=tcpclient();
+  ihm_setup->status='n';
+  ihm_setup->level=DEFAULTLEVEL;
+  ihm_setup->random=DEFAULTRANDOM;
+  ihm_setup->pli=malloc(sizeof(trick_t));
+  memset(ihm_setup->pli,0,sizeof(trick_t));
+  ihm_setup->contrat=malloc(sizeof(contrat_t));
+  memset(ihm_setup->contrat,0,sizeof(contrat_t));
+  ihm_setup->transfert=malloc(sizeof(transfert_t));
+  memset(ihm_setup->transfert,0,sizeof(transfert_t));
+  ihm_setup->socketid=tcpclient();
   for (position=sud;position<est+1;position++ ) {
     for (couleur=club;couleur<spade+1;couleur++) {
-      ihm_pli->tab_couleur[position][couleur]=0;
+      ihm_setup->tab_couleur[position][couleur]=0;
     }
   }
-  ihm_pli->allcardslist=NULL;
-  ihm_pli->scontrat=NULL;
-  ihm_pli->waiting=NULL;
-  ihm_pli->dropping=NULL;
-  ihm_pli->movecard=NULL;
-  ihm_pli->trash=NULL;
-  ihm_pli->players = (GList **) g_malloc( sizeof(GList*) *NBJOUEURS );
+  ihm_setup->allcardslist=NULL;
+  ihm_setup->scontrat=NULL;
+  ihm_setup->waiting=NULL;
+  ihm_setup->dropping=NULL;
+  ihm_setup->movecard=NULL;
+  ihm_setup->trash=NULL;
+  ihm_setup->players = (GList **) g_malloc( sizeof(GList*) *NBJOUEURS );
   for (position=sud;position<est+1;position++ ) {
-    ihm_pli->players[position]=NULL;
+    ihm_setup->players[position]=NULL;
 
   }
-  ihm_pli->target=NULL; 
-  ihm_pli->back=NULL;
-  ihm_pli->copy=NULL;
-  ihm_pli->cardmask=NULL;
-  ihm_pli->Drawing_area=NULL;
-  ihm_pli->path=NULL;
-  ihm_pli->transfert->level=DEFAULTLEVEL;
-  ihm_pli->transfert->random=DEFAULTRANDOM;
-  ihm_pli->output=NULL;
-  ihm_pli->ligneia=1;
-  ihm_pli->blinkid=0;
-  ihm_pli->state=BID;
-  ihm_pli->read=FALSE;
-  ihm_pli->savegame=FALSE;
-  ihm_pli->fd=NULL;
-  ihm_pli->path=g_hash_table_lookup (configHash, "dir_imgs");
-  ihm_pli->filename[0]='\0';
-  init_bid(ihm_pli);
+  ihm_setup->target=NULL; 
+  ihm_setup->back=NULL;
+  ihm_setup->copy=NULL;
+  ihm_setup->cardmask=NULL;
+  ihm_setup->Drawing_area=NULL;
+  ihm_setup->path=NULL;
+  ihm_setup->transfert->level=DEFAULTLEVEL;
+  ihm_setup->transfert->random=DEFAULTRANDOM;
+  ihm_setup->output=NULL;
+  ihm_setup->ligneia=1;
+  ihm_setup->blinkid=0;
+  ihm_setup->state=BID;
+  ihm_setup->read=FALSE;
+  ihm_setup->savegame=FALSE;
+  ihm_setup->fd=NULL;
+  ihm_setup->path=g_hash_table_lookup (configHash, "dir_imgs");
+  ihm_setup->filename[0]='\0';
+  init_bid(ihm_setup);
 }
 
 
 
-void init_bid(ihm_trick_t *ihm_pli) {
+void init_bid(ihm_trick_t *ihm_setup) {
   int i,k;
   char *rescl,*resct;
-  gchar *enchname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*sizeof(gchar));
-  ihm_pli->Allbid=g_malloc(sizeof(ihm_bid_t*)*NBENCHERES);
-  ihm_pli->Othbid=g_malloc(sizeof(ihm_bid_t*)*4);
-  if(ihm_pli->Allbid) {
+  gchar *enchname = (gchar*)g_malloc((strlen(ihm_setup->path)+20)*sizeof(gchar));
+  ihm_setup->Allbid=g_malloc(sizeof(ihm_bid_t*)*NBENCHERES);
+  ihm_setup->Othbid=g_malloc(sizeof(ihm_bid_t*)*4);
+  if(ihm_setup->Allbid) {
     for(i=club;i<aucune+1;i++) {
       for(k=0;k<7;k++) {
-        ihm_pli->Allbid[i*7+k]=g_malloc(sizeof(ihm_bid_t));
-        ihm_pli->Allbid[i*7+k]->bid=g_malloc(sizeof(bid_t));
+        ihm_setup->Allbid[i*7+k]=g_malloc(sizeof(ihm_bid_t));
+        ihm_setup->Allbid[i*7+k]->bid=g_malloc(sizeof(bid_t));
         
-        ihm_pli->Allbid[i*7+k]->bid->nombre=k+1;
-        ihm_pli->Allbid[i*7+k]->bid->couleur=i;
+        ihm_setup->Allbid[i*7+k]->bid->nombre=k+1;
+        ihm_setup->Allbid[i*7+k]->bid->couleur=i;
         rescl=affichage((int)i,COULEUR);
         resct=affichage((int)k+1,CONTRAT);
-        sprintf(enchname, "%s/ench%s%s.xpm", ihm_pli->path, resct,rescl);
+        sprintf(enchname, "%s/ench%s%s.xpm", ihm_setup->path, resct,rescl);
         free(rescl);
         free(resct);
-        ihm_pli->Allbid[i*7+k]->bid->position=aucun;
-        ihm_pli->Allbid[i*7+k]->bid->passe=FALSE;
-        ihm_pli->Allbid[i*7+k]->bid->contre=FALSE;
-        ihm_pli->Allbid[i*7+k]->bid->surcontre=FALSE;
-        ihm_pli->Allbid[i*7+k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
-        ihm_pli->Allbid[i*7+k]->widget=gtk_image_new();
-        ihm_pli->Allbid[i*7+k]->bwidget=gtk_button_new();
+        ihm_setup->Allbid[i*7+k]->bid->position=aucun;
+        ihm_setup->Allbid[i*7+k]->bid->passe=FALSE;
+        ihm_setup->Allbid[i*7+k]->bid->contre=FALSE;
+        ihm_setup->Allbid[i*7+k]->bid->surcontre=FALSE;
+        ihm_setup->Allbid[i*7+k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
+        ihm_setup->Allbid[i*7+k]->widget=gtk_image_new();
+        ihm_setup->Allbid[i*7+k]->bwidget=gtk_button_new();
          
 
       }
     }
   }
-  if(ihm_pli->Othbid) {
+  if(ihm_setup->Othbid) {
     for (k=0;k<4;k++) {
-      ihm_pli->Othbid[k]=g_malloc(sizeof(ihm_bid_t));
-      ihm_pli->Othbid[k]->bid=g_malloc(sizeof(bid_t));
+      ihm_setup->Othbid[k]=g_malloc(sizeof(ihm_bid_t));
+      ihm_setup->Othbid[k]->bid=g_malloc(sizeof(bid_t));
       
-      ihm_pli->Othbid[k]->bid->nombre=0;
-      ihm_pli->Othbid[k]->bid->couleur=aucune;
+      ihm_setup->Othbid[k]->bid->nombre=0;
+      ihm_setup->Othbid[k]->bid->couleur=aucune;
       if(k==0) {
-        sprintf(enchname, "%s/enchPP.xpm", ihm_pli->path);
-        ihm_pli->Othbid[k]->bid->passe=TRUE;
-        ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
+        sprintf(enchname, "%s/enchPP.xpm", ihm_setup->path);
+        ihm_setup->Othbid[k]->bid->passe=TRUE;
+        ihm_setup->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
       }
       if(k==1){
-        sprintf(enchname, "%s/enchXP.xpm", ihm_pli->path);
-        ihm_pli->Othbid[k]->bid->passe=FALSE;
-        ihm_pli->Othbid[k]->bid->contre=TRUE;
-        ihm_pli->Othbid[k]->bid->surcontre=FALSE;
-        ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
+        sprintf(enchname, "%s/enchXP.xpm", ihm_setup->path);
+        ihm_setup->Othbid[k]->bid->passe=FALSE;
+        ihm_setup->Othbid[k]->bid->contre=TRUE;
+        ihm_setup->Othbid[k]->bid->surcontre=FALSE;
+        ihm_setup->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
       }
       if(k==2) {
-        sprintf(enchname, "%s/enchXX.xpm", ihm_pli->path);
-        ihm_pli->Othbid[k]->bid->passe=FALSE;
-        ihm_pli->Othbid[k]->bid->contre=FALSE;
-        ihm_pli->Othbid[k]->bid->surcontre=TRUE;
-        ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
+        sprintf(enchname, "%s/enchXX.xpm", ihm_setup->path);
+        ihm_setup->Othbid[k]->bid->passe=FALSE;
+        ihm_setup->Othbid[k]->bid->contre=FALSE;
+        ihm_setup->Othbid[k]->bid->surcontre=TRUE;
+        ihm_setup->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
 
       }
       if(k==3) {
-        sprintf(enchname, "%s/enchND.xpm", ihm_pli->path);
-        ihm_pli->Othbid[k]->bid->contre=FALSE;
-        ihm_pli->Othbid[k]->bid->surcontre=FALSE;
-        ihm_pli->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
+        sprintf(enchname, "%s/enchND.xpm", ihm_setup->path);
+        ihm_setup->Othbid[k]->bid->contre=FALSE;
+        ihm_setup->Othbid[k]->bid->surcontre=FALSE;
+        ihm_setup->Othbid[k]->wimage=gdk_pixbuf_new_from_file(enchname, NULL);
       }
-      ihm_pli->Othbid[k]->bid->position=aucun;
-      ihm_pli->Othbid[k]->widget=gtk_image_new();
-      ihm_pli->Othbid[k]->bwidget=gtk_button_new();
+      ihm_setup->Othbid[k]->bid->position=aucun;
+      ihm_setup->Othbid[k]->widget=gtk_image_new();
+      ihm_setup->Othbid[k]->bwidget=gtk_button_new();
     } 
   
   }

@@ -234,23 +234,22 @@ typedef struct _tablist
 
 typedef struct _button_bid_t
 {
-  ihm_trick_t *ihm_pli;
+  ihm_trick_t *ihm_setup;
   ihm_bid_t *ihm_bid;
 } button_bid_t;
 
 void bouge_carte(position_t position,carte_t *carte,int maxl);
 void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int maxl) ;
-void affiche_pli(trick_t *pli);
+void display_trick(trick_t *pli);
 char *affichage (int valeur,int type);
 
 char * contrat_to_char ( couleur_t atout); 
 char *affichage (int valeur, int type);
 void affiche_carte (carte_t *carte);
-void copy_pli (trick_t *ppliori, trick_t *pplicopie);
-void affiche_pli( trick_t *ppli);
+void display_trick( trick_t *ppli);
 void init_trick (trick_t * pli, int maniere);
-void free_ihm_pli( ihm_trick_t *ihm_pli) ;
-void reset_ihm_pli (ihm_trick_t *ihm_pli);
-void init_ihm_pli (ihm_trick_t *ihm_pli);
-void init_bid (ihm_trick_t *ihm_pli);
+void free_ihm_setup( ihm_trick_t *ihm_setup) ;
+void reset_ihm_setup (ihm_trick_t *ihm_setup);
+void init_ihm_setup (ihm_trick_t *ihm_setup);
+void init_bid (ihm_trick_t *ihm_setup);
 char *display_str(char *str ); 

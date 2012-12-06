@@ -32,24 +32,24 @@
  * stdout.
  */
 
-void alloc_pixmap(ihm_trick_t *ihm_pli)
+void alloc_pixmap(ihm_trick_t *ihm_setup)
 {
-	if(ihm_pli->target != NULL)
+	if(ihm_setup->target != NULL)
 	{
-		g_object_unref(ihm_pli->target);
-		ihm_pli->target = NULL;
+		g_object_unref(ihm_setup->target);
+		ihm_setup->target = NULL;
 	}
 	
-	ihm_pli->target = gdk_pixmap_new( 
-		ihm_pli->Drawing_area->window, 
-		ihm_pli->Drawing_area->allocation.width, 
-		ihm_pli->Drawing_area->allocation.height, 
+	ihm_setup->target = gdk_pixmap_new( 
+		ihm_setup->Drawing_area->window, 
+		ihm_setup->Drawing_area->allocation.width, 
+		ihm_setup->Drawing_area->allocation.height, 
 		-1) ;
 	
-	if(ihm_pli->target == NULL)
+	if(ihm_setup->target == NULL)
 	{
-		if(ihm_pli->output != NULL)
-			fprintf(ihm_pli->output, 
+		if(ihm_setup->output != NULL)
+			fprintf(ihm_setup->output, 
 				_("Unable to allocated target pixmap\n") );
 	}
 }
@@ -81,7 +81,7 @@ void alloc_pixmap(ihm_trick_t *ihm_pli)
  * NULL in case of an error.
  */
 
-rectangle_t * alloc_targetzone(ihm_trick_t *ihm_pli)
+rectangle_t * alloc_targetzone(ihm_trick_t *ihm_setup)
 {
 	rectangle_t *zone = (rectangle_t *) g_malloc(sizeof(rectangle_t) );
 	
@@ -93,8 +93,8 @@ rectangle_t * alloc_targetzone(ihm_trick_t *ihm_pli)
 		zone->dim.w = 0;
 		zone->dim.h = 0;
 		
-		ihm_pli->dropping = g_list_prepend(
-			ihm_pli->dropping, (gpointer)zone);
+		ihm_setup->dropping = g_list_prepend(
+			ihm_setup->dropping, (gpointer)zone);
 	}
 	
 	return( zone );
@@ -139,11 +139,11 @@ rectangle_t * alloc_targetzone(ihm_trick_t *ihm_pli)
  * 
  * 
  */
-void alloc_ihm(ihm_trick_t *ihm_pli)
+void alloc_ihm(ihm_trick_t *ihm_setup)
 {
 	
-	alloc_pixmap(ihm_pli);
-	alloc_targetzone(ihm_pli);
+	alloc_pixmap(ihm_setup);
+	alloc_targetzone(ihm_setup);
 
 }
 

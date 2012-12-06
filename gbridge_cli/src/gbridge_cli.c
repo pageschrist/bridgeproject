@@ -32,10 +32,10 @@ int main (int argc, char *argv[])
 
   GOptionContext* context;
   GError *error = NULL;
-  ihm_trick_t *ihm_pli;
+  ihm_trick_t *ihm_setup;
   mtrace();
-  ihm_pli=malloc(sizeof(ihm_trick_t));
-  memset(ihm_pli,0,sizeof(ihm_trick_t));
+  ihm_setup=malloc(sizeof(ihm_trick_t));
+  memset(ihm_setup,0,sizeof(ihm_trick_t));
   context = g_option_context_new ( _("Gbridge GTK game") );
   if(context) {
     //g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
@@ -47,11 +47,11 @@ int main (int argc, char *argv[])
     create_config();
     rempli_config();
     verifie_config();
-    create_ihm(ihm_pli);        
+    create_ihm(ihm_setup);        
     
   //gtk_init (&argc, &argv);
-    if (ihm_pli->Fenetre != NULL ) { 
-      gtk_widget_show_all(ihm_pli->Fenetre);
+    if (ihm_setup->Fenetre != NULL ) { 
+      gtk_widget_show_all(ihm_setup->Fenetre);
       gtk_main ();
     }
   }

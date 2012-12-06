@@ -52,55 +52,55 @@ void game_middle_offset_dynamic(position_t position, int *midx, int *midy,
 
 }
 
-void position_middle( ihm_trick_t *ihm_pli,imgcard_t *card,position_t position) {
+void position_middle( ihm_trick_t *ihm_setup,imgcard_t *card,position_t position) {
   int midx,midy;
   if (card==NULL) {
    printf ("Erreur in position_middle\n");
    exit(1);
   }
-  midx = (ihm_pli->Drawing_area->allocation.width - card->dim.w)/2;
-  midy = (ihm_pli->Drawing_area->allocation.height - card->dim.h)/2;
+  midx = (ihm_setup->Drawing_area->allocation.width - card->dim.w)/2;
+  midy = (ihm_setup->Drawing_area->allocation.height - card->dim.h)/2;
   
   game_middle_offset_dynamic(position, &midx, &midy,
-                ihm_pli->Drawing_area->allocation.width,
-                ihm_pli->Drawing_area->allocation.height,
+                ihm_setup->Drawing_area->allocation.width,
+                ihm_setup->Drawing_area->allocation.height,
                 card->dim.w, card->dim.h);
 
         if(card->dim.x != midx || card->dim.y != midy)
         {
-                //if(ihm_pli->animation)
+                //if(ihm_setup->animation)
                  //       position_move_card(card, midx, midy, prog_data);
 
 
                 card->dim.x = midx;
                 card->dim.y = midy;
-                draw_container_ihm(ihm_pli);
+                draw_container_ihm(ihm_setup);
         }
  
 
 }
-void position_targetzone(ihm_trick_t *ihm_pli)
+void position_targetzone(ihm_trick_t *ihm_setup)
 {
         
-        if(ihm_pli->dropping != NULL)
+        if(ihm_setup->dropping != NULL)
         {
                 int w, h;
-                GList *lst = ihm_pli->dropping;
+                GList *lst = ihm_setup->dropping;
 
                 rectangle_t *zone;
 
-                if(ihm_pli->back)
+                if(ihm_setup->back)
                 {
 
-                        gdk_drawable_get_size(ihm_pli->back,
+                        gdk_drawable_get_size(ihm_setup->back,
                                 &w, &h);
 
                         if(lst)
                         {
                                 zone = (rectangle_t *)lst->data;
 
-                                zone->dim.x = ihm_pli->Drawing_area->allocation.width/2;
-                                zone->dim.y = ihm_pli->Drawing_area->allocation.height/2;
+                                zone->dim.x = ihm_setup->Drawing_area->allocation.width/2;
+                                zone->dim.y = ihm_setup->Drawing_area->allocation.height/2;
 
                                 zone->dim.x -= w;
                                 zone->dim.y -= (2*h)/3;
@@ -116,34 +116,34 @@ void position_targetzone(ihm_trick_t *ihm_pli)
 
 
 
-void destroy_ihm_pli (ihm_trick_t *ihm_pli) {
+void destroy_ihm_setup (ihm_trick_t *ihm_setup) {
  position_t position;
- free( ihm_pli->contrat);
+ free( ihm_setup->contrat);
  for (position=sud;position>est+1;position++ ) 
-   g_free (ihm_pli->players[position]);
- g_free(ihm_pli->players);
- free(ihm_pli->pli);
+   g_free (ihm_setup->players[position]);
+ g_free(ihm_setup->players);
+ free(ihm_setup->pli);
 }
 
-void init_game(ihm_trick_t *ihm_pli) {
+void init_game(ihm_trick_t *ihm_setup) {
    
   int contrat; 
   couleur_t couleur;
-  free_ihm_pli(ihm_pli);
-  reset_ihm_pli(ihm_pli);
-  write_data (ihm_pli,NULL, 'n');
+  free_ihm_setup(ihm_setup);
+  reset_ihm_setup(ihm_setup);
+  write_data (ihm_setup,NULL, 'n');
 
-  recuperation_jeu(ihm_pli,0);
-  draw_container_ihm(ihm_pli);
+  recuperation_jeu(ihm_setup,0);
+  draw_container_ihm(ihm_setup);
   for(contrat=0;contrat<7;contrat++){
     for(couleur=club;couleur<aucune+1;couleur++)
-                gtk_widget_set_sensitive(ihm_pli->Allbid[couleur*7+contrat]->bwidget, TRUE);
+                gtk_widget_set_sensitive(ihm_setup->Allbid[couleur*7+contrat]->bwidget, TRUE);
   }
 
 
 
   
-  ihm_pli->pli->nextpos=ouest;
+  ihm_setup->pli->nextpos=ouest;
 
 }
 
@@ -249,104 +249,104 @@ void position_list(GList *ptr, int x, int y, enum eposition ep, float coef)
 }
 
 
-int game_turn (ihm_trick_t *ihm_pli,imgcard_t *imgcard) {
+int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
 
   position_t poscour;
   char *cardname,*rescl,*resvl,*resps;
-  GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
+  GtkStateType state = GTK_WIDGET_STATE(ihm_setup->Drawing_area);
   char *reschaine;
   GdkGC *gc;
   
   printf("Debut game_turn\n");
     //Nettoyage,  à changer 
-  if(ihm_pli->pli->noj==0) {
+  if(ihm_setup->pli->noj==0) {
     printf("Nettoyage\n");
-    trash_list(ihm_pli);
+    trash_list(ihm_setup);
   }
-  // C'est la fin au a deja ihm_pli->nbcard plis 
-  if((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard ) {
+  // C'est la fin au a deja ihm_setup->nbcard plis 
+  if((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard ) {
     printf("The end recuperation_jeu\n");
       
    return 0;
   }
-  poscour = ihm_pli->pli->nextpos;
-  if(ihm_pli->debug)
-    fprintf(stdout,"ihm_pli->pli->nbpli_ligne[1]=%d\nihm_pli->pli->nbpli_ligne[0]=%d\nposcour=%d\n",ihm_pli->pli->nbpli_ligne[1],ihm_pli->pli->nbpli_ligne[0],poscour);
+  poscour = ihm_setup->pli->nextpos;
+  if(ihm_setup->debug)
+    fprintf(stdout,"ihm_setup->pli->nbpli_ligne[1]=%d\nihm_setup->pli->nbpli_ligne[0]=%d\nposcour=%d\n",ihm_setup->pli->nbpli_ligne[1],ihm_setup->pli->nbpli_ligne[0],poscour);
 
 
-  if((ihm_pli->pli->nextpos%2)==(position_t)ihm_pli->ligneia) {
+  if((ihm_setup->pli->nextpos%2)==(position_t)ihm_setup->ligneia) {
    
     printf("IA joue\n");
-    read_header(ihm_pli,ihm_pli->pli, 'p');
-    affiche_pli(ihm_pli->pli);
-    cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
-    gc = ihm_pli->Drawing_area->style->fg_gc[state];
-    gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
-    if( ihm_pli->pli->noj==0) {
-      rescl=affichage((int)ihm_pli->pli->lastcarte.clcarte,COULEUR);
-      resvl=affichage((int)ihm_pli->pli->lastcarte.nocarte,CARTE);
-      sprintf(cardname, "%s/%s%s.xpm", ihm_pli->path, resvl,rescl);
+    read_header(ihm_setup,ihm_setup->pli, 'p');
+    display_trick(ihm_setup->pli);
+    cardname = (gchar*)g_malloc((strlen(ihm_setup->path)+20)*(sizeof(gchar)));
+    gc = ihm_setup->Drawing_area->style->fg_gc[state];
+    gdk_gc_set_clip_mask(gc,ihm_setup->backmask);
+    if( ihm_setup->pli->noj==0) {
+      rescl=affichage((int)ihm_setup->pli->lastcarte.clcarte,COULEUR);
+      resvl=affichage((int)ihm_setup->pli->lastcarte.nocarte,CARTE);
+      sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path, resvl,rescl);
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,&ihm_pli->pli->lastcarte,ihm_pli,poscour); 
+        imgcard=load_imgcard(cardname,&ihm_setup->pli->lastcarte,ihm_setup,poscour); 
       }
         
            
-      position_middle(ihm_pli,imgcard,poscour);
-      ihm_pli->waiting=g_list_prepend(ihm_pli->waiting, (gpointer)imgcard);
+      position_middle(ihm_setup,imgcard,poscour);
+      ihm_setup->waiting=g_list_prepend(ihm_setup->waiting, (gpointer)imgcard);
     }
 
     else {
-      resvl=affichage(ihm_pli->pli->carte[poscour].nocarte,CARTE);
-      rescl=affichage(ihm_pli->pli->carte[poscour].clcarte,COULEUR);
-      sprintf(cardname, "%s/%s%s.xpm", ihm_pli->path, resvl,rescl);
+      resvl=affichage(ihm_setup->pli->carte[poscour].nocarte,CARTE);
+      rescl=affichage(ihm_setup->pli->carte[poscour].clcarte,COULEUR);
+      sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path, resvl,rescl);
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,&ihm_pli->pli->carte[poscour],ihm_pli,poscour); 
+        imgcard=load_imgcard(cardname,&ihm_setup->pli->carte[poscour],ihm_setup,poscour); 
       }
-        position_middle(ihm_pli,imgcard,poscour);
-        ihm_pli->waiting=g_list_prepend(ihm_pli->waiting, (gpointer)imgcard);
+        position_middle(ihm_setup,imgcard,poscour);
+        ihm_setup->waiting=g_list_prepend(ihm_setup->waiting, (gpointer)imgcard);
 
     }
     //Ajout clignotement
-    if(imgcard->position==ihm_pli->pli->nextpos) {
+    if(imgcard->position==ihm_setup->pli->nextpos) {
       imgcard->blink=TRUE;
       imgcard->draw=FALSE;
-      draw_copy(ihm_pli);
-      ihm_pli->blinkid=g_timeout_add(800,event_blink, (gpointer)ihm_pli);
+      draw_copy(ihm_setup);
+      ihm_setup->blinkid=g_timeout_add(800,event_blink, (gpointer)ihm_setup);
     }
 
-    draw_container_ihm(ihm_pli);
-    resps=affichage(ihm_pli->pli->nextpos,POSITION); 
+    draw_container_ihm(ihm_setup);
+    resps=affichage(ihm_setup->pli->nextpos,POSITION); 
       reschaine=malloc(30*sizeof(char));
-      sprintf(reschaine,"NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0]);
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),reschaine );
+      sprintf(reschaine,"NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbpli_ligne[0],ihm_setup->pli->nbpli_ligne[1],resps[0]);
+    gtk_label_set_text (GTK_LABEL (ihm_setup->Score),reschaine );
     free(reschaine);
     free(resps);
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
+    gtk_label_set_text (GTK_LABEL (ihm_setup->Label),g_strdup_printf("Contrat Final:%s",ihm_setup->scontrat));
 
     
-    return((ihm_pli->pli->nextpos)%2);
+    return((ihm_setup->pli->nextpos)%2);
   }
   else {
     printf("Player\n");
 
   
-    position_middle(ihm_pli,imgcard,poscour);
-    ihm_pli->waiting=g_list_prepend(ihm_pli->waiting, (gpointer)imgcard);
-    ihm_pli->players[poscour]=g_list_remove(ihm_pli->players[poscour],(gconstpointer) imgcard);
+    position_middle(ihm_setup,imgcard,poscour);
+    ihm_setup->waiting=g_list_prepend(ihm_setup->waiting, (gpointer)imgcard);
+    ihm_setup->players[poscour]=g_list_remove(ihm_setup->players[poscour],(gconstpointer) imgcard);
     
-    ihm_pli->pli->carte[poscour].clcarte=imgcard->couleur;
-    ihm_pli->pli->carte[poscour].nocarte=imgcard->valeur;
-    ihm_pli->tab_couleur[poscour][imgcard->couleur]--;
-    draw_container_ihm(ihm_pli);
+    ihm_setup->pli->carte[poscour].clcarte=imgcard->couleur;
+    ihm_setup->pli->carte[poscour].nocarte=imgcard->valeur;
+    ihm_setup->tab_couleur[poscour][imgcard->couleur]--;
+    draw_container_ihm(ihm_setup);
 
     
-    write_data(ihm_pli,ihm_pli->pli,'p');
-    read_header (ihm_pli,ihm_pli->pli, 'p');
-    affiche_pli(ihm_pli->pli);
-    resps=affichage(ihm_pli->pli->nextpos,POSITION); 
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_pli->pli->nbpli_ligne[0],ihm_pli->pli->nbpli_ligne[1],resps[0] ));
-    gtk_label_set_text (GTK_LABEL (ihm_pli->Label),g_strdup_printf("Contrat Final:%s",ihm_pli->scontrat));
-    return(ihm_pli->pli->nextpos%2);
+    write_data(ihm_setup,ihm_setup->pli,'p');
+    read_header (ihm_setup,ihm_setup->pli, 'p');
+    display_trick(ihm_setup->pli);
+    resps=affichage(ihm_setup->pli->nextpos,POSITION); 
+    gtk_label_set_text (GTK_LABEL (ihm_setup->Score),g_strdup_printf("NS:%d  EO:%d  \n Doit Jouer:%c",ihm_setup->pli->nbpli_ligne[0],ihm_setup->pli->nbpli_ligne[1],resps[0] ));
+    gtk_label_set_text (GTK_LABEL (ihm_setup->Label),g_strdup_printf("Contrat Final:%s",ihm_setup->scontrat));
+    return(ihm_setup->pli->nextpos%2);
 
   }
 
@@ -355,40 +355,40 @@ int game_turn (ihm_trick_t *ihm_pli,imgcard_t *imgcard) {
   free(resps);
 }
 
-void locate_cards(GList *listplayer,position_t position,ihm_trick_t *ihm_pli) {
+void locate_cards(GList *listplayer,position_t position,ihm_trick_t *ihm_setup) {
 
   int x, y, w, h;
   int coef;
   enum eposition ep;
-  if(ihm_pli->back) {
-    gdk_drawable_get_size(ihm_pli->back, &w, &h);
+  if(ihm_setup->back) {
+    gdk_drawable_get_size(ihm_setup->back, &w, &h);
     switch(position) {
       case NORD:
         y = 10;
         coef = 1;
-        x = (ihm_pli->Drawing_area->allocation.width - w)*2 / 3;
+        x = (ihm_setup->Drawing_area->allocation.width - w)*2 / 3;
         ep = EP_HORIZONTAL;
         break;
         case EST:
-          x = ihm_pli->Drawing_area->allocation.width - w -10;
+          x = ihm_setup->Drawing_area->allocation.width - w -10;
           coef = 1;
-          //y = (ihm_pli->Drawing_area->allocation.height - h)*2 / 2;
-          y = (ihm_pli->Drawing_area->allocation.height - h -10)/2+60;
+          //y = (ihm_setup->Drawing_area->allocation.height - h)*2 / 2;
+          y = (ihm_setup->Drawing_area->allocation.height - h -10)/2+60;
           ep = EP_VERTICAL;
           break;
 
         case SUD:
-          y = ihm_pli->Drawing_area->allocation.height - h -10;
+          y = ihm_setup->Drawing_area->allocation.height - h -10;
           coef = -1;
-          x = (ihm_pli->Drawing_area->allocation.width - w) *2/ 3;
+          x = (ihm_setup->Drawing_area->allocation.width - w) *2/ 3;
           ep = EP_HORIZONTAL;
           break;
 
         case OUEST:
           x = 0;
           coef = 1;
-          //y = (ihm_pli->Drawing_area->allocation.height - h)*2 / 2 ;
-          y = (ihm_pli->Drawing_area->allocation.height - h -10)/2+60;
+          //y = (ihm_setup->Drawing_area->allocation.height - h)*2 / 2 ;
+          y = (ihm_setup->Drawing_area->allocation.height - h -10)/2+60;
           ep = EP_VERTICAL;
           break;
 
@@ -401,7 +401,7 @@ void locate_cards(GList *listplayer,position_t position,ihm_trick_t *ihm_pli) {
 }
 
 void
-recuperation_jeu (ihm_trick_t *ihm_pli, position_t position)
+recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
 {
   imgcard_t *imgcard;
   char *rescl,*resvl,refcoul='O',*resp;
@@ -414,99 +414,99 @@ recuperation_jeu (ihm_trick_t *ihm_pli, position_t position)
   int i;
   gchar *cardname=NULL;
   GdkGC *gc;
-  GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
+  GtkStateType state = GTK_WIDGET_STATE(ihm_setup->Drawing_area);
   couleur_t couleur;
   char model[] = "paris";
   resp=affichage(position,POSITION);
-  cardname = (gchar*)g_malloc((strlen(ihm_pli->path)+20)*(sizeof(gchar)));
-  gc = ihm_pli->Drawing_area->style->fg_gc[state];
-  gdk_gc_set_clip_mask(gc,ihm_pli->backmask);
-  if(ihm_pli->back==NULL) {
-    sprintf(cardname, "%s/%s/back.xpm", ihm_pli->path,model);
+  cardname = (gchar*)g_malloc((strlen(ihm_setup->path)+20)*(sizeof(gchar)));
+  gc = ihm_setup->Drawing_area->style->fg_gc[state];
+  gdk_gc_set_clip_mask(gc,ihm_setup->backmask);
+  if(ihm_setup->back==NULL) {
+    sprintf(cardname, "%s/%s/back.xpm", ihm_setup->path,model);
     if(g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE) {
-      ihm_pli->back = gdk_pixmap_create_from_xpm( ihm_pli->Drawing_area->window,
-                                &(ihm_pli->backmask),
-                                &(ihm_pli->Drawing_area->style->black),
+      ihm_setup->back = gdk_pixmap_create_from_xpm( ihm_setup->Drawing_area->window,
+                                &(ihm_setup->backmask),
+                                &(ihm_setup->Drawing_area->style->black),
                                 cardname);
     }
   }
   for( couleur=club;couleur<spade+1;couleur++)
-    ihm_pli->tab_couleur[position][couleur]=0;
-  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
-    if(NULL==ihm_pli->fd) {
-      snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_pli->random);
+    ihm_setup->tab_couleur[position][couleur]=0;
+  if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
+    if(NULL==ihm_setup->fd) {
+      snprintf(savefile,MAXFILENAME,SAVEFILEDIR"donne.%d",ihm_setup->random);
       if(position==sud) 
-        ihm_pli->fd=fopen(savefile,"w");
+        ihm_setup->fd=fopen(savefile,"w");
       else
-        ihm_pli->fd=fopen(savefile,"a");
+        ihm_setup->fd=fopen(savefile,"a");
     }
     if(position==sud){
       snprintf(writebuf,NBPCOULEURS+2,"%c",resp[0]);
-      fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+      fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
     }
     else{
       snprintf(writebuf,NBPCOULEURS+2,"\n%c",resp[0]);
-      fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+      fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
     }
   }
   i=0;
   do {
-      read_header (ihm_pli, carte, 'c');
+      read_header (ihm_setup, carte, 'c');
       resvl=affichage(carte->nocarte,CARTE);
       rescl=affichage(carte->clcarte,COULEUR);
-      sprintf(cardname, "%s/%s%s.xpm", ihm_pli->path,resvl ,rescl);
+      sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path,resvl ,rescl);
 
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,carte,ihm_pli,position); 
-         ihm_pli->players[position]=g_list_prepend(ihm_pli->players[position], (gpointer)imgcard);
-        if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&TRUE==ihm_pli->savegame) {
-          if(ihm_pli->fd) {
+        imgcard=load_imgcard(cardname,carte,ihm_setup,position); 
+         ihm_setup->players[position]=g_list_prepend(ihm_setup->players[position], (gpointer)imgcard);
+        if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
+          if(ihm_setup->fd) {
             if(refcoul!=rescl[0]){ 
               if(rescl[0] != colorref[j]) {
                 snprintf(writebuf,NBPCOULEURS+2,"\n%c",colorref[j]);
-                fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+                fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
                 j++;
               }
               snprintf(writebuf,NBPCOULEURS+2,"\n%c%c",rescl[0],resvl[0]);
-              fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+              fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
               refcoul=rescl[0];
               j++;
             }
             else{
               snprintf(writebuf,NBPCOULEURS+2,"%c",resvl[0]);
-              fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+              fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
             }
           }
           
         }
       }
 
-      ihm_pli->tab_couleur[position][carte->clcarte]=ihm_pli->tab_couleur[position][carte->clcarte]+1;
+      ihm_setup->tab_couleur[position][carte->clcarte]=ihm_setup->tab_couleur[position][carte->clcarte]+1;
 	
       free(rescl);
       free(resvl);
       i++;
       
-  } while (i<ihm_pli->nbcard);
-  if((ihm_pli->fd)&&(j<NBCOULEURS)) {
+  } while (i<ihm_setup->nbcard);
+  if((ihm_setup->fd)&&(j<NBCOULEURS)) {
     for(k=j;k<NBCOULEURS;k++) {
        printf("k=%d\n",k);
        snprintf(writebuf,NBPCOULEURS+2,"\n%c",colorref[k]);
-       fwrite(writebuf,strlen(writebuf),1,ihm_pli->fd);
+       fwrite(writebuf,strlen(writebuf),1,ihm_setup->fd);
     }
     
   }
-  if(((ihm_pli->pli->nbpli_ligne[1]+ihm_pli->pli->nbpli_ligne[0] ) ==ihm_pli->nbcard)&&(TRUE==ihm_pli->savegame )&& (position==est) &&ihm_pli->fd) {
+  if(((ihm_setup->pli->nbpli_ligne[1]+ihm_setup->pli->nbpli_ligne[0] ) ==ihm_setup->nbcard)&&(TRUE==ihm_setup->savegame )&& (position==est) &&ihm_setup->fd) {
     snprintf(writebuf,NBPCOULEURS+2,"\n");
-    fwrite(writebuf,1,1,ihm_pli->fd);
+    fwrite(writebuf,1,1,ihm_setup->fd);
   }
-  locate_cards(ihm_pli->players[position],position,ihm_pli);
+  locate_cards(ihm_setup->players[position],position,ihm_setup);
   free(carte);
   free(resp);
   
-  if(ihm_pli->fd) {
-    fclose(ihm_pli->fd);
-    ihm_pli->fd=NULL;
+  if(ihm_setup->fd) {
+    fclose(ihm_setup->fd);
+    ihm_setup->fd=NULL;
   }
   
   g_free(cardname);

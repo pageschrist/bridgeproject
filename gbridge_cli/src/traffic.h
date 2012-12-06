@@ -14,8 +14,8 @@ typedef struct _net_header_t
  gboolean debug; // lenght of the sata if necessary 
  int nbcard;
 } net_header_t;
-ssize_t write_data(ihm_trick_t *ihm_pli,void  *data,char type,...); 
-void read_data( ihm_trick_t *ihm_pli,void *data, char type);
-int  read_header (ihm_trick_t *ihm_pli,void *data,char type);
-ssize_t write_header( ihm_trick_t *ihm_pli,char type,...) ;
-gboolean send_file(ihm_trick_t *ihm_pli);
+ssize_t write_data(ihm_trick_t *ihm_setup,void  *data,char type,...); 
+void read_data( ihm_trick_t *ihm_setup,void *data, char type);
+int  read_header (ihm_trick_t *ihm_setup,void *data,char type);
+ssize_t write_header( ihm_trick_t *ihm_setup,char type,...) ;
+gboolean send_file(ihm_trick_t *ihm_setup);

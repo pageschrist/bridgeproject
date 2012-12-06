@@ -4,17 +4,17 @@
 #include "draw.h"
 
 
-void draw_cards(ihm_trick_t *ihm_pli, GList *list, GdkPixmap *target)
+void draw_cards(ihm_trick_t *ihm_setup, GList *list, GdkPixmap *target)
 {
-        if(ihm_pli->debug)
+        if(ihm_setup->debug)
           printf("Draw cards\n");
         GList *ptr;
         imgcard_t *data_ptr;
         GdkPixmap *img;
         GdkGC *gc;
-        GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
+        GtkStateType state = GTK_WIDGET_STATE(ihm_setup->Drawing_area);
 
-        gc = ihm_pli->Drawing_area->style->fg_gc[state];
+        gc = ihm_setup->Drawing_area->style->fg_gc[state];
 
         for(ptr = g_list_last(list); ptr; ptr = ptr->prev)
         {
@@ -24,13 +24,13 @@ void draw_cards(ihm_trick_t *ihm_pli, GList *list, GdkPixmap *target)
                 {
                         if(data_ptr->draw_face == FALSE)
                         {
-                                img = ihm_pli->back;
-                                gdk_gc_set_clip_mask(gc, ihm_pli->backmask);
+                                img = ihm_setup->back;
+                                gdk_gc_set_clip_mask(gc, ihm_setup->backmask);
                         }
                         else if(data_ptr->draw == TRUE)
                         {
                                 img = data_ptr->img;
-                                gdk_gc_set_clip_mask(gc, ihm_pli->cardmask);
+                                gdk_gc_set_clip_mask(gc, ihm_setup->cardmask);
                         }
                         else
                                 img = NULL;
@@ -41,7 +41,7 @@ void draw_cards(ihm_trick_t *ihm_pli, GList *list, GdkPixmap *target)
                                         data_ptr->dim.x,
                                         data_ptr->dim.y);
                                 gdk_draw_drawable( target,
-                                        ihm_pli->Drawing_area->style->fg_gc[state],
+                                        ihm_setup->Drawing_area->style->fg_gc[state],
                                         img, 0, 0,
                                         data_ptr->dim.x,
                                         data_ptr->dim.y, -1, -1);
@@ -53,45 +53,45 @@ void draw_cards(ihm_trick_t *ihm_pli, GList *list, GdkPixmap *target)
 }
 
 
-void draw_moving_card(ihm_trick_t *ihm_pli, GdkPixmap *target)
+void draw_moving_card(ihm_trick_t *ihm_setup, GdkPixmap *target)
 {   
         GdkGC *gc;
         GdkPixmap *img;
-        GtkStateType state = GTK_WIDGET_STATE(ihm_pli->Drawing_area);
+        GtkStateType state = GTK_WIDGET_STATE(ihm_setup->Drawing_area);
 
-        gc = ihm_pli->Drawing_area->style->fg_gc[state];
+        gc = ihm_setup->Drawing_area->style->fg_gc[state];
 
-        if(ihm_pli->movecard->card->draw_face == TRUE)
+        if(ihm_setup->movecard->card->draw_face == TRUE)
         {
-                img = ihm_pli->movecard->card->img;
-                gdk_gc_set_clip_mask(gc, ihm_pli->cardmask);
+                img = ihm_setup->movecard->card->img;
+                gdk_gc_set_clip_mask(gc, ihm_setup->cardmask);
         }
         else
         {
-                img = ihm_pli->back;
-                gdk_gc_set_clip_mask(gc, ihm_pli->backmask);
+                img = ihm_setup->back;
+                gdk_gc_set_clip_mask(gc, ihm_setup->backmask);
         }
 
         gdk_gc_set_clip_origin(gc,
-                ihm_pli->movecard->dim.x,
-                ihm_pli->movecard->dim.y);
+                ihm_setup->movecard->dim.x,
+                ihm_setup->movecard->dim.y);
 
         gdk_draw_drawable( target,
-                ihm_pli->Drawing_area->style->fg_gc[state],
+                ihm_setup->Drawing_area->style->fg_gc[state],
                 img, 0, 0,
-                ihm_pli->movecard->dim.x,
-                ihm_pli->movecard->dim.y, -1, -1);
+                ihm_setup->movecard->dim.x,
+                ihm_setup->movecard->dim.y, -1, -1);
 
         gdk_gc_set_clip_mask(gc, NULL);
 }
 
 
-gboolean player_can_drop(ihm_trick_t *ihm_pli)
+gboolean player_can_drop(ihm_trick_t *ihm_setup)
 {
         return
         
                 (
-                        (ihm_pli->pli->nextpos)%2 != ((position_t )ihm_pli->ligneia)
+                        (ihm_setup->pli->nextpos)%2 != ((position_t )ihm_setup->ligneia)
                 );
 }
 
@@ -111,23 +111,23 @@ gboolean card_touch_dropzone(movingcard_t *movecard, rectangle_t *rectangle)
 
 
 
-rectangle_t * draw_dropping_zone(ihm_trick_t *ihm_pli, GdkPixmap *target)
+rectangle_t * draw_dropping_zone(ihm_trick_t *ihm_setup, GdkPixmap *target)
 {
         GList *lst;
         rectangle_t *rectangle = NULL;
 
-        for(lst = ihm_pli->dropping; lst; lst = lst->next)
+        for(lst = ihm_setup->dropping; lst; lst = lst->next)
         {
                 rectangle = (rectangle_t *)lst->data;
 
                 rectangle->active = FALSE;
 
-                if(ihm_pli->movecard && player_can_drop(ihm_pli) )
+                if(ihm_setup->movecard && player_can_drop(ihm_setup) )
                 {
-                        if( card_touch_dropzone(ihm_pli->movecard, rectangle) )
+                        if( card_touch_dropzone(ihm_setup->movecard, rectangle) )
                         {
                                 gdk_draw_rectangle(target,
-                                ihm_pli->Drawing_area->style->light_gc[GTK_WIDGET_STATE(ihm_pli->Drawing_area)],
+                                ihm_setup->Drawing_area->style->light_gc[GTK_WIDGET_STATE(ihm_setup->Drawing_area)],
                                 FALSE, rectangle->dim.x, rectangle->dim.y,
                                 rectangle->dim.w, rectangle->dim.h);
                                 rectangle->active = TRUE;
@@ -139,39 +139,39 @@ rectangle_t * draw_dropping_zone(ihm_trick_t *ihm_pli, GdkPixmap *target)
 
 
 
-void draw_container_ihm(ihm_trick_t *ihm_pli)
+void draw_container_ihm(ihm_trick_t *ihm_setup)
 {
         printf("Draw !!\n");
-        if(ihm_pli->target != NULL)
+        if(ihm_setup->target != NULL)
         {
                 /* Paint it black */
-                gdk_draw_rectangle( ihm_pli->target,
-                        ihm_pli->Drawing_area->style->black_gc, TRUE, 0, 0,
-                        ihm_pli->Drawing_area->allocation.width,
-                        ihm_pli->Drawing_area->allocation.height );
+                gdk_draw_rectangle( ihm_setup->target,
+                        ihm_setup->Drawing_area->style->black_gc, TRUE, 0, 0,
+                        ihm_setup->Drawing_area->allocation.width,
+                        ihm_setup->Drawing_area->allocation.height );
 
 
-                draw_cards(ihm_pli, ihm_pli->waiting, ihm_pli->target);
+                draw_cards(ihm_setup, ihm_setup->waiting, ihm_setup->target);
 
-                if(ihm_pli->players != NULL)
+                if(ihm_setup->players != NULL)
                 {
                         int i;
                         for(i=0; i<4; i++)
-                        draw_cards(ihm_pli, ihm_pli->players[i],
-                                        ihm_pli->target);
+                        draw_cards(ihm_setup, ihm_setup->players[i],
+                                        ihm_setup->target);
                 }
 
-                //if(ihm_pli->dropping) {
-                //        draw_dropping_zone(ihm_pli, ihm_pli->target);
+                //if(ihm_setup->dropping) {
+                //        draw_dropping_zone(ihm_setup, ihm_setup->target);
                 //}
-                if(ihm_pli->movecard) {
-                       draw_moving_card(ihm_pli, ihm_pli->target);
+                if(ihm_setup->movecard) {
+                       draw_moving_card(ihm_setup, ihm_setup->target);
                 }
 
                 /* Blit */
-                gdk_draw_drawable( ihm_pli->Drawing_area->window,
-                        ihm_pli->Drawing_area->style->fg_gc[GTK_WIDGET_STATE(ihm_pli->Drawing_area)],
-                        ihm_pli->target, 0, 0, 0, 0, -1, -1 );
+                gdk_draw_drawable( ihm_setup->Drawing_area->window,
+                        ihm_setup->Drawing_area->style->fg_gc[GTK_WIDGET_STATE(ihm_setup->Drawing_area)],
+                        ihm_setup->target, 0, 0, 0, 0, -1, -1 );
 
         }
         else {
@@ -181,46 +181,46 @@ void draw_container_ihm(ihm_trick_t *ihm_pli)
         }
 }
 
-void draw_copy(ihm_trick_t *ihm_pli)
+void draw_copy(ihm_trick_t *ihm_setup)
 {
 
-        if(!ihm_pli->copy)
+        if(!ihm_setup->copy)
         {
-                ihm_pli->copy = gdk_pixmap_new(
-                        ihm_pli->Drawing_area->window,
-                        ihm_pli->Drawing_area->allocation.width,
-                        ihm_pli->Drawing_area->allocation.height, -1);
+                ihm_setup->copy = gdk_pixmap_new(
+                        ihm_setup->Drawing_area->window,
+                        ihm_setup->Drawing_area->allocation.width,
+                        ihm_setup->Drawing_area->allocation.height, -1);
 
         }
 
-        if(ihm_pli->copy)
+        if(ihm_setup->copy)
         {
-                draw_to(ihm_pli, ihm_pli->copy);
+                draw_to(ihm_setup, ihm_setup->copy);
         }
 
 }
 
-void draw_to(ihm_trick_t *ihm_pli, GdkPixmap *target)
+void draw_to(ihm_trick_t *ihm_setup, GdkPixmap *target)
 {
         if(target != NULL)
         {
                 /* Paint it black */
                 gdk_draw_rectangle( target,
-                        ihm_pli->Drawing_area->style->black_gc, TRUE, 0, 0,
-                        ihm_pli->Drawing_area->allocation.width,
-                        ihm_pli->Drawing_area->allocation.height );
+                        ihm_setup->Drawing_area->style->black_gc, TRUE, 0, 0,
+                        ihm_setup->Drawing_area->allocation.width,
+                        ihm_setup->Drawing_area->allocation.height );
 
 
 
 
-                draw_cards(ihm_pli, ihm_pli->waiting, target);
+                draw_cards(ihm_setup, ihm_setup->waiting, target);
 
-                if(ihm_pli->players != NULL)
+                if(ihm_setup->players != NULL)
                 {
                         int i;
                         for(i=0; i< 4; i++)
-                                draw_cards(ihm_pli,
-                                        ihm_pli->players[i], target);
+                                draw_cards(ihm_setup,
+                                        ihm_setup->players[i], target);
                 }
 
         }

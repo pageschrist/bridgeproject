@@ -9,7 +9,7 @@
 #include "objets.h"
 #include "load.h"
 extern GHashTable *configHash;
-imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_trick_t *ihm_pli,position_t position) {
+imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_trick_t *ihm_setup,position_t position) {
 
   imgcard_t *imgcard = (imgcard_t *) g_malloc(sizeof(imgcard_t) );
 
@@ -27,7 +27,7 @@ imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_trick_t *ihm_pli,positi
 
     imgcard->blink = FALSE;
     imgcard->status = AVAILABLE;
-    imgcard->img = gdk_pixmap_create_from_xpm( ihm_pli->Drawing_area->window, NULL, NULL, file);
+    imgcard->img = gdk_pixmap_create_from_xpm( ihm_setup->Drawing_area->window, NULL, NULL, file);
 
     gdk_drawable_get_size(imgcard->img, &(imgcard->dim.w), &(imgcard->dim.h));
 
