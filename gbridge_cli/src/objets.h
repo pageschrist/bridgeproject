@@ -6,7 +6,7 @@
 #define GAMEOVER 0
 #define PLI 2
 #define CONTRAT 3
-#define CARTES 4
+#define CARDS 4
 #define BID 5
 #define HAND 6
 #define PLAY 7
@@ -19,7 +19,7 @@
 #define OUEST 1
 #define NORD 2
 #define EST 3
-#define NBCARTES 52
+#define NBCARDS 52
 #define NBJOUEURS 4
 #define NBCOULEURS 4
 #define COULEURS 4
@@ -34,10 +34,10 @@
 #define INTERVENANT 1
 #define REPONDANT 2
 #define REPINTERVENANT 3
-#define CARTE 100
+#define CARD 100
 #define COULEUR 101
 #define POSITION 102
-#define PASDECARTE -1
+#define PASDECARD -1
 #define PASDECOULEUR -1
 #define DEFAULTLEVEL 5
 #define DEFAULTRANDOM 40
@@ -75,28 +75,28 @@ typedef struct _coord_t
   position_t detenteur;
 } coord_t;
 
-typedef struct _carte_t
+typedef struct _card_t
 {
-  valeur_t nocarte;
-  couleur_t clcarte;
-} carte_t;
+  valeur_t nocard;
+  couleur_t clcard;
+} card_t;
 
 typedef struct _main_t
 {
   int nbpoints;
-  int nbcartes[spade+1];
+  int nbcards[spade+1];
   int nbpointshonneurs[spade+1];
-  int nbcartesmax;
+  int nbcardsmax;
 } main_t;
 
 typedef struct _trick_t
 {
-  carte_t carte[est + 1];
-  carte_t discard[est + 1];
+  card_t card[est + 1];
+  card_t discard[est + 1];
   position_t entame;
   position_t nextpos;
-  carte_t phcarte;
-  carte_t lastcarte;
+  card_t phcard;
+  card_t lastcard;
   int notrick;
   int nbtricks_line[eo + 1];
   int noj; //Numero du joueur qui joue
@@ -227,8 +227,8 @@ typedef struct _ihm_trick_t
 typedef struct _tablist
 {
   valeur_t tabcoul[13];
-  gboolean debug;               //position de la derniere carte jouee
-  int nbcrt;                    //nombre de carte dans la couleur
+  gboolean debug;               //position de la derniere card jouee
+  int nbcrt;                    //nombre de card dans la couleur
   couleur_t couleureval;
 } tablist_t;
 
@@ -238,14 +238,14 @@ typedef struct _button_bid_t
   ihm_bid_t *ihm_bid;
 } button_bid_t;
 
-void bouge_carte(position_t position,carte_t *carte,int maxl);
-void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int maxl) ;
+void bouge_card(position_t position,card_t *card,int maxl);
+void bouge_card_jeu(position_t poscour,card_t  *card, int nl, int nc, int maxl) ;
 void display_trick(trick_t *trick);
 char *affichage (int valeur,int type);
 
 char * contrat_to_char ( couleur_t atout); 
 char *affichage (int valeur, int type);
-void affiche_carte (carte_t *carte);
+void affiche_card (card_t *card);
 void display_trick( trick_t *ptrick);
 void init_trick (trick_t * trick, int maniere);
 void free_ihm_setup( ihm_trick_t *ihm_setup) ;

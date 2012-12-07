@@ -7,7 +7,7 @@
 #include "client.h"
 char * contrat_to_char(couleur_t atout);
 extern GHashTable *configHash;
-carte_t **tab_coord;
+card_t **tab_coord;
 void debugaff(void) {
 
  int i=3;
@@ -41,7 +41,7 @@ char *affichage (int valeur, int type)
   char *contrattype="01234567";
   char *pos=malloc(2*sizeof(char ));;
     
-  if (type == CARTE) {
+  if (type == CARD) {
       if(valeur<(int)strlen(figure))
       pos[0]=figure[valeur];
   }
@@ -58,7 +58,7 @@ char *affichage (int valeur, int type)
     pos[0]=contrattype[valeur];
   }
   pos[1]='\0';
-  if ((type != CARTE) && (type != COULEUR) && (type != POSITION) && (type != CONTRAT)) {
+  if ((type != CARD) && (type != COULEUR) && (type != POSITION) && (type != CONTRAT)) {
     perror ("type invalide\n");
     pos=NULL;
   }
@@ -74,10 +74,10 @@ char *affichage (int valeur, int type)
 
 
 
-void affiche_carte (carte_t *carte)
+void affiche_card (card_t *card)
 {
-  printf("La couleur de la carte est: %d\n",carte->clcarte);
-  printf("La valeur de la carte est: %d\n",carte->nocarte);
+  printf("La couleur de la card est: %d\n",card->clcard);
+  printf("La valeur de la card est: %d\n",card->nocard);
 }
 void display_trick( trick_t *trick)
 {
@@ -85,16 +85,16 @@ void display_trick( trick_t *trick)
         char *rescl,*resct;
 	ligne_t j;
 	for(i=sud;i<est+1;i++) {
-        resct=affichage(trick->carte[i].nocarte,CARTE);
-        rescl=affichage(trick->carte[i].clcarte,COULEUR);
+        resct=affichage(trick->card[i].nocard,CARD);
+        rescl=affichage(trick->card[i].clcard,COULEUR);
         printf("pos %d,  %s%s\n",i,resct,rescl);
         free(resct);
         free(rescl);
 	}
 	printf("Vci  trick.entame %d\n",trick->entame);
 	printf("Vci  trick.nextpos %d\n",trick->nextpos);
-	printf("Vci  trick.lastcarte.no %d\n",trick->lastcarte.nocarte);
-	printf("Vci  trick.lastcarte.cl %d\n",trick->lastcarte.clcarte);
+	printf("Vci  trick.lastcard.no %d\n",trick->lastcard.nocard);
+	printf("Vci  trick.lastcard.cl %d\n",trick->lastcard.clcard);
 	printf("Vci  trick.notrick %d\n",trick->notrick);
   for (j = ns; j < eo + 1; j++)
     {
@@ -312,13 +312,13 @@ void init_trick (trick_t * trick, int maniere)
   ligne_t j;
   for (i = sud; i < est + 1; i++)
     {
-      trick->carte[i].nocarte = pdc;
-      trick->carte[i].clcarte = aucune;
-      trick->discard[i].nocarte = pdc;
-      trick->discard[i].clcarte = aucune;
+      trick->card[i].nocard = pdc;
+      trick->card[i].clcard = aucune;
+      trick->discard[i].nocard = pdc;
+      trick->discard[i].clcard = aucune;
     }
-  trick->phcarte.nocarte = pdc;
-  trick->phcarte.clcarte = aucune;
+  trick->phcard.nocard = pdc;
+  trick->phcard.clcard = aucune;
   if (maniere == INIT)
     {
       trick->entame = aucun;

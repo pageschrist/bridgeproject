@@ -283,11 +283,11 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     gc = ihm_setup->Drawing_area->style->fg_gc[state];
     gdk_gc_set_clip_mask(gc,ihm_setup->backmask);
     if( ihm_setup->trick->noj==0) {
-      rescl=affichage((int)ihm_setup->trick->lastcarte.clcarte,COULEUR);
-      resvl=affichage((int)ihm_setup->trick->lastcarte.nocarte,CARTE);
+      rescl=affichage((int)ihm_setup->trick->lastcard.clcard,COULEUR);
+      resvl=affichage((int)ihm_setup->trick->lastcard.nocard,CARD);
       sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path, resvl,rescl);
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,&ihm_setup->trick->lastcarte,ihm_setup,poscour); 
+        imgcard=load_imgcard(cardname,&ihm_setup->trick->lastcard,ihm_setup,poscour); 
       }
         
            
@@ -296,11 +296,11 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     }
 
     else {
-      resvl=affichage(ihm_setup->trick->carte[poscour].nocarte,CARTE);
-      rescl=affichage(ihm_setup->trick->carte[poscour].clcarte,COULEUR);
+      resvl=affichage(ihm_setup->trick->card[poscour].nocard,CARD);
+      rescl=affichage(ihm_setup->trick->card[poscour].clcard,COULEUR);
       sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path, resvl,rescl);
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,&ihm_setup->trick->carte[poscour],ihm_setup,poscour); 
+        imgcard=load_imgcard(cardname,&ihm_setup->trick->card[poscour],ihm_setup,poscour); 
       }
         position_middle(ihm_setup,imgcard,poscour);
         ihm_setup->waiting=g_list_prepend(ihm_setup->waiting, (gpointer)imgcard);
@@ -334,8 +334,8 @@ int game_turn (ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
     ihm_setup->waiting=g_list_prepend(ihm_setup->waiting, (gpointer)imgcard);
     ihm_setup->players[poscour]=g_list_remove(ihm_setup->players[poscour],(gconstpointer) imgcard);
     
-    ihm_setup->trick->carte[poscour].clcarte=imgcard->couleur;
-    ihm_setup->trick->carte[poscour].nocarte=imgcard->valeur;
+    ihm_setup->trick->card[poscour].clcard=imgcard->couleur;
+    ihm_setup->trick->card[poscour].nocard=imgcard->valeur;
     ihm_setup->tab_couleur[poscour][imgcard->couleur]--;
     draw_container_ihm(ihm_setup);
 
@@ -406,11 +406,11 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
   imgcard_t *imgcard;
   char *rescl,*resvl,refcoul='O',*resp;
   char savefile[MAXFILENAME];
-  carte_t *carte;
+  card_t *card;
   char writebuf[NBPCOULEURS+2];
   char *colorref="TKCP";
   int j=0,k;
-  carte=malloc(sizeof(carte_t));
+  card=malloc(sizeof(card_t));
   int i;
   gchar *cardname=NULL;
   GdkGC *gc;
@@ -451,13 +451,13 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
   }
   i=0;
   do {
-      read_header (ihm_setup, carte, 'c');
-      resvl=affichage(carte->nocarte,CARTE);
-      rescl=affichage(carte->clcarte,COULEUR);
+      read_header (ihm_setup, card, 'c');
+      resvl=affichage(card->nocard,CARD);
+      rescl=affichage(card->clcard,COULEUR);
       sprintf(cardname, "%s/%s%s.xpm", ihm_setup->path,resvl ,rescl);
 
       if ( g_file_test(cardname, G_FILE_TEST_EXISTS) == TRUE ) {
-        imgcard=load_imgcard(cardname,carte,ihm_setup,position); 
+        imgcard=load_imgcard(cardname,card,ihm_setup,position); 
          ihm_setup->players[position]=g_list_prepend(ihm_setup->players[position], (gpointer)imgcard);
         if(((ihm_setup->trick->nbtricks_line[1]+ihm_setup->trick->nbtricks_line[0] ) ==ihm_setup->nbcard)&&TRUE==ihm_setup->savegame) {
           if(ihm_setup->fd) {
@@ -481,7 +481,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
         }
       }
 
-      ihm_setup->tab_couleur[position][carte->clcarte]=ihm_setup->tab_couleur[position][carte->clcarte]+1;
+      ihm_setup->tab_couleur[position][card->clcard]=ihm_setup->tab_couleur[position][card->clcard]+1;
 	
       free(rescl);
       free(resvl);
@@ -501,7 +501,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
     fwrite(writebuf,1,1,ihm_setup->fd);
   }
   locate_cards(ihm_setup->players[position],position,ihm_setup);
-  free(carte);
+  free(card);
   free(resp);
   
   if(ihm_setup->fd) {

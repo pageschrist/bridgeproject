@@ -3,7 +3,7 @@
 #define FREE 2
 #define INDEX(position,couleur) ((position*4)+couleur)
 #define INDCARD(color,value) ((color*NBPCOULEURS)+value)
-#define CARTES 4
+#define CARDS 4
 #define GAMEOVER 0
 #define NEWGAME 1
 #define PLI 2
@@ -35,8 +35,8 @@ typedef  enum
 typedef struct _tablist
 {
   valeur_t tabcoul[13];
-  gboolean debug;		//position de la derniere carte jouee
-  int nbcrt;			//nombre de carte dans la couleur
+  gboolean debug;		//position de la derniere card jouee
+  int nbcrt;			//nombre de card dans la couleur
   couleur_t couleureval;
 } tablist_t;
 
@@ -51,16 +51,16 @@ typedef struct _coord_t
 } coord_t;
 
 
-typedef struct _carte_t
+typedef struct _card_t
 {
-  valeur_t nocarte;
-  couleur_t clcarte;
-} carte_t;
+  valeur_t nocard;
+  couleur_t clcard;
+} card_t;
 
 
 typedef struct _best_t
 {
-  carte_t *carte;
+  card_t *card;
   int score;
   int numero;
   int nbline[eo+1];
@@ -84,9 +84,9 @@ typedef struct _l_best
 typedef struct _main_t
 {
   int nbpoints;
-  int nbcartes[spade + 1];
+  int nbcards[spade + 1];
   int nbpointshonneurs[spade + 1];
-  int nbcartesmax;
+  int nbcardsmax;
 } main_t;
 
 typedef struct _transfert_t 
@@ -109,12 +109,12 @@ typedef struct _bid_t
 
 typedef struct _trick_t
 {
-  carte_t carte[est + 1];
-  carte_t discard[est + 1];
+  card_t card[est + 1];
+  card_t discard[est + 1];
   position_t entame;
   position_t nextpos;
-  carte_t phcarte;
-  carte_t lastcarte;
+  card_t phcard;
+  card_t lastcard;
   int nbtrick;
   int nbtrick_line[eo + 1];
   int noj; //Numero du joueur qui joue
@@ -128,8 +128,8 @@ typedef struct _trick_t
 typedef struct _thread_jeu
 {
   tablist_t **t_jeu;
-  carte_t *carte;
-  carte_t *best_cartepot;
+  card_t *card;
+  card_t *best_cardpot;
   trick_t *trick;
   short status;
   int score;
@@ -189,15 +189,15 @@ void *dupXXcate_trick (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
 void display_trick (trick_t * trick,gboolean display);
-void *copy_carte (void *data);
+void *copy_card (void *data);
 void init_tabjeu(game_t *game);
 int remove_index (tablist_t **t_jeu,position_t position, couleur_t couleur, int pos_index);
 int find_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur);
-void affiche_tab_cartes (void);
+void affiche_tab_cards (void);
 int insert_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur,int pos_index);
 void affiche_tabjeuref (game_t *game,position_t position);
 void affiche_tabjeu_c (tablist_t **t_jeu);
-void affiche_carte (carte_t *carte);
+void affiche_card (card_t *card);
 int sub_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur);
 void init_trick (trick_t * trick, int maniere);
 void add_list_f(l_best_t *l_best,best_t *best) ;

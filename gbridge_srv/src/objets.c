@@ -9,7 +9,7 @@
 #include "ia.h"
 #include "stack.h"
 #include "arbitre.h"
-coord_t tab_cartes[cA + 1][spade + 1];
+coord_t tab_cards[cA + 1][spade + 1];
 void mark(void)
 {
     printf("mark\n");
@@ -105,7 +105,7 @@ void clear_list(l_best_t * l_list)
     elem_best_t *tmp;
     elem_best_t *elem_best = l_list->first;
     while (elem_best) {
-	free(elem_best->best->carte);
+	free(elem_best->best->card);
 	free(elem_best->best);
 	tmp = elem_best;
 	elem_best = elem_best->next;
@@ -369,7 +369,7 @@ void affiche_tabjeuref(game_t * game, position_t position)
 	     i++) {
 	    printf("%s", affca =
 		   affichage(game->tabjeuref[INDEX(position, couleur)]->
-			     tabcoul[i], CARTE));
+			     tabcoul[i], CARD));
 	    free(affca);
 
 	}
@@ -395,10 +395,10 @@ void affiche_tabjeu_c(tablist_t ** t_jeu)
 	    for (i = 0; i < t_jeu[INDEX(position, couleur)]->nbcrt; i++) {
 		printf("%s", affca =
 		       affichage(t_jeu[INDEX(position, couleur)]->
-				 tabcoul[i], CARTE));
+				 tabcoul[i], CARD));
 		free(affca);
 	    }
-	    printf(" Nb de cartes:%d\n",
+	    printf(" Nb de cards:%d\n",
 		   t_jeu[INDEX(position, couleur)]->nbcrt);
 
 	}
@@ -406,23 +406,23 @@ void affiche_tabjeu_c(tablist_t ** t_jeu)
 }
 
 
-void init_cartes(void)
+void init_cards(void)
 {
     valeur_t i;
     couleur_t j;
     for (i = 0; i < cA + 1; i++) {
 	for (j = 0; j < spade + 1; j++) {
-	    tab_cartes[i][j].nol = aucun;
-	    tab_cartes[i][j].noc = aucun;
-	    tab_cartes[i][j].detenteur = aucun;
+	    tab_cards[i][j].nol = aucun;
+	    tab_cards[i][j].noc = aucun;
+	    tab_cards[i][j].detenteur = aucun;
 	}
     }
 
 }
 void *copy_card(void *data) {
-  carte_t *card;
-  card=malloc(sizeof(carte_t));
-  memcpy(card,(carte_t *) data,sizeof(carte_t));
+  card_t *card;
+  card=malloc(sizeof(card_t));
+  memcpy(card,(card_t *) data,sizeof(card_t));
   return((void*) card);
 }
 
@@ -441,14 +441,14 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 {
     char *affca, *affco;
     affiche_tabjeu_c(thread_jeu->t_jeu);
-    printf("carte:%s%s\n", affca =
-	   affichage(thread_jeu->carte->nocarte, CARTE), affco =
-	   affichage(thread_jeu->carte->clcarte, COULEUR));
+    printf("card:%s%s\n", affca =
+	   affichage(thread_jeu->card->nocard, CARD), affco =
+	   affichage(thread_jeu->card->clcard, COULEUR));
     free(affca);
     free(affco);
-    printf("best_cartepot:%s%s\n", affca =
-	   affichage(thread_jeu->best_cartepot->nocarte, CARTE), affco =
-	   affichage(thread_jeu->best_cartepot->clcarte, COULEUR));
+    printf("best_cardpot:%s%s\n", affca =
+	   affichage(thread_jeu->best_cardpot->nocard, CARD), affco =
+	   affichage(thread_jeu->best_cardpot->clcard, COULEUR));
     free(affca);
     free(affco);
     printf("status=%d score=%d prof=%d prof_max=%d\n", thread_jeu->status,
@@ -465,13 +465,13 @@ void display_trick(trick_t * trick,gboolean display)
     printf("DSP  nop=%d,noj %d, ", trick->nbtrick,trick->noj);
     for (i = sud; i < est + 1; i++) {
 	printf("pos %d  %s%s,", i, affca =
-	       affichage(trick->carte[i].nocarte, CARTE), affco =
-	       affichage(trick->carte[i].clcarte, COULEUR));
+	       affichage(trick->card[i].nocard, CARD), affco =
+	       affichage(trick->card[i].clcard, COULEUR));
 	free(affca);
 	free(affco);
     }
-    printf("higher %d,", trick->phcarte.nocarte);
-    //printf("lastcarte %d,", trick->lastcarte.nocarte);
+    printf("higher %d,", trick->phcard.nocard);
+    //printf("lastcard %d,", trick->lastcard.nocard);
     printf("lead %d,", trick->entame);
     printf("npos %d,", trick->nextpos);
     printf("leader %d,", trick->leader);
@@ -483,31 +483,31 @@ void display_trick(trick_t * trick,gboolean display)
 
 }
 
-void affiche_carte(carte_t * carte)
+void affiche_card(card_t * card)
 {
     char *resca;
     char *rescl;
-    resca = affichage(carte->nocarte, CARTE);
-    rescl = affichage(carte->clcarte, COULEUR);
+    resca = affichage(card->nocard, CARD);
+    rescl = affichage(card->clcard, COULEUR);
     printf("%s", resca);
     printf("%s", rescl);
     free(resca);
     free(rescl);
 }
 
-void affiche_tab_cartes(void)
+void affiche_tab_cards(void)
 {
-    extern coord_t tab_cartes[cA + 1][spade + 1];
+    extern coord_t tab_cards[cA + 1][spade + 1];
     position_t i;
     valeur_t v;
     couleur_t c;
     for (i = sud; i < est + 1; i++) {
 	for (c = club; c < spade + 1; c++) {
 	    for (v = c2; v < cA + 1; v++) {
-		if (tab_cartes[v][c].detenteur == i)
-		    printf("tab_cartes[%s][%s].det=%s\n",
-			   affichage(v, CARTE), affichage(c, COULEUR),
-			   affichage(tab_cartes[v][c].detenteur,
+		if (tab_cards[v][c].detenteur == i)
+		    printf("tab_cards[%s][%s].det=%s\n",
+			   affichage(v, CARD), affichage(c, COULEUR),
+			   affichage(tab_cards[v][c].detenteur,
 				     POSITION));
 	    }
 	}
@@ -528,16 +528,16 @@ void init_trick(trick_t * trick, int maniere)
 	for (j = ns; j < eo + 1; j++) {
 	    trick->nbtrick_line[j] = 0;
 	}
-	trick->lastcarte.nocarte = pdc;
-	trick->lastcarte.clcarte = aucune;
+	trick->lastcard.nocard = pdc;
+	trick->lastcard.clcard = aucune;
     }
-    trick->phcarte.nocarte = pdc;
-    trick->phcarte.clcarte = aucune;
+    trick->phcard.nocard = pdc;
+    trick->phcard.clcard = aucune;
     for (i = sud; i < est + 1; i++) {
-	trick->carte[i].nocarte = pdc;
-	trick->carte[i].clcarte = aucune;
-	trick->discard[i].nocarte = pdc;
-	trick->discard[i].clcarte = aucune;
+	trick->card[i].nocard = pdc;
+	trick->card[i].clcard = aucune;
+	trick->discard[i].nocard = pdc;
+	trick->discard[i].clcard = aucune;
     }
 }
 

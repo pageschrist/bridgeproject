@@ -25,7 +25,7 @@ gboolean test_card(ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
   if(ihm_setup->trick->noj==0)
     couleurentame=aucune;
   else
-  couleurentame=ihm_setup->trick->carte[ihm_setup->trick->entame].clcarte;
+  couleurentame=ihm_setup->trick->card[ihm_setup->trick->entame].clcard;
 
   if(imgcard->position!=poscour)
     return(FALSE);
@@ -85,7 +85,7 @@ gboolean find_moveable_card(GList *ptr, GdkEventButton *event,
                                         draw_container_ihm(ihm_setup);
                                 }
                         }
-                        printf("status carte:movable=%d drawable=%d\n",data_ptr->moveable,data_ptr->draw);
+                        printf("status card:movable=%d drawable=%d\n",data_ptr->moveable,data_ptr->draw);
                         found = TRUE;
                         ptr = NULL;
                 }

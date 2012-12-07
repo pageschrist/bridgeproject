@@ -2,7 +2,7 @@
 #define OUEST 1
 #define NORD 2
 #define EST 3
-#define NBCARTES 52
+#define NBCARDS 52
 #define NBJOUEURS 4
 #define NBCOULEURS 4
 #define COULEURS 4
@@ -16,18 +16,18 @@
 #define INTERVENANT 1
 #define REPONDANT 2
 #define REPINTERVENANT 3
-#define CARTE 100
+#define CARD 100
 #define COULEUR 101
 #define POSITION 102
-#define PASDECARTE -1
+#define PASDECARD -1
 #define PASDECOULEUR -1
 #define BONUSLONG 5
 
 char desccouleur[NBPCOULEURS];
 typedef struct jeu
 {
-  int nombre[NBCOULEURS];	/*indique le nombre de carte dans chaque couleur */
-  int couleur[NBCOULEURS][NBPCOULEURS];	/*indique la liste des cartes dans chaque couleur */
+  int nombre[NBCOULEURS];	/*indique le nombre de card dans chaque couleur */
+  int couleur[NBCOULEURS][NBPCOULEURS];	/*indique la liste des cards dans chaque couleur */
   int nbpoints[NBCOULEURS];
   int nbpointstotal;
 } jeu;
@@ -47,7 +47,7 @@ void initialisation (void);
 int tirage (int diviseur);
 char * affichage (int valeur, int type);
 void affiche_contrat (contrat_t * contrat);
-void defcarte (int dividende, position_t position);
+void defcard (int dividende, position_t position);
 void qintsort (int arr[], int lidx, int ridx);
 void evalmain (game_t *game);
 void presentation (main_t * mainjoueur);

@@ -27,8 +27,8 @@ int  best_elem_best_l(elem_best_t *elem_best,trick_t *trick) {
       if(elem_best->best->score>score)
         score=elem_best->best->score;
     }
-    affca=affichage(elem_best->best->carte->nocarte,CARTE),
-    affcl=affichage(elem_best->best->carte->clcarte,COULEUR),
+    affca=affichage(elem_best->best->card->nocard,CARD),
+    affcl=affichage(elem_best->best->card->clcard,COULEUR),
     printf ("card=%s%s score=%d nbline[IALINE]=%d nbline[IALINE+1]=%d \n",
                      affca,affcl,
 		     elem_best->best->score,
@@ -44,13 +44,13 @@ int  best_elem_best_l(elem_best_t *elem_best,trick_t *trick) {
 //void display_l_item_l(l_item_t *l_item) {
  // while(
 //}
-carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
+card_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 		    hopestat_t * hopestat,trick_t *trick)
 {
     gboolean suplead[spade+1];
     valeur_t tabval[spade + 1];
     l_item_t *l_item=create_l_item(copy_card);
-    carte_t *carte = malloc(sizeof(carte_t));
+    card_t *card = malloc(sizeof(card_t));
     unsigned int jline = (IALINE + 1) % 2;
 
     couleur_t i;
@@ -72,10 +72,10 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	printf("On a %d bons coups\n", *nb_best);
     if(*nb_best==1) {
 
-      carte->clcarte=elem_best->best->carte->clcarte;
-      carte->nocarte=elem_best->best->carte->nocarte;
+      card->clcard=elem_best->best->card->clcard;
+      card->nocard=elem_best->best->card->nocard;
       clean_l_item(l_item);
-      return (carte);
+      return (card);
     }
 
 
@@ -91,49 +91,49 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	    }
             if(trick &&(trick->nextpos==(trick->entame+3)%4 &&(trick->leader)%2==jline )) {  
               if(trick->atout!=aucune) {
-                if(trick->carte[trick->leader].clcarte==elem_best->best->carte->clcarte) {
-                  if(trick->carte[trick->leader].nocarte<elem_best->best->carte->nocarte) {
-                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
-                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                if(trick->card[trick->leader].clcard==elem_best->best->card->clcard) {
+                  if(trick->card[trick->leader].nocard<elem_best->best->card->nocard) {
+                    tabval[elem_best->best->card->clcard] = elem_best->best->card->nocard;
+                    suplead[elem_best->best->card->clcard]=FALSE;
                   }
                 }
                 else {
-                  if(elem_best->best->carte->clcarte==trick->atout) {
-                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
-                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                  if(elem_best->best->card->clcard==trick->atout) {
+                    tabval[elem_best->best->card->clcard] = elem_best->best->card->nocard;
+                    suplead[elem_best->best->card->clcard]=FALSE;
                   }
                 }
               }
               else {
-                if(trick->carte[trick->leader].clcarte==elem_best->best->carte->clcarte) {
-                  if(trick->carte[trick->leader].nocarte<elem_best->best->carte->nocarte) {
-                    tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
-                    suplead[elem_best->best->carte->clcarte]=FALSE;
+                if(trick->card[trick->leader].clcard==elem_best->best->card->clcard) {
+                  if(trick->card[trick->leader].nocard<elem_best->best->card->nocard) {
+                    tabval[elem_best->best->card->clcard] = elem_best->best->card->nocard;
+                    suplead[elem_best->best->card->clcard]=FALSE;
                   }
                 }
               }
-              if(suplead[elem_best->best->carte->clcarte]) {
-  	        if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
-  	          tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+              if(suplead[elem_best->best->card->clcard]) {
+  	        if (tabval[elem_best->best->card->clcard] > elem_best->best->card->nocard)
+  	          tabval[elem_best->best->card->clcard] = elem_best->best->card->nocard;
 
               }
 
 
             }
             else {
-  	      if (tabval[elem_best->best->carte->clcarte] > elem_best->best->carte->nocarte)
-  	      tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
+  	      if (tabval[elem_best->best->card->clcard] > elem_best->best->card->nocard)
+  	      tabval[elem_best->best->card->clcard] = elem_best->best->card->nocard;
             }
-          carte->clcarte=elem_best->best->carte->clcarte;
-          carte->nocarte=tabval[elem_best->best->carte->clcarte];
-          if(carte->nocarte!=pdc)
-            add_item_tail(l_item,carte);
+          card->clcard=elem_best->best->card->clcard;
+          card->nocard=tabval[elem_best->best->card->clcard];
+          if(card->nocard!=pdc)
+            add_item_tail(l_item,card);
 	}
 	elem_best = elem_best->next;
     }
-    carte=pop_item_tail(l_item);
+    card=pop_item_tail(l_item);
     clean_l_item(l_item);
-    return (carte);
+    return (card);
 
 }
 
@@ -168,7 +168,7 @@ rettrick_t *cur_explore(int prof, trick_t * trick_cur, int prof_max,
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
-    valeur_t nocarte;
+    valeur_t nocard;
 
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */
     /*choix du joueur qui joue en fonction de la profondeur  */
@@ -184,14 +184,14 @@ rettrick_t *cur_explore(int prof, trick_t * trick_cur, int prof_max,
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
-	nocarte = trick_new->carte[positionc].nocarte;
-	nocouleur = trick_new->carte[positionc].clcarte;
-	if (nocarte == pdc) {
+	nocard = trick_new->card[positionc].nocard;
+	nocouleur = trick_new->card[positionc].clcard;
+	if (nocard == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
 	}
 	//On joue le coup
-	pos_index = find_index(t_jeu, positionc, nocouleur, nocarte);
+	pos_index = find_index(t_jeu, positionc, nocouleur, nocard);
 	if (pos_index == -1) {
 	    fprintf(stderr, "Pb in cur_explore \n");
 	    exit(1);
@@ -220,7 +220,7 @@ rettrick_t *cur_explore(int prof, trick_t * trick_cur, int prof_max,
 
 
 	// On annule le coup joue
-	if (insert_index(t_jeu, positionc, nocouleur, nocarte, pos_index)
+	if (insert_index(t_jeu, positionc, nocouleur, nocard, pos_index)
 	    == 0) {
 	    fprintf(stderr, "Pb dans insert_index\n");
 	    exit(EXIT_FAILURE);
@@ -279,7 +279,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * trick_cur, int prof_max,
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
-    valeur_t nocarte;
+    valeur_t nocard;
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */
     best_score =
 	100000 * ((positionc) % 2) - 100000 * ((positionc + 1) % 2);
@@ -299,14 +299,14 @@ rettrick_t *cur_explore_eval(int prof, trick_t * trick_cur, int prof_max,
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
-	nocarte = trick_new->carte[positionc].nocarte;
-	nocouleur = trick_new->carte[positionc].clcarte;
-	if (nocarte == pdc) {
+	nocard = trick_new->card[positionc].nocard;
+	nocouleur = trick_new->card[positionc].clcard;
+	if (nocard == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
 	}
 	//On joue le coup
-	pos_index = find_index(t_jeu, positionc, nocouleur, nocarte);
+	pos_index = find_index(t_jeu, positionc, nocouleur, nocard);
 	if (pos_index == -1) {
 	    printf("Pb in cur_explore \n");
 	    exit(1);
@@ -336,7 +336,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * trick_cur, int prof_max,
 
 
 	// On annule le coup joue
-	if (insert_index(t_jeu, positionc, nocouleur, nocarte, pos_index)
+	if (insert_index(t_jeu, positionc, nocouleur, nocard, pos_index)
 	    == 0) {
 	    fprintf(stderr, "Pb dans insert_index\n");
 	    exit(EXIT_FAILURE);
@@ -398,7 +398,7 @@ void *new_explore(void *arg)
     trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
-    valeur_t nocarte;
+    valeur_t nocard;
     //reconstitution des varaiables
     prof = thread_jeu->prof;
     prof_max = thread_jeu->prof_max;
@@ -435,15 +435,15 @@ void *new_explore(void *arg)
     // tant que la pile des coups n'est pas vide on joue le coup dépilé
     while ((trick_new = (trick_t *) pop_item_head(l_item)) != NULL) {
 
-	nocarte = trick_new->carte[positionc].nocarte;
-	nocouleur = trick_new->carte[positionc].clcarte;
-	if (nocarte == pdc) {
+	nocard = trick_new->card[positionc].nocard;
+	nocouleur = trick_new->card[positionc].clcard;
+	if (nocard == pdc) {
 	    printf("Erreur dans explore\n");
 	    exit(2);
 	}
 	//On joue le coup
 	pos_index =
-	    find_index(thread_jeu->t_jeu, positionc, nocouleur, nocarte);
+	    find_index(thread_jeu->t_jeu, positionc, nocouleur, nocard);
 	if (pos_index == -1) {
 	    printf("Pb in new_explore \n");
 	    exit(1);
@@ -472,7 +472,7 @@ void *new_explore(void *arg)
 
 	// On annule le coup joue
 	if (insert_index
-	    (thread_jeu->t_jeu, positionc, nocouleur, nocarte,
+	    (thread_jeu->t_jeu, positionc, nocouleur, nocard,
 	     pos_index) == 0) {
 	    fprintf(stderr, "Pb dans insert_index\n");
 	    exit(EXIT_FAILURE);
@@ -512,7 +512,7 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
     trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score;
     couleur_t nocouleur;
-    valeur_t nocarte;
+    valeur_t nocard;
     best_t *best;
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */
     /*choix du joueur qui joue en fonction de la profondeur  */
@@ -531,9 +531,9 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	    best = malloc(sizeof(best_t));
 	    best->score = 1;
 	    best->numero = 1;
-	    best->carte = malloc(sizeof(carte_t));
-	    best->carte->nocarte = trick_new->carte[positionc].nocarte;
-	    best->carte->clcarte = trick_new->carte[positionc].clcarte;
+	    best->card = malloc(sizeof(card_t));
+	    best->card->nocard = trick_new->card[positionc].nocard;
+	    best->card->clcard = trick_new->card[positionc].clcard;
 	    add_list_l(l_best, best);
 	    //vidage(stk);
             clean_l_item(l_item);
@@ -553,14 +553,14 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	    realloc(thread_jeu, (sizeof(thread_jeu_t *)) * (nothr + 1));
 	thread_jeu[nothr] = malloc(sizeof(thread_jeu_t));
 	dup_game(thread_jeu[nothr], game);
-	thread_jeu[nothr]->carte = malloc(sizeof(carte_t));
-	thread_jeu[nothr]->best_cartepot = malloc(sizeof(carte_t));
-	nocarte = trick_new->carte[positionc].nocarte;
-	nocouleur = trick_new->carte[positionc].clcarte;
-	thread_jeu[nothr]->carte->nocarte =
-	    trick_new->carte[positionc].nocarte;
-	thread_jeu[nothr]->carte->clcarte =
-	    trick_new->carte[positionc].clcarte;
+	thread_jeu[nothr]->card = malloc(sizeof(card_t));
+	thread_jeu[nothr]->best_cardpot = malloc(sizeof(card_t));
+	nocard = trick_new->card[positionc].nocard;
+	nocouleur = trick_new->card[positionc].clcard;
+	thread_jeu[nothr]->card->nocard =
+	    trick_new->card[positionc].nocard;
+	thread_jeu[nothr]->card->clcard =
+	    trick_new->card[positionc].clcard;
 	thread_jeu[nothr]->trick = trick_new;
 	thread_jeu[nothr]->status = 0;
 	thread_jeu[nothr]->prof_max = prof_max;
@@ -569,14 +569,14 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	//On joue le coup
 	pos_index =
 	    find_index(thread_jeu[nothr]->t_jeu, positionc, nocouleur,
-		       nocarte);
+		       nocard);
 	pos_index =
 	    remove_index(thread_jeu[nothr]->t_jeu, positionc, nocouleur,
 			 pos_index);
-	thread_jeu[nothr]->best_cartepot->nocarte =
-	    trick_new->carte[positionc].nocarte;
-	thread_jeu[nothr]->best_cartepot->clcarte =
-	    trick_new->carte[positionc].clcarte;
+	thread_jeu[nothr]->best_cardpot->nocard =
+	    trick_new->card[positionc].nocard;
+	thread_jeu[nothr]->best_cardpot->clcard =
+	    trick_new->card[positionc].clcard;
 	evaluation_trick(thread_jeu[nothr]->trick);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
 
 
@@ -619,12 +619,12 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	    }
 	    best->score = best_score;
 	    best->numero = *nb_best - 1;
-	    if (NULL == (best->carte = malloc(sizeof(carte_t)))) {
+	    if (NULL == (best->card = malloc(sizeof(card_t)))) {
 		fprintf(stderr, "Pb with malloc __LINE__\n");
 		exit(EXIT_FAILURE);
 	    }
-	    best->carte->nocarte = thread_jeu[i]->best_cartepot->nocarte;
-	    best->carte->clcarte = thread_jeu[i]->best_cartepot->clcarte;
+	    best->card->nocard = thread_jeu[i]->best_cardpot->nocard;
+	    best->card->clcard = thread_jeu[i]->best_cardpot->clcard;
 	    best->nbline[0] = thread_jeu[i]->nbline[0];
 	    best->nbline[1] = thread_jeu[i]->nbline[1];
 	    add_list_l(l_best, best);
@@ -633,8 +633,8 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
     }
     for (i = 0; i < nothr; i++) {
 
-	free(thread_jeu[i]->best_cartepot);
-	free(thread_jeu[i]->carte);
+	free(thread_jeu[i]->best_cardpot);
+	free(thread_jeu[i]->card);
 	destroy_jeu(thread_jeu[i]);
 	free(thread_jeu[i]);
 

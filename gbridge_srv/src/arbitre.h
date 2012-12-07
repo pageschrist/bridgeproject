@@ -3,7 +3,7 @@
 #define NON 0
 #define PASTROUVE 1
 #define FIN 3
-#define CARTESEULE 2
+#define CARDSEULE 2
 #define ENTAME 0
 #define DISCARD 1
 #define NONENTAME 2
@@ -18,7 +18,7 @@ int list_all_coups (position_t positionc, l_item_t *l_item, trick_t * trick,tabl
 int list_all_coups_eval (position_t positionc, l_item_t *l_item, trick_t * trick,tablist_t **tmpjeu);
 void define_leader(trick_t *trick);
 position_t evaluation_trick (trick_t * trick);
-int joue_coup (trick_t * trick,carte_t *carte,game_t *game );
+int joue_coup (trick_t * trick,card_t *card,game_t *game );
 rettrick_t * check_trick (trick_t * trick);
 void  dup_game(thread_jeu_t *thread_jeu,game_t *game) ;
 void  destroy_jeu(thread_jeu_t *thread_jeu) ;

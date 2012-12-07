@@ -8,7 +8,7 @@
 #include "distribution.h"
 #include "analyse.h"
 #include "gbridge_srv.h"
-extern coord_t tab_cartes[cA + 1][spade + 1];
+extern coord_t tab_cards[cA + 1][spade + 1];
 void initialisation(void)
 {
     couleur_t j;
@@ -16,7 +16,7 @@ void initialisation(void)
 
     for (j = club; j < aucune; j++) {
 	for (k = c2; k < pdc; k++) {
-	    tab_cartes[k][j].detenteur = aucun;
+	    tab_cards[k][j].detenteur = aucun;
 	}
     }
 
@@ -40,7 +40,7 @@ char *affichage(int valeur, int type)
     char couleurtype[spade + 1];
     char positiontype[aucun + 1];
     char *pos;
-    if (type == CARTE) {
+    if (type == CARD) {
 	strcpy(figure, "23456789XVDRAZ");
 	pos = malloc(sizeof(char) * 2);
         if(valeur>cA+1) 
@@ -65,7 +65,7 @@ char *affichage(int valeur, int type)
         else
 	  memcpy(pos, positiontype + valeur, sizeof(char));
     }
-    if ((type != CARTE) && (type != COULEUR) && (type != POSITION)) {
+    if ((type != CARD) && (type != COULEUR) && (type != POSITION)) {
 	perror("type invalide\n");
 	pos = NULL;
     }
@@ -83,7 +83,7 @@ void affiche_contrat(contrat_t * contrat)
 
 }
 
-void defcarte(int dividende, position_t position)
+void defcard(int dividende, position_t position)
 {
     int res = 0;
     int div;
@@ -92,12 +92,12 @@ void defcarte(int dividende, position_t position)
     while (res == 0) {
 	couleur = dividende / NBPCOULEURS;
 	valeur = dividende - (couleur * NBPCOULEURS);
-	if (tab_cartes[valeur][couleur].detenteur == aucun) {
-	    tab_cartes[valeur][couleur].detenteur = position;
+	if (tab_cards[valeur][couleur].detenteur == aucun) {
+	    tab_cards[valeur][couleur].detenteur = position;
 	    res = 1;
 
 	} else {
-	    div = (dividende + 1) % NBCARTES;
+	    div = (dividende + 1) % NBCARDS;
 	    dividende = div;
 	}
     }
@@ -145,9 +145,9 @@ void evalmain(game_t * game)
     for (position = sud; position < aucun; position++) {
 	game->mainjoueur[position].nbpoints = 0;
 	for (couleur = club; couleur < aucune; couleur++) {
-	    game->mainjoueur[position].nbcartes[couleur] = 0;
+	    game->mainjoueur[position].nbcards[couleur] = 0;
 	    game->mainjoueur[position].nbpointshonneurs[couleur] = 0;
-	    game->mainjoueur[position].nbcartesmax = 0;
+	    game->mainjoueur[position].nbcardsmax = 0;
 
 	}
     }
@@ -155,35 +155,35 @@ void evalmain(game_t * game)
 	for (valeur = c2; valeur < pdc; valeur++) {
 	    for (couleur = club; couleur < aucune; couleur++) {
 		if (valeur >= cV) {
-		    game->mainjoueur[tab_cartes[valeur][couleur].
+		    game->mainjoueur[tab_cards[valeur][couleur].
 				     detenteur].nbpoints =
-			game->mainjoueur[tab_cartes[valeur][couleur].
+			game->mainjoueur[tab_cards[valeur][couleur].
 					 detenteur].nbpoints + (valeur -
 								8);
-		    game->mainjoueur[tab_cartes[valeur][couleur].
+		    game->mainjoueur[tab_cards[valeur][couleur].
 				     detenteur].nbpointshonneurs[couleur] =
-			game->mainjoueur[tab_cartes[valeur][couleur].
+			game->mainjoueur[tab_cards[valeur][couleur].
 					 detenteur].
 			nbpointshonneurs[couleur] + (valeur - 8);
 		}
 
-		game->mainjoueur[tab_cartes[valeur][couleur].detenteur].
-		    nbcartes[couleur] =
-		    game->mainjoueur[tab_cartes[valeur][couleur].
-				     detenteur].nbcartes[couleur] + 1;
+		game->mainjoueur[tab_cards[valeur][couleur].detenteur].
+		    nbcards[couleur] =
+		    game->mainjoueur[tab_cards[valeur][couleur].
+				     detenteur].nbcards[couleur] + 1;
 	    }
 	}
 	for (position = sud; position < aucun; position++) {
 	    for (couleur = club; couleur < aucune; couleur++) {
-		if (game->mainjoueur[position].nbcartes[couleur] >
-		    game->mainjoueur[position].nbcartesmax)
-		    game->mainjoueur[position].nbcartesmax =
-			game->mainjoueur[position].nbcartes[couleur];
-		if (game->mainjoueur[position].nbcartes[couleur] >=
+		if (game->mainjoueur[position].nbcards[couleur] >
+		    game->mainjoueur[position].nbcardsmax)
+		    game->mainjoueur[position].nbcardsmax =
+			game->mainjoueur[position].nbcards[couleur];
+		if (game->mainjoueur[position].nbcards[couleur] >=
 		    BONUSLONG)
 		    game->mainjoueur[position].nbpoints =
 			game->mainjoueur[position].nbpoints +
-			game->mainjoueur[position].nbcartes[couleur] -
+			game->mainjoueur[position].nbcards[couleur] -
 			BONUSLONG + 1;
 
 	    }
@@ -196,31 +196,31 @@ void envoi_jeu(position_t position, game_t * game)
 {
 
     couleur_t couleur;
-    carte_t *carte;
+    card_t *card;
     char *affca;
-    carte = malloc(sizeof(carte_t));
+    card = malloc(sizeof(card_t));
     int valeur;
     int index;
     for (couleur = club; couleur < aucune; couleur++) {
 	index = INDEX(position, couleur);
-	carte->clcarte = couleur;
+	card->clcard = couleur;
 	if (game->tabjeuref[index]->nbcrt != 0) {
 	    for (valeur = 0; valeur < game->tabjeuref[index]->nbcrt;
 		 valeur++) {
                 if(game->debug) {
 		  printf("%s", affca =
 		       affichage(game->tabjeuref[index]->tabcoul[valeur],
-				 CARTE));
+				 CARD));
 		  free(affca);
                 }
-		carte->nocarte = game->tabjeuref[index]->tabcoul[valeur];
-		if('e'==write_data(game, carte, 'c')) 
+		card->nocard = game->tabjeuref[index]->tabcoul[valeur];
+		if('e'==write_data(game, card, 'c')) 
                   end_session(game);
 
 	    }
 	}
     }
-    free(carte);
+    free(card);
 
 }
 
@@ -233,7 +233,7 @@ void fill_list_game(game_t * game)
     init_tabjeu(game);
     for (couleur = club; couleur < spade + 1; couleur++) {
 	for (valeur = c2; valeur < pdc; valeur++) {
-	    position = tab_cartes[valeur][couleur].detenteur;
+	    position = tab_cards[valeur][couleur].detenteur;
 	    position = (position) % 4;
 	    index = INDEX(position, couleur);
 	    nbcrt = game->tabjeu[index]->nbcrt;
@@ -249,14 +249,14 @@ void fill_list_game(game_t * game)
 }
 void distribution(void)
 {
-    int i = NBCARTES;
-    int nouvellecarte;
+    int i = NBCARDS;
+    int nouvellecard;
     position_t position;
     position = sud;
     initialisation();
-    for (i = NBCARTES; i > 0; i--) {
-	nouvellecarte = tirage(NBCARTES);
-	defcarte(nouvellecarte, position);
+    for (i = NBCARDS; i > 0; i--) {
+	nouvellecard = tirage(NBCARDS);
+	defcard(nouvellecard, position);
 
 	position = (position + 1) % NBJOUEURS;
     }

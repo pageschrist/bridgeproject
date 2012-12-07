@@ -135,7 +135,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     choice_color_t *choice_color=malloc(sizeof(choice_color_t));
     memset(choice_color,0,sizeof(choice_color_t));
     int index;
-    carte_t *best_coup = NULL;
+    card_t *best_coup = NULL;
     l_best_t *l_best = NULL;
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
@@ -160,7 +160,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		     hopestat[index]->nbline[(IALINE + 1) % 2],
 		     hopestat[index]->aff);
 		if (hopestat[index]->best_card)
-		    affiche_carte(hopestat[index]->best_card);
+		    affiche_card(hopestat[index]->best_card);
                 printf("\n");
 	    }
 	}
@@ -202,18 +202,18 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		if ((notour == 155555 && t == 0)&&hopestat && game->nbcard == NBPCOULEURS) {	// On est à l'entame
 		    search_best_color(trick->nextpos, hopestat,choice_color);
                     printf("color->toavoid=%d,color->interessant=%d\n",choice_color->toavoid,choice_color->interessant);
-		    best_coup = malloc(sizeof(carte_t));
+		    best_coup = malloc(sizeof(card_t));
 		    memcpy(best_coup,
 			   hopestat[INDEX(trick->nextpos, choice_color->interessant)]->best_card,
-			   sizeof(carte_t));
+			   sizeof(card_t));
 		    gettimeofday(timeap, NULL);
 		} else {
-		    if (t != 0 && game->tabjeu[INDEX(trick->nextpos, trick->carte[trick->entame].clcarte)]->nbcrt != 0) {	// On a entame et on a de la couleur d'entame
+		    if (t != 0 && game->tabjeu[INDEX(trick->nextpos, trick->card[trick->entame].clcard)]->nbcrt != 0) {	// On a entame et on a de la couleur d'entame
 			if (game->debug)
                           printf("look in analyse_hand\n");
 			best_coup =
 			    analyse_hand(game, trick,
-					 trick->carte[trick->entame].clcarte);
+					 trick->card[trick->entame].clcard);
                         if(!best_coup)
                           printf("ERROR: best_coup empty  coming from analyse_hand!!\n");
  
@@ -236,11 +236,11 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    l_best = NULL;
 		}
                 if(best_coup) {
-		  trick->lastcarte.nocarte = best_coup->nocarte;
-		  trick->lastcarte.clcarte = best_coup->clcarte;
+		  trick->lastcard.nocard = best_coup->nocard;
+		  trick->lastcard.clcard = best_coup->clcard;
 		  if (game->debug || TRUE) {
 		    printf("Joue coup trick,best_coup\n");
-		    affiche_carte(best_coup);
+		    affiche_card(best_coup);
 		  }
 		  if (joue_coup(trick, best_coup, game) == 0) {
 		    free(best_coup);

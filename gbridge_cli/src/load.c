@@ -9,13 +9,13 @@
 #include "objets.h"
 #include "load.h"
 extern GHashTable *configHash;
-imgcard_t  *load_imgcard(gchar *file, carte_t *carte,ihm_trick_t *ihm_setup,position_t position) {
+imgcard_t  *load_imgcard(gchar *file, card_t *card,ihm_trick_t *ihm_setup,position_t position) {
 
   imgcard_t *imgcard = (imgcard_t *) g_malloc(sizeof(imgcard_t) );
 
   if(imgcard != NULL) {
-    imgcard->couleur = carte->clcarte;
-    imgcard->valeur = carte->nocarte;
+    imgcard->couleur = card->clcard;
+    imgcard->valeur = card->nocard;
     imgcard->position = position;
 
     imgcard->dim.x = 0;

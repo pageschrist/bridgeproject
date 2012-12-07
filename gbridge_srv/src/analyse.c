@@ -52,7 +52,7 @@ void changeeval(game_t * game, couleur_t couleureval)
     }
 }
 
-carte_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
+card_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
 {
 
     int index;
@@ -63,7 +63,7 @@ carte_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
     int sizemax;
     l_best_t *l_best = NULL;
     int nb_best = 0;
-    carte_t *best_card = malloc(sizeof(carte_t));
+    card_t *best_card = malloc(sizeof(card_t));
     position_t position;
     sizemax = 0;
     for (position = sud; position < est + 1; position++) {
@@ -134,7 +134,7 @@ hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_trick)
 	for (position = sud; position < est + 1; position++) {
 	    index = INDEX(position, couleur);
 	    hopestat[index] = malloc(sizeof(hopestat_t));
-	    hopestat[index]->best_card = malloc(sizeof(carte_t));
+	    hopestat[index]->best_card = malloc(sizeof(card_t));
 	    hopestat[index]->position = position;
 	    hopestat[index]->couleur = couleur;
             if(!cur_trick) {
@@ -386,14 +386,14 @@ gboolean analyse_bid(game_t * game)
 /*Cette fonction essaie de trouver un fit en majeur, sinon elle teste l'arret a sans atout , sinon elle est essaie un fit en mineur, enfin elle retourne la couleur la plus longue */
 couleur_t fit(main_t * mainjoueur, int position)
 {
-    int nbmaxcarte = 0, i;
+    int nbmaxcard = 0, i;
     couleur_t refcouleur;
-    if (mainjoueur[position].nbcartes[spade] +
-	mainjoueur[position + 2].nbcartes[spade] >= FIT)
+    if (mainjoueur[position].nbcards[spade] +
+	mainjoueur[position + 2].nbcards[spade] >= FIT)
 	return (spade);
 
-    if (mainjoueur[position].nbcartes[heart] +
-	mainjoueur[position + 2].nbcartes[heart] >= FIT)
+    if (mainjoueur[position].nbcards[heart] +
+	mainjoueur[position + 2].nbcards[heart] >= FIT)
 	return (heart);
 
     if ((mainjoueur[position].nbpointshonneurs[spade] +
@@ -406,19 +406,19 @@ couleur_t fit(main_t * mainjoueur, int position)
 	    mainjoueur[position + 2].nbpointshonneurs[club] >= ARRET))
 	return (aucune);
 
-    if (mainjoueur[position].nbcartes[diamond] +
-	mainjoueur[position + 2].nbcartes[diamond] >= FIT)
+    if (mainjoueur[position].nbcards[diamond] +
+	mainjoueur[position + 2].nbcards[diamond] >= FIT)
 	return (diamond);
-    if (mainjoueur[position].nbcartes[club] +
-	mainjoueur[position + 2].nbcartes[club] >= FIT)
+    if (mainjoueur[position].nbcards[club] +
+	mainjoueur[position + 2].nbcards[club] >= FIT)
 	return (club);
     for (i = spade; i >= club; i--) {
-	if (mainjoueur[position].nbcartes[i] +
-	    mainjoueur[position + 2].nbcartes[i] >= nbmaxcarte) {
-	    nbmaxcarte =
-		mainjoueur[position].nbcartes[i] + mainjoueur[position +
+	if (mainjoueur[position].nbcards[i] +
+	    mainjoueur[position + 2].nbcards[i] >= nbmaxcard) {
+	    nbmaxcard =
+		mainjoueur[position].nbcards[i] + mainjoueur[position +
 							      2].
-		nbcartes[i];
+		nbcards[i];
 	    refcouleur = i;
 	}
 
@@ -451,19 +451,19 @@ position_t eval_contrat(game_t * game)
     if (color != aucune) {
 	for (i = 0; i < NBCOULEURS; i++) {
 	    if (color != i) {
-		if (game->mainjoueur[ref].nbcartes[i] <= 2)
+		if (game->mainjoueur[ref].nbcards[i] <= 2)
 		    pointsadditionnels =
 			pointsadditionnels + 3 -
-			game->mainjoueur[ref].nbcartes[i];
-		if (game->mainjoueur[ref + 2].nbcartes[i] <= 2)
+			game->mainjoueur[ref].nbcards[i];
+		if (game->mainjoueur[ref + 2].nbcards[i] <= 2)
 		    pointsadditionnels =
 			pointsadditionnels + 3 -
-			game->mainjoueur[ref].nbcartes[i];
+			game->mainjoueur[ref].nbcards[i];
 	    }
 
 	}
-	if (game->mainjoueur[ref].nbcartes[color] >=
-	    game->mainjoueur[ref + 2].nbcartes[color]) {
+	if (game->mainjoueur[ref].nbcards[color] >=
+	    game->mainjoueur[ref + 2].nbcards[color]) {
 	    jouepar = ref;
 	} else {
 	    jouepar = ref + 2;
