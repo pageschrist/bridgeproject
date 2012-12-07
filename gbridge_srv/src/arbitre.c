@@ -522,17 +522,6 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * trick,
     }
     return (0);			//Normalement pas utilise
 }
-void *copy_card(void *data)
-{
-    card_t *card;
-
-    card = malloc(sizeof(card_t));
-
-    (*card).nocard = ((card_t *) data)->nocard;
-    (*card).clcard = ((card_t *) data)->clcard;
-
-    return ((void *) card);
-}
 
 /*Cette fonction determine qui sera le suivant a jouer et met a jour les scores*/
 position_t evaluation_trick(trick_t * trick)
