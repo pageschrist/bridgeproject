@@ -171,14 +171,14 @@ int  read_header (ihm_trick_t *ihm_setup,void *data,char type) {
 }
   
 void read_data( ihm_trick_t *ihm_setup,void *data, char type) {
-  trick_t *pli;
+  trick_t *trick;
   carte_t *carte;
   bid_t *bid;
   char *cur_bid;
   switch(type) {
     case 'p':
-      pli= data;
-      read (ihm_setup->socketid,  pli, sizeof (trick_t));
+      trick= data;
+      read (ihm_setup->socketid,  trick, sizeof (trick_t));
       break;
     case 'c':
       carte= data;
@@ -204,7 +204,7 @@ ssize_t write_data(ihm_trick_t *ihm_setup,void  *data,char type,...) {
   va_list args;
   ssize_t ret=0;
   va_start (args, type);
-  trick_t *pli;
+  trick_t *trick;
   int size;
   carte_t *carte;
   bid_t *bid;
@@ -215,9 +215,9 @@ ssize_t write_data(ihm_trick_t *ihm_setup,void  *data,char type,...) {
   
   switch(type) {
     case 'p':
-      pli=(trick_t *) data;
+      trick=(trick_t *) data;
       write_header(ihm_setup,type);
-      ret=write (ihm_setup->socketid,  pli, sizeof (trick_t));
+      ret=write (ihm_setup->socketid,  trick, sizeof (trick_t));
       break;
     case 'f':
       size=va_arg(args,int);      

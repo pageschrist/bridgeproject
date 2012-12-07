@@ -140,10 +140,10 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
-    trick_t *pli;
+    trick_t *trick;
     int t, notour = 0 ;
-    pli = malloc(sizeof(trick_t));
-    init_trick(pli, INIT);
+    trick = malloc(sizeof(trick_t));
+    init_trick(trick, INIT);
     if (game->debug)
 	printf("We are in newgame random=%d level=%d\n", random, prof);
 
@@ -178,15 +178,15 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     }
     envoi_jeu((game->contrat->declarant) % NBJOUEURS, game);
     envoi_jeu((game->contrat->declarant + 2) % NBJOUEURS, game);
-    pli->entame = (game->contrat->declarant + 1) % 4;
-    pli->nextpos = (game->contrat->declarant + 1) % 4;
-    pli->atout = game->contrat->atout;
+    trick->entame = (game->contrat->declarant + 1) % 4;
+    trick->nextpos = (game->contrat->declarant + 1) % 4;
+    trick->atout = game->contrat->atout;
     if(game->nbcard <10)
       prof = game->nbcard  * 4;
     for (notour = 0; notour < game->nbcard; notour++) {
 	for (t = 0; t < NBJOUEURS; t++) {
             display_cardplayed(game);
-	    if ((pli->nextpos) % 2 == (game->contrat->declarant + 1) % 2) {
+	    if ((trick->nextpos) % 2 == (game->contrat->declarant + 1) % 2) {
                 if(game->debug)
 		  printf("IA play\n");
 		if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
@@ -200,25 +200,25 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    prof = (game->nbcard - notour) * 4;
 		}
 		if ((notour == 155555 && t == 0)&&hopestat && game->nbcard == NBPCOULEURS) {	// On est à l'entame
-		    search_best_color(pli->nextpos, hopestat,choice_color);
+		    search_best_color(trick->nextpos, hopestat,choice_color);
                     printf("color->toavoid=%d,color->interessant=%d\n",choice_color->toavoid,choice_color->interessant);
 		    best_coup = malloc(sizeof(carte_t));
 		    memcpy(best_coup,
-			   hopestat[INDEX(pli->nextpos, choice_color->interessant)]->best_card,
+			   hopestat[INDEX(trick->nextpos, choice_color->interessant)]->best_card,
 			   sizeof(carte_t));
 		    gettimeofday(timeap, NULL);
 		} else {
-		    if (t != 0 && game->tabjeu[INDEX(pli->nextpos, pli->carte[pli->entame].clcarte)]->nbcrt != 0) {	// On a entame et on a de la couleur d'entame
+		    if (t != 0 && game->tabjeu[INDEX(trick->nextpos, trick->carte[trick->entame].clcarte)]->nbcrt != 0) {	// On a entame et on a de la couleur d'entame
 			if (game->debug)
                           printf("look in analyse_hand\n");
 			best_coup =
-			    analyse_hand(game, pli,
-					 pli->carte[pli->entame].clcarte);
+			    analyse_hand(game, trick,
+					 trick->carte[trick->entame].clcarte);
                         if(!best_coup)
                           printf("ERROR: best_coup empty  coming from analyse_hand!!\n");
  
 		    } else {
-			first_explore(pli, prof - pli->noj, &nb_best,
+			first_explore(trick, prof - trick->noj, &nb_best,
 					  l_best, game);
 			gettimeofday(timeap, NULL);
 			if (game->debug)
@@ -226,7 +226,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 				   (int) timeap->tv_sec -
 				   (int) timeav->tv_sec);
 			best_coup =
-			    best_choice(&nb_best, l_best, game, NULL,pli);
+			    best_choice(&nb_best, l_best, game, NULL,trick);
                         if(!best_coup)
                           printf("ERROR: best_coup empty  coming from best_choice!!\n");
 		    }
@@ -236,13 +236,13 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 		    l_best = NULL;
 		}
                 if(best_coup) {
-		  pli->lastcarte.nocarte = best_coup->nocarte;
-		  pli->lastcarte.clcarte = best_coup->clcarte;
+		  trick->lastcarte.nocarte = best_coup->nocarte;
+		  trick->lastcarte.clcarte = best_coup->clcarte;
 		  if (game->debug || TRUE) {
-		    printf("Joue coup pli,best_coup\n");
+		    printf("Joue coup trick,best_coup\n");
 		    affiche_carte(best_coup);
 		  }
-		  if (joue_coup(pli, best_coup, game) == 0) {
+		  if (joue_coup(trick, best_coup, game) == 0) {
 		    free(best_coup);
 		    game->transfert->status = WAITING;
 		    return (TRUE);
@@ -254,13 +254,13 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 	    } else {
                 if(game->debug)
 		  printf("Player  \n");
-		if ('e' == read_header(game, pli, 'p'))
+		if ('e' == read_header(game, trick, 'p'))
 		    end_session(game);
-		joue_coup(pli, NULL, game);
+		joue_coup(trick, NULL, game);
 	    }
-	    pli->nextpos = evaluation_trick(pli);
+	    trick->nextpos = evaluation_trick(trick);
 
-	    if('e'==write_data(game, pli, 'p'))
+	    if('e'==write_data(game, trick, 'p'))
               end_session(game);
 	}
     }
@@ -268,7 +268,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
 	envoi_jeu((game->contrat->declarant + t) % NBJOUEURS, game);
     if (game->debug)
 	printf("4 games sent\n");
-    free(pli);
+    free(trick);
     return (TRUE);
 }
 

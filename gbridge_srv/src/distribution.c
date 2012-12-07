@@ -273,7 +273,7 @@ void init_distrib(game_t * game)
     bzero((char *) phrase, sizeof(char));
     if (game->debug)
 	printf("randomdist =%d\n", random);
-    //init_trick(pli,INIT);
+    //init_trick(trick,INIT);
     initialisation();
     //initstate (time (NULL), phrase, sizeof (phrase)); 
     if (random <= 0)

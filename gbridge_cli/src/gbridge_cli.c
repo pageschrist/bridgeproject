@@ -45,7 +45,7 @@ int main (int argc, char *argv[])
 
     g_free(context);
     create_config();
-    rempli_config();
+    fill_config();
     verifie_config();
     create_ihm(ihm_setup);        
     

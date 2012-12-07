@@ -130,7 +130,7 @@ typedef struct _thread_jeu
   tablist_t **t_jeu;
   carte_t *carte;
   carte_t *best_cartepot;
-  trick_t *pli;
+  trick_t *trick;
   short status;
   int score;
   int nbline[eo+1];
@@ -143,7 +143,7 @@ typedef struct _thread_jeu
 typedef struct _contrat_t
 {
   couleur_t atout;
-  valeur_t nbtricks;		/* decrit le nombre de plis a realiser */
+  valeur_t nbtricks;		/* decrit le nombre de tricks a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
   int maxc[4];
@@ -188,7 +188,7 @@ int max(int a,int b);
 void *dupXXcate_trick (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
-void display_trick (trick_t * pli,gboolean display);
+void display_trick (trick_t * trick,gboolean display);
 void *copy_carte (void *data);
 void init_tabjeu(game_t *game);
 int remove_index (tablist_t **t_jeu,position_t position, couleur_t couleur, int pos_index);
@@ -199,7 +199,7 @@ void affiche_tabjeuref (game_t *game,position_t position);
 void affiche_tabjeu_c (tablist_t **t_jeu);
 void affiche_carte (carte_t *carte);
 int sub_index (tablist_t **t_jeu,position_t position, couleur_t couleur, valeur_t valeur);
-void init_trick (trick_t * pli, int maniere);
+void init_trick (trick_t * trick, int maniere);
 void add_list_f(l_best_t *l_best,best_t *best) ;
 void add_list_l(l_best_t *l_best,best_t *best) ;
 void init_list_best(l_best_t *l_best);

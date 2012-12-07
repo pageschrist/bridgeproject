@@ -103,21 +103,21 @@ carte_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
 }
 
 
-hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_pli)
+hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_trick)
 {
 
     int index;
     hopestat_t **hopestat = malloc(16 * sizeof(hopestat_t *));
-    trick_t *pli;
+    trick_t *trick;
     int sizemax[spade + 1];
     l_best_t *l_best = NULL;
     int nb_best = 0;
     struct timeval *timeav = malloc(sizeof(struct timeval));
     struct timeval *timeap = malloc(sizeof(struct timeval));
-    if(!cur_pli)
-      pli = malloc(sizeof(trick_t));
+    if(!cur_trick)
+      trick = malloc(sizeof(trick_t));
     else
-      pli=cur_pli;
+      trick=cur_trick;
     position_t position;
     couleur_t couleur;
     for (couleur = club; couleur < spade + 1; couleur++) {
@@ -137,11 +137,11 @@ hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_pli)
 	    hopestat[index]->best_card = malloc(sizeof(carte_t));
 	    hopestat[index]->position = position;
 	    hopestat[index]->couleur = couleur;
-            if(!cur_pli) {
-	    init_trick(pli, INIT);
-	      pli->entame = position;
-	      pli->nextpos = position;
-	     pli->atout = aucune;
+            if(!cur_trick) {
+	    init_trick(trick, INIT);
+	      trick->entame = position;
+	      trick->nextpos = position;
+	     trick->atout = aucune;
             }
 	    if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
 		fprintf(stderr, "Pb with malloc\n");
@@ -151,12 +151,12 @@ hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_pli)
 	    }
 	    nb_best = 0;
 	    gettimeofday(timeav, NULL);
-	    first_explore(pli, (sizemax[couleur] * 4) - pli->noj, &nb_best,
+	    first_explore(trick, (sizemax[couleur] * 4) - trick->noj, &nb_best,
 			  l_best, game);
 	    gettimeofday(timeap, NULL);
 	    if (nb_best != 0) {
 		hopestat[index]->best_card =
-		    best_choice(&nb_best, l_best, game, hopestat[index],cur_pli);
+		    best_choice(&nb_best, l_best, game, hopestat[index],cur_trick);
 
 	    } else {
 		free(hopestat[index]->best_card);
@@ -169,8 +169,8 @@ hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_pli)
 	}
     }
     changeeval(game, aucune);
-    if(!cur_pli)
-      free(pli);
+    if(!cur_trick)
+      free(trick);
     free(timeap);
     free(timeav);
     return (hopestat);

@@ -12,7 +12,7 @@
 #include "arbitre.h"
 extern coord_t tab_cartes[cA + 1][spade + 1];
 /* Fonction qui liste tous les newcartes , soit on passe une couleur sinon on a le choix*/
-/*pli.entame doit etre initialise */
+/*trick.entame doit etre initialise */
 void ftrace(void)
 {
     printf("OK\n");
@@ -46,13 +46,13 @@ gboolean test_reprise(position_t position,tablist_t **t_jeu) {
   
 
 }
-gboolean check_invert_lead(trick_t *pli,tablist_t **t_jeu) {
+gboolean check_invert_lead(trick_t *trick,tablist_t **t_jeu) {
   couleur_t coloreval=t_jeu[0]->couleureval; 
-  if((pli->noj)%4==0) {
-    if(t_jeu[INDEX(pli->nextpos,coloreval)]->nbcrt==0 && t_jeu[INDEX((pli->nextpos+2)%4,coloreval)]->nbcrt!=0) {
+  if((trick->noj)%4==0) {
+    if(t_jeu[INDEX(trick->nextpos,coloreval)]->nbcrt==0 && t_jeu[INDEX((trick->nextpos+2)%4,coloreval)]->nbcrt!=0) {
      
-      if(test_reprise((pli->nextpos+2)%4,t_jeu)) {
-        pli->nextpos=(pli->nextpos+2)%4;
+      if(test_reprise((trick->nextpos+2)%4,t_jeu)) {
+        trick->nextpos=(trick->nextpos+2)%4;
         return(TRUE);
       }
     }     
@@ -195,7 +195,7 @@ void destroy_jeu(thread_jeu_t * thread_jeu)
 
 
 int
-list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * pli,
+list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * trick,
 		    tablist_t ** tmpjeu)
 {
     couleur_t couleurc = tmpjeu[0]->couleureval;
@@ -204,25 +204,25 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * pli,
     couleur_t i;
     carte_t phcarte;
     int presence = NON, pos_index;
-    if (positionc == pli->entame)
+    if (positionc == trick->entame)
 	situation = ENTAME;
-    if (positionc != pli->entame) {
+    if (positionc != trick->entame) {
 	situation = NONENTAME;
 	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0) {
 	    situation = DISCARD;
 	}
     }
-    phcarte.nocarte = pli->phcarte.nocarte;
-    phcarte.clcarte = pli->phcarte.clcarte;
+    phcarte.nocarte = trick->phcarte.nocarte;
+    phcarte.clcarte = trick->phcarte.clcarte;
 
     if (situation == DISCARD) {
 	for (i = (couleurc + 1) % 4; (i) % 4 != couleurc; i = (i + 1) % 4) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
-		pli->carte[positionc].clcarte = i;
-		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+		trick->carte[positionc].clcarte = i;
+		trick->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
 		nbcoups++;
-                add_item_head(l_item, pli);
+                add_item_head(l_item, trick);
 		break;
 	    }
 	}
@@ -242,28 +242,28 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * pli,
 		/* On teste si la carte inférieure est équivalente */
 		if ((tmpjeu[INDEX(positionc, i)]->tabcoul[k] -
 		     tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1]) != 1) {
-		    pli->carte[positionc].clcarte = i;
-		    pli->carte[positionc].nocarte =
+		    trick->carte[positionc].clcarte = i;
+		    trick->carte[positionc].nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-		    pli->phcarte.clcarte = i;
-		    pli->phcarte.nocarte =
+		    trick->phcarte.clcarte = i;
+		    trick->phcarte.nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		    nbcoups++;
-                    add_item_head(l_item, pli);
-		    pli->phcarte.nocarte = phcarte.nocarte;
-		    pli->phcarte.clcarte = phcarte.clcarte;
+                    add_item_head(l_item, trick);
+		    trick->phcarte.nocarte = phcarte.nocarte;
+		    trick->phcarte.clcarte = phcarte.clcarte;
 		}
 	    } else {
-		pli->carte[positionc].clcarte = i;
-		pli->carte[positionc].nocarte =
+		trick->carte[positionc].clcarte = i;
+		trick->carte[positionc].nocarte =
 		    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-		pli->phcarte.clcarte = i;
-		pli->phcarte.nocarte =
+		trick->phcarte.clcarte = i;
+		trick->phcarte.nocarte =
 		    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
 		nbcoups++;
-                add_item_head(l_item, pli);
-		pli->phcarte.nocarte = phcarte.nocarte;
-		pli->phcarte.clcarte = phcarte.clcarte;
+                add_item_head(l_item, trick);
+		trick->phcarte.nocarte = phcarte.nocarte;
+		trick->phcarte.clcarte = phcarte.clcarte;
 		presence = OUI;
 
 
@@ -284,22 +284,22 @@ list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * pli,
 
 	if (tmpjeu[index]->nbcrt == 1) {	//Une seule carte 
 
-	    pli->carte[positionc].clcarte = couleurc;
-	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-            add_item_head(l_item, pli);
+	    trick->carte[positionc].clcarte = couleurc;
+	    trick->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+            add_item_head(l_item, trick);
 	    return (1);
 
 	} else {
 	    for (pos_index = 0; pos_index < tmpjeu[index]->nbcrt;
 		 pos_index++) {
 
-		pli->carte[positionc].clcarte = couleurc;
-		pli->carte[positionc].nocarte =
+		trick->carte[positionc].clcarte = couleurc;
+		trick->carte[positionc].nocarte =
 		    tmpjeu[index]->tabcoul[pos_index];
-		pli->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
-		pli->phcarte.clcarte = couleurc;
+		trick->phcarte.nocarte = tmpjeu[index]->tabcoul[pos_index];
+		trick->phcarte.clcarte = couleurc;
 		nbcoups++;
-                add_item_head(l_item, pli);
+                add_item_head(l_item, trick);
 	    }
 	}
 	return (nbcoups);
@@ -334,7 +334,7 @@ int points_per_color(tablist_t *tablist ) {
 }
 
 int
-list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
+list_all_coups(position_t positionc, l_item_t *l_item, trick_t * trick,
 	       tablist_t ** tmpjeu,gboolean *cardplayed)
 {
     int index, situation, nbcoups = 0;
@@ -344,29 +344,29 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
     couleur_t i;
     carte_t phcarte;
     int presence = NON, pos_index;
-    if (positionc == pli->entame)
+    if (positionc == trick->entame)
 	situation = ENTAME;
-    if (positionc != pli->entame) {
+    if (positionc != trick->entame) {
 	situation = NONENTAME;
-	couleurc = pli->carte[pli->entame].clcarte;
+	couleurc = trick->carte[trick->entame].clcarte;
 	if (tmpjeu[INDEX(positionc, couleurc)]->nbcrt == 0 ) {
 	    situation = DISCARD; //DISCARD or TRUMP
 	}
     }
-    phcarte.nocarte = pli->phcarte.nocarte;
-    phcarte.clcarte = pli->phcarte.clcarte;
+    phcarte.nocarte = trick->phcarte.nocarte;
+    phcarte.clcarte = trick->phcarte.clcarte;
 
     if (situation == DISCARD) {
 	for (i = club; i < spade + 1; i++) {
 	    index = INDEX(positionc, i);
 	    if (tmpjeu[index]->nbcrt != 0) {
-		if (i != pli->atout) {
+		if (i != trick->atout) {
                     points_per_color(tmpjeu[index]);
-		    pli->carte[positionc].clcarte = i;
-		    pli->carte[positionc].nocarte =
+		    trick->carte[positionc].clcarte = i;
+		    trick->carte[positionc].nocarte =
 			tmpjeu[index]->tabcoul[0];
                   if(NULL==cardplayed || tmpjeu[index]->nbcrt ==1) {  //if tmpjeu[index]->nbcrt ==1 no choice
-                    add_item_tail(l_item, pli);
+                    add_item_tail(l_item, trick);
 
                   }
                   else {
@@ -375,25 +375,25 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
                     dist=calc_dist(cardplayed,i,higher_value,tmpjeu[index]->tabcoul[0]);
 
                     if(dist+1<tmpjeu[index]->nbcrt) {
-                      add_item_tail(l_item, pli);
+                      add_item_tail(l_item, trick);
                     }
                     else 
-                      add_item_head(l_item, pli);    
+                      add_item_head(l_item, trick);    
                   }
 		  nbcoups++;
 		} else {
 		    for (k = 0;  k<tmpjeu[index]->nbcrt; k++) {
                         if(k!=0) {
-                          if(pli->carte[positionc].nocarte-(1+kmem)==tmpjeu[index]->tabcoul[k]) {
+                          if(trick->carte[positionc].nocarte-(1+kmem)==tmpjeu[index]->tabcoul[k]) {
                             kmem++;
                             continue;
                           }
                         }
-			pli->carte[positionc].clcarte = i;
-			pli->carte[positionc].nocarte =
+			trick->carte[positionc].clcarte = i;
+			trick->carte[positionc].nocarte =
 			    tmpjeu[index]->tabcoul[k];
 			nbcoups++;
-			add_item_head(l_item, pli);
+			add_item_head(l_item, trick);
 		    }
 		}
 	    }
@@ -415,15 +415,15 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
 		    if ((tmpjeu[INDEX(positionc, i)]->tabcoul[k] -
 			 tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1]) != 1)
 		    {
-			pli->carte[positionc].clcarte = i;
-			pli->carte[positionc].nocarte =
+			trick->carte[positionc].clcarte = i;
+			trick->carte[positionc].nocarte =
 			    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-			pli->phcarte.clcarte = i;
-			pli->phcarte.nocarte =
+			trick->phcarte.clcarte = i;
+			trick->phcarte.nocarte =
 			    tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-			if (pli->carte[positionc].nocarte == pdc) {
+			if (trick->carte[positionc].nocarte == pdc) {
 			    int h;
-			    display_trick(pli,TRUE);
+			    display_trick(trick,TRUE);
 			    for (h = 0; h < NBJOUEURS; h++)
 				//affiche_tabjeu(h);
 				printf("Pb dans list_all_coups 1 \n");
@@ -432,31 +432,31 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
 			    exit(3);
 			}
 			nbcoups++;
-			//push(stack, pli);
-                        add_item_head(l_item, pli);
-			pli->phcarte.nocarte = phcarte.nocarte;
-			pli->phcarte.clcarte = phcarte.clcarte;
+			//push(stack, trick);
+                        add_item_head(l_item, trick);
+			trick->phcarte.nocarte = phcarte.nocarte;
+			trick->phcarte.clcarte = phcarte.clcarte;
 		    }
 		} else {
-		    pli->carte[positionc].clcarte = i;
-		    pli->carte[positionc].nocarte =
+		    trick->carte[positionc].clcarte = i;
+		    trick->carte[positionc].nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-		    pli->phcarte.clcarte = i;
-		    pli->phcarte.nocarte =
+		    trick->phcarte.clcarte = i;
+		    trick->phcarte.nocarte =
 			tmpjeu[INDEX(positionc, i)]->tabcoul[k - 1];
-		    if (pli->carte[positionc].nocarte == pdc) {
+		    if (trick->carte[positionc].nocarte == pdc) {
 			int h;
-			display_trick(pli,TRUE);
+			display_trick(trick,TRUE);
 			for (h = 0; h < NBJOUEURS; h++)
 			    //affiche_tmpjeu(h);
 			    printf("Pb dans list_all_coups 2\n");
 			exit(3);
 		    }
 		    nbcoups++;
-		    //push(stack, pli);
-                    add_item_head(l_item, pli);
-		    pli->phcarte.nocarte = phcarte.nocarte;
-		    pli->phcarte.clcarte = phcarte.clcarte;
+		    //push(stack, trick);
+                    add_item_head(l_item, trick);
+		    trick->phcarte.nocarte = phcarte.nocarte;
+		    trick->phcarte.clcarte = phcarte.clcarte;
 		    presence = OUI;
 
 
@@ -471,48 +471,48 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * pli,
 
 
     else {
-	couleurc = pli->carte[pli->entame].clcarte;	/*On recupere la couleur entame */
+	couleurc = trick->carte[trick->entame].clcarte;	/*On recupere la couleur entame */
 	presence = NON;
 
 	index = INDEX(positionc, couleurc);
 
 	if (tmpjeu[index]->nbcrt == 1) {	//Une seule carte 
 
-	    pli->carte[positionc].clcarte = couleurc;
-	    pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-	    //push(stack, pli);
-            add_item_head(l_item, pli);
+	    trick->carte[positionc].clcarte = couleurc;
+	    trick->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+	    //push(stack, trick);
+            add_item_head(l_item, trick);
 	    return (1);
 
 	} else {
 
 	    sub =
 		sub_index(tmpjeu, positionc, couleurc,
-			  pli->phcarte.nocarte);
-	    if (sub == 0 && tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt - 1] < pli->phcarte.nocarte) {	//Toutes les cartes 
-		pli->carte[positionc].clcarte = couleurc;
-		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-		//push(stack, pli);
-                add_item_head(l_item, pli);
+			  trick->phcarte.nocarte);
+	    if (sub == 0 && tmpjeu[index]->tabcoul[tmpjeu[index]->nbcrt - 1] < trick->phcarte.nocarte) {	//Toutes les cartes 
+		trick->carte[positionc].clcarte = couleurc;
+		trick->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+		//push(stack, trick);
+                add_item_head(l_item, trick);
 		return (1);
 	    } else {
-		pli->carte[positionc].clcarte = couleurc;
-		pli->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
-		//push(stack, pli);
-                add_item_head(l_item, pli);
+		trick->carte[positionc].clcarte = couleurc;
+		trick->carte[positionc].nocarte = tmpjeu[index]->tabcoul[0];
+		//push(stack, trick);
+                add_item_head(l_item, trick);
 		nbcoups++;
 		for (pos_index = sub + 1; pos_index < tmpjeu[index]->nbcrt;
 		     pos_index++) {
 
-		    pli->carte[positionc].clcarte = couleurc;
-		    pli->carte[positionc].nocarte =
+		    trick->carte[positionc].clcarte = couleurc;
+		    trick->carte[positionc].nocarte =
 			tmpjeu[index]->tabcoul[pos_index];
-		    pli->phcarte.nocarte =
+		    trick->phcarte.nocarte =
 			tmpjeu[index]->tabcoul[pos_index];
-		    pli->phcarte.clcarte = couleurc;
+		    trick->phcarte.clcarte = couleurc;
 		    nbcoups++;
-		    //push(stack, pli);
-                    add_item_head(l_item, pli);
+		    //push(stack, trick);
+                    add_item_head(l_item, trick);
 
 		}
 	    }
@@ -535,159 +535,159 @@ void *copy_carte(void *data)
 }
 
 /*Cette fonction determine qui sera le suivant a jouer et met a jour les scores*/
-position_t evaluation_trick(trick_t * pli)
+position_t evaluation_trick(trick_t * trick)
 {
 
     carte_t carte_atout;
-    carte_atout.clcarte = pli->atout;
+    carte_atout.clcarte = trick->atout;
     carte_atout.nocarte = pdc;
     position_t postmp;
     position_t posgagnante;
     carte_t carteref;
 
-    define_leader(pli); // We setup who  is winning
-    /* On teste si on est le dernier joueur du pli */
-    if (pli->noj == 3) {
-	postmp = pli->entame;
-	carteref.nocarte = pli->carte[pli->entame].nocarte;
-	carteref.clcarte = pli->carte[pli->entame].clcarte;
-	posgagnante = pli->entame;
+    define_leader(trick); // We setup who  is winning
+    /* On teste si on est le dernier joueur du trick */
+    if (trick->noj == 3) {
+	postmp = trick->entame;
+	carteref.nocarte = trick->carte[trick->entame].nocarte;
+	carteref.clcarte = trick->carte[trick->entame].clcarte;
+	posgagnante = trick->entame;
 	postmp = (postmp + 1) % 4;
-	while (postmp != pli->entame) {
+	while (postmp != trick->entame) {
 	    if (carte_atout.nocarte == pdc) {	//On n'a jamais joue atout
-		if (pli->carte[postmp].clcarte == carteref.clcarte) {
-		    if (pli->carte[postmp].nocarte > carteref.nocarte) {
+		if (trick->carte[postmp].clcarte == carteref.clcarte) {
+		    if (trick->carte[postmp].nocarte > carteref.nocarte) {
 			posgagnante = postmp;
-			carteref.nocarte = pli->carte[postmp].nocarte;
+			carteref.nocarte = trick->carte[postmp].nocarte;
 		    }
 		} else {
-		    if ((pli->atout == pli->carte[postmp].clcarte)
-			&& (pli->atout != aucune)) {
+		    if ((trick->atout == trick->carte[postmp].clcarte)
+			&& (trick->atout != aucune)) {
 			posgagnante = postmp;
-			carte_atout.nocarte = pli->carte[postmp].nocarte;
+			carte_atout.nocarte = trick->carte[postmp].nocarte;
 		    }
 
 		}
 
 
 	    } else {		//on a joue atout
-		if ((pli->atout == pli->carte[postmp].clcarte)
-		    && (pli->carte[postmp].nocarte >
+		if ((trick->atout == trick->carte[postmp].clcarte)
+		    && (trick->carte[postmp].nocarte >
 			carte_atout.nocarte)) {
 		    posgagnante = postmp;
-		    carte_atout.nocarte = pli->carte[postmp].nocarte;
+		    carte_atout.nocarte = trick->carte[postmp].nocarte;
 		}
 	    }
 	    postmp = (postmp + 1) % 4;
 	}
-	pli->entame = posgagnante;
-	pli->nextpos = posgagnante;
-	pli->nbtrick++;
-	pli->nbtrick_line[(posgagnante % 2)]++;
+	trick->entame = posgagnante;
+	trick->nextpos = posgagnante;
+	trick->nbtrick++;
+	trick->nbtrick_line[(posgagnante % 2)]++;
 
-	init_trick(pli, RESET);	/*on reinitialise le pli */
-	//display_trick (pli);
+	init_trick(trick, RESET);	/*on reinitialise le trick */
+	//display_trick (trick);
     } else {
-	if (pli->phcarte.nocarte == pdc) {
-	    pli->phcarte.nocarte = pli->carte[pli->nextpos].nocarte;
-	    pli->phcarte.clcarte = pli->carte[pli->nextpos].clcarte;
+	if (trick->phcarte.nocarte == pdc) {
+	    trick->phcarte.nocarte = trick->carte[trick->nextpos].nocarte;
+	    trick->phcarte.clcarte = trick->carte[trick->nextpos].clcarte;
 	} else {
-	    if ((pli->phcarte.clcarte == pli->carte[pli->nextpos].clcarte)
-		&& (pli->carte[pli->nextpos].nocarte >
-		    pli->phcarte.nocarte)) {
+	    if ((trick->phcarte.clcarte == trick->carte[trick->nextpos].clcarte)
+		&& (trick->carte[trick->nextpos].nocarte >
+		    trick->phcarte.nocarte)) {
 
-		pli->phcarte.nocarte = pli->carte[pli->nextpos].nocarte;
-		pli->phcarte.clcarte = pli->carte[pli->nextpos].clcarte;
+		trick->phcarte.nocarte = trick->carte[trick->nextpos].nocarte;
+		trick->phcarte.clcarte = trick->carte[trick->nextpos].clcarte;
 
 	    }
 
 
 	}
 
-	pli->nextpos = (pli->nextpos + 1) % 4;
+	trick->nextpos = (trick->nextpos + 1) % 4;
     }
-    pli->noj = (pli->noj + 1) % 4;
-    return (pli->nextpos);
+    trick->noj = (trick->noj + 1) % 4;
+    return (trick->nextpos);
 }
 
-int joue_coup(trick_t * pli, carte_t * carte, game_t * game)
+int joue_coup(trick_t * trick, carte_t * carte, game_t * game)
 {
     int posindex;
     position_t position;
-    // NULL is used when  (IHM) plays , all the information is in pli
+    // NULL is used when  (IHM) plays , all the information is in trick
     if (carte != NULL) {
-	position = pli->nextpos;
-	pli->carte[position].nocarte = carte->nocarte;
-	pli->carte[position].clcarte = carte->clcarte;
+	position = trick->nextpos;
+	trick->carte[position].nocarte = carte->nocarte;
+	trick->carte[position].clcarte = carte->clcarte;
         game->cardplayed[INDCARD(carte->clcarte,carte->nocarte)]=TRUE;
 	posindex =
 	    find_index(game->tabjeu, position, carte->clcarte,
 		       carte->nocarte);
 	if (posindex == -1) {
 	    printf("Pb in joue_coup1\n");
-	    display_trick(pli,TRUE);
+	    display_trick(trick,TRUE);
 	    affiche_carte(carte);
 	    return (0);
 	}
 	posindex =
 	    remove_index(game->tabjeu, position, carte->clcarte, posindex);
     } else {
-	position = pli->nextpos;
+	position = trick->nextpos;
 	posindex =
 	    find_index(game->tabjeu, position,
-		       pli->carte[position].clcarte,
-		       pli->carte[position].nocarte);
+		       trick->carte[position].clcarte,
+		       trick->carte[position].nocarte);
 	if (posindex == -1) {
 	    printf("Pb in joue_coup2\n");
 	    return (0);
 	}
 	posindex =
 	    remove_index(game->tabjeu, position,
-			 pli->carte[position].clcarte, posindex);
-	if (pli->carte[position].clcarte ==
-	    pli->carte[pli->entame].clcarte) {
-	    if (pli->phcarte.nocarte < pli->carte[position].nocarte)
-		pli->phcarte.nocarte = pli->carte[position].nocarte;
+			 trick->carte[position].clcarte, posindex);
+	if (trick->carte[position].clcarte ==
+	    trick->carte[trick->entame].clcarte) {
+	    if (trick->phcarte.nocarte < trick->carte[position].nocarte)
+		trick->phcarte.nocarte = trick->carte[position].nocarte;
 	}
-        game->cardplayed[INDCARD(pli->carte[position].clcarte,pli->carte[position].nocarte)]=TRUE;
+        game->cardplayed[INDCARD(trick->carte[position].clcarte,trick->carte[position].nocarte)]=TRUE;
     }
 
     return (1);
 }
 
 
-rettrick_t *check_trick(trick_t * pli)
+rettrick_t *check_trick(trick_t * trick)
 {
     rettrick_t *rettrick = malloc(sizeof(rettrick_t));
     ligne_t lignej;
     lignej = (IALINE + 1) % 2;
-    rettrick->score = pli->nbtrick_line[lignej] - pli->nbtrick_line[IALINE];
-    rettrick->nbline[lignej] = pli->nbtrick_line[lignej];
-    rettrick->nbline[IALINE] = pli->nbtrick_line[IALINE];
+    rettrick->score = trick->nbtrick_line[lignej] - trick->nbtrick_line[IALINE];
+    rettrick->nbline[lignej] = trick->nbtrick_line[lignej];
+    rettrick->nbline[IALINE] = trick->nbtrick_line[IALINE];
     rettrick->alpha_or_beta = 0;
     /* printf ("Voici le score dans check_trick: %d\n", score); */
     return (rettrick);
 
 }
-void define_leader(trick_t *pli) {
-  if(pli->entame==pli->nextpos) {
-   pli->leader=pli->entame;
+void define_leader(trick_t *trick) {
+  if(trick->entame==trick->nextpos) {
+   trick->leader=trick->entame;
   }
   else {
-    if(pli->atout!=aucune) {
-      if(pli->carte[pli->leader].clcarte==pli->carte[pli->nextpos].clcarte) {
-        if(pli->carte[pli->leader].nocarte<pli->carte[pli->nextpos].nocarte)
-          pli->leader=pli->nextpos;
+    if(trick->atout!=aucune) {
+      if(trick->carte[trick->leader].clcarte==trick->carte[trick->nextpos].clcarte) {
+        if(trick->carte[trick->leader].nocarte<trick->carte[trick->nextpos].nocarte)
+          trick->leader=trick->nextpos;
       }
       else {
-        if(pli->carte[pli->nextpos].clcarte==pli->atout)
-          pli->leader=pli->nextpos;
+        if(trick->carte[trick->nextpos].clcarte==trick->atout)
+          trick->leader=trick->nextpos;
       }
     }
     else {
-      if(pli->carte[pli->leader].clcarte==pli->carte[pli->nextpos].clcarte) {
-        if(pli->carte[pli->leader].nocarte<pli->carte[pli->nextpos].nocarte)
-          pli->leader=pli->nextpos;
+      if(trick->carte[trick->leader].clcarte==trick->carte[trick->nextpos].clcarte) {
+        if(trick->carte[trick->leader].nocarte<trick->carte[trick->nextpos].nocarte)
+          trick->leader=trick->nextpos;
       }
 
     }

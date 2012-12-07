@@ -14,12 +14,12 @@
 int prof_start = 0;
 int flag_debug = 0;
 
-int  best_elem_best_l(elem_best_t *elem_best,trick_t *pli) {
+int  best_elem_best_l(elem_best_t *elem_best,trick_t *trick) {
   char *affca,*affcl;
   int score;
-  score=-15*((pli->nextpos+1)%2) +(15*((pli->nextpos)%2));
+  score=-15*((trick->nextpos+1)%2) +(15*((trick->nextpos)%2));
   while (elem_best) {
-    if((pli->nextpos)%2==1) {
+    if((trick->nextpos)%2==1) {
       if(elem_best->best->score<score)
         score=elem_best->best->score;
     }
@@ -45,7 +45,7 @@ int  best_elem_best_l(elem_best_t *elem_best,trick_t *pli) {
  // while(
 //}
 carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
-		    hopestat_t * hopestat,trick_t *pli)
+		    hopestat_t * hopestat,trick_t *trick)
 {
     gboolean suplead[spade+1];
     valeur_t tabval[spade + 1];
@@ -61,8 +61,8 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
 	tabval[i] = pdc;
     for (i = 0; i < spade + 1; i++)
 	suplead[i] = TRUE;
-    if(pli)
-      score_ref = best_elem_best_l(disp_elem_best,pli);
+    if(trick)
+      score_ref = best_elem_best_l(disp_elem_best,trick);
     else 
       score_ref = l_best->first->best->score;
 
@@ -89,24 +89,24 @@ carte_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
                 hopestat->aff=hopestat->aff-(elem_best->best->nbline[jline]+elem_best->best->nbline[IALINE]);
 
 	    }
-            if(pli &&(pli->nextpos==(pli->entame+3)%4 &&(pli->leader)%2==jline )) {  
-              if(pli->atout!=aucune) {
-                if(pli->carte[pli->leader].clcarte==elem_best->best->carte->clcarte) {
-                  if(pli->carte[pli->leader].nocarte<elem_best->best->carte->nocarte) {
+            if(trick &&(trick->nextpos==(trick->entame+3)%4 &&(trick->leader)%2==jline )) {  
+              if(trick->atout!=aucune) {
+                if(trick->carte[trick->leader].clcarte==elem_best->best->carte->clcarte) {
+                  if(trick->carte[trick->leader].nocarte<elem_best->best->carte->nocarte) {
                     tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
                     suplead[elem_best->best->carte->clcarte]=FALSE;
                   }
                 }
                 else {
-                  if(elem_best->best->carte->clcarte==pli->atout) {
+                  if(elem_best->best->carte->clcarte==trick->atout) {
                     tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
                     suplead[elem_best->best->carte->clcarte]=FALSE;
                   }
                 }
               }
               else {
-                if(pli->carte[pli->leader].clcarte==elem_best->best->carte->clcarte) {
-                  if(pli->carte[pli->leader].nocarte<elem_best->best->carte->nocarte) {
+                if(trick->carte[trick->leader].clcarte==elem_best->best->carte->clcarte) {
+                  if(trick->carte[trick->leader].nocarte<elem_best->best->carte->nocarte) {
                     tabval[elem_best->best->carte->clcarte] = elem_best->best->carte->nocarte;
                     suplead[elem_best->best->carte->clcarte]=FALSE;
                   }
@@ -163,7 +163,7 @@ rettrick_t *cur_explore(int prof, trick_t * trick_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -274,7 +274,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * trick_cur, int prof_max,
     int beta = oribeta;
     position_t positionc;
     int pos_index;
-    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
@@ -395,14 +395,14 @@ void *new_explore(void *arg)
     rettrick_t *ret;
     rettrick_t *rettmp;
     int pos_index;
-    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];
     couleur_t nocouleur;
     valeur_t nocarte;
     //reconstitution des varaiables
     prof = thread_jeu->prof;
     prof_max = thread_jeu->prof_max;
-    trick_cur = thread_jeu->pli;
+    trick_cur = thread_jeu->trick;
     if (thread_jeu->t_jeu[0]->debug)
 	printf("A thread is started with prof=%d, prof_max=%d\n", prof,
 	       prof_max);
@@ -509,7 +509,7 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
     int nbcoups, i, threads_remaining = 1;
     position_t positionc;
     int pos_index;
-    trick_t *trick_new;		/* nouveau pli renvoye par la liste des coups */
+    trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score;
     couleur_t nocouleur;
     valeur_t nocarte;
@@ -561,7 +561,7 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	    trick_new->carte[positionc].nocarte;
 	thread_jeu[nothr]->carte->clcarte =
 	    trick_new->carte[positionc].clcarte;
-	thread_jeu[nothr]->pli = trick_new;
+	thread_jeu[nothr]->trick = trick_new;
 	thread_jeu[nothr]->status = 0;
 	thread_jeu[nothr]->prof_max = prof_max;
 	thread_jeu[nothr]->prof = 1;
@@ -577,7 +577,7 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
 	    trick_new->carte[positionc].nocarte;
 	thread_jeu[nothr]->best_cartepot->clcarte =
 	    trick_new->carte[positionc].clcarte;
-	evaluation_trick(thread_jeu[nothr]->pli);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
+	evaluation_trick(thread_jeu[nothr]->trick);	/*on incremente nextpos ou on fixe la prochaine entame et nbtricks++ */
 
 
 

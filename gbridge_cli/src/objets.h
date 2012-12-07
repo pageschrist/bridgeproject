@@ -97,7 +97,7 @@ typedef struct _trick_t
   position_t nextpos;
   carte_t phcarte;
   carte_t lastcarte;
-  int nopli;
+  int notrick;
   int nbtricks_line[eo + 1];
   int noj; //Numero du joueur qui joue
   couleur_t atout;
@@ -146,7 +146,7 @@ typedef struct _movingcard_t
 typedef struct _contrat_t
 {
   couleur_t atout;
-  valeur_t nbplis;			/* decrit le nombre de plis a realiser */
+  valeur_t nbtricks;			/* decrit le nombre de tricks a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
   int maxc[4];
@@ -181,7 +181,7 @@ typedef struct _ihm_bid_t
 
 typedef struct _ihm_trick_t
 {
-  trick_t *pli;
+  trick_t *trick;
   int socketid;
   int level;
   int random;
@@ -240,14 +240,14 @@ typedef struct _button_bid_t
 
 void bouge_carte(position_t position,carte_t *carte,int maxl);
 void bouge_carte_jeu(position_t poscour,carte_t  *carte, int nl, int nc, int maxl) ;
-void display_trick(trick_t *pli);
+void display_trick(trick_t *trick);
 char *affichage (int valeur,int type);
 
 char * contrat_to_char ( couleur_t atout); 
 char *affichage (int valeur, int type);
 void affiche_carte (carte_t *carte);
-void display_trick( trick_t *ppli);
-void init_trick (trick_t * pli, int maniere);
+void display_trick( trick_t *ptrick);
+void init_trick (trick_t * trick, int maniere);
 void free_ihm_setup( ihm_trick_t *ihm_setup) ;
 void reset_ihm_setup (ihm_trick_t *ihm_setup);
 void init_ihm_setup (ihm_trick_t *ihm_setup);

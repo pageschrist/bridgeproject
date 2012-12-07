@@ -11,6 +11,6 @@
 #define FICHIERCONFHOME "/.gbridge_cli.conf"
 
 void create_config(void);
-void rempli_config(void);
+void fill_config(void);
 void verifie_config(void);
 void skipcomment(char *line);

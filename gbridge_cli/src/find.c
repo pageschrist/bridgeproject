@@ -21,11 +21,11 @@ gboolean test_card(ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
   position_t poscour;
   couleur_t couleurentame;
 
-  poscour=ihm_setup->pli->nextpos;
-  if(ihm_setup->pli->noj==0)
+  poscour=ihm_setup->trick->nextpos;
+  if(ihm_setup->trick->noj==0)
     couleurentame=aucune;
   else
-  couleurentame=ihm_setup->pli->carte[ihm_setup->pli->entame].clcarte;
+  couleurentame=ihm_setup->trick->carte[ihm_setup->trick->entame].clcarte;
 
   if(imgcard->position!=poscour)
     return(FALSE);
@@ -51,10 +51,10 @@ gboolean find_moveable_card(GList *ptr, GdkEventButton *event,
 {
         imgcard_t *data_ptr;
         gboolean found = FALSE;
-        set_moveable(ihm_setup->players[ihm_setup->pli->nextpos],TRUE);
-        set_moveable(ihm_setup->players[(ihm_setup->pli->nextpos+1)%4],FALSE);
-        set_moveable(ihm_setup->players[(ihm_setup->pli->nextpos+2)%4],FALSE);
-        set_moveable(ihm_setup->players[(ihm_setup->pli->nextpos+3)%4],FALSE);
+        set_moveable(ihm_setup->players[ihm_setup->trick->nextpos],TRUE);
+        set_moveable(ihm_setup->players[(ihm_setup->trick->nextpos+1)%4],FALSE);
+        set_moveable(ihm_setup->players[(ihm_setup->trick->nextpos+2)%4],FALSE);
+        set_moveable(ihm_setup->players[(ihm_setup->trick->nextpos+3)%4],FALSE);
         while( ptr )
         {
                 data_ptr = ptr->data;

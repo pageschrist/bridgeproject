@@ -91,7 +91,7 @@ gboolean player_can_drop(ihm_trick_t *ihm_setup)
         return
         
                 (
-                        (ihm_setup->pli->nextpos)%2 != ((position_t )ihm_setup->ligneia)
+                        (ihm_setup->trick->nextpos)%2 != ((position_t )ihm_setup->ligneia)
                 );
 }
 

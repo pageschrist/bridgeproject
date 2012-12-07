@@ -79,33 +79,33 @@ void affiche_carte (carte_t *carte)
   printf("La couleur de la carte est: %d\n",carte->clcarte);
   printf("La valeur de la carte est: %d\n",carte->nocarte);
 }
-void display_trick( trick_t *ppli)
+void display_trick( trick_t *trick)
 {
 	position_t i;
         char *rescl,*resct;
 	ligne_t j;
 	for(i=sud;i<est+1;i++) {
-        resct=affichage(ppli->carte[i].nocarte,CARTE);
-        rescl=affichage(ppli->carte[i].clcarte,COULEUR);
+        resct=affichage(trick->carte[i].nocarte,CARTE);
+        rescl=affichage(trick->carte[i].clcarte,COULEUR);
         printf("pos %d,  %s%s\n",i,resct,rescl);
         free(resct);
         free(rescl);
 	}
-	printf("Vci  pli.entame %d\n",ppli->entame);
-	printf("Vci  pli.nextpos %d\n",ppli->nextpos);
-	printf("Vci  pli.lastcarte.no %d\n",ppli->lastcarte.nocarte);
-	printf("Vci  pli.lastcarte.cl %d\n",ppli->lastcarte.clcarte);
-	printf("Vci  pli.nopli %d\n",ppli->nopli);
+	printf("Vci  trick.entame %d\n",trick->entame);
+	printf("Vci  trick.nextpos %d\n",trick->nextpos);
+	printf("Vci  trick.lastcarte.no %d\n",trick->lastcarte.nocarte);
+	printf("Vci  trick.lastcarte.cl %d\n",trick->lastcarte.clcarte);
+	printf("Vci  trick.notrick %d\n",trick->notrick);
   for (j = ns; j < eo + 1; j++)
     {
-      printf("Vci pli.nbtricks_line[%d] %d\n",j,ppli->nbtricks_line[j]); 
+      printf("Vci trick.nbtricks_line[%d] %d\n",j,trick->nbtricks_line[j]); 
     }
 
 }
 void free_ihm_setup( ihm_trick_t *ihm_setup) {
   position_t position; 
-  free(ihm_setup->pli);
-  ihm_setup->pli=NULL;
+  free(ihm_setup->trick);
+  ihm_setup->trick=NULL;
   free(ihm_setup->contrat);
   ihm_setup->contrat=NULL;
   ihm_setup->scontrat=NULL;
@@ -135,7 +135,7 @@ void reset_ihm_setup( ihm_trick_t *ihm_setup) {
 #endif
   couleur_t couleur; 
   position_t position; 
-  ihm_setup->pli=malloc(sizeof(trick_t));
+  ihm_setup->trick=malloc(sizeof(trick_t));
   ihm_setup->contrat=malloc(sizeof(contrat_t));
   for (position=sud;position<est+1;position++ ) {
     for (couleur=club;couleur<spade+1;couleur++) {
@@ -146,7 +146,7 @@ void reset_ihm_setup( ihm_trick_t *ihm_setup) {
   ihm_setup->filename[0]='\0';
    
   ihm_setup->read=FALSE;
-  memset(ihm_setup->pli,0,sizeof(trick_t));
+  memset(ihm_setup->trick,0,sizeof(trick_t));
   memset(ihm_setup->contrat,0,sizeof(contrat_t));
   //init_bid(ihm_setup);
 }
@@ -163,8 +163,8 @@ void init_ihm_setup( ihm_trick_t *ihm_setup) {
   ihm_setup->status='n';
   ihm_setup->level=DEFAULTLEVEL;
   ihm_setup->random=DEFAULTRANDOM;
-  ihm_setup->pli=malloc(sizeof(trick_t));
-  memset(ihm_setup->pli,0,sizeof(trick_t));
+  ihm_setup->trick=malloc(sizeof(trick_t));
+  memset(ihm_setup->trick,0,sizeof(trick_t));
   ihm_setup->contrat=malloc(sizeof(contrat_t));
   memset(ihm_setup->contrat,0,sizeof(contrat_t));
   ihm_setup->transfert=malloc(sizeof(transfert_t));
@@ -306,28 +306,28 @@ char *display_str(char *str ) {
   ret_str[3*((strlen(str))/2)]='\0';
   return(ret_str);  
 }
-void init_trick (trick_t * pli, int maniere)
+void init_trick (trick_t * trick, int maniere)
 {
   position_t i;
   ligne_t j;
   for (i = sud; i < est + 1; i++)
     {
-      pli->carte[i].nocarte = pdc;
-      pli->carte[i].clcarte = aucune;
-      pli->discard[i].nocarte = pdc;
-      pli->discard[i].clcarte = aucune;
+      trick->carte[i].nocarte = pdc;
+      trick->carte[i].clcarte = aucune;
+      trick->discard[i].nocarte = pdc;
+      trick->discard[i].clcarte = aucune;
     }
-  pli->phcarte.nocarte = pdc;
-  pli->phcarte.clcarte = aucune;
+  trick->phcarte.nocarte = pdc;
+  trick->phcarte.clcarte = aucune;
   if (maniere == INIT)
     {
-      pli->entame = aucun;
-      pli->nextpos = aucun;
-      pli->nopli = 0;
-      pli->noj = 0;
+      trick->entame = aucun;
+      trick->nextpos = aucun;
+      trick->notrick = 0;
+      trick->noj = 0;
       for (j = ns; j < eo + 1; j++)
 	{
-	  pli->nbtricks_line[j] = 0;
+	  trick->nbtricks_line[j] = 0;
 	}
     }
 }

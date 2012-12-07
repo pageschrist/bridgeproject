@@ -455,28 +455,28 @@ void affiche_thread_jeu(thread_jeu_t * thread_jeu)
 	   thread_jeu->score, thread_jeu->prof, thread_jeu->prof_max);
 }
 
-void display_trick(trick_t * pli,gboolean display)
+void display_trick(trick_t * trick,gboolean display)
 {
   position_t i;
   char *affca, *affco;
   ligne_t j;
   if (display) {
     /*return(0); */
-    printf("DSP  nop=%d,noj %d, ", pli->nbtrick,pli->noj);
+    printf("DSP  nop=%d,noj %d, ", trick->nbtrick,trick->noj);
     for (i = sud; i < est + 1; i++) {
 	printf("pos %d  %s%s,", i, affca =
-	       affichage(pli->carte[i].nocarte, CARTE), affco =
-	       affichage(pli->carte[i].clcarte, COULEUR));
+	       affichage(trick->carte[i].nocarte, CARTE), affco =
+	       affichage(trick->carte[i].clcarte, COULEUR));
 	free(affca);
 	free(affco);
     }
-    printf("higher %d,", pli->phcarte.nocarte);
-    //printf("lastcarte %d,", pli->lastcarte.nocarte);
-    printf("lead %d,", pli->entame);
-    printf("npos %d,", pli->nextpos);
-    printf("leader %d,", pli->leader);
+    printf("higher %d,", trick->phcarte.nocarte);
+    //printf("lastcarte %d,", trick->lastcarte.nocarte);
+    printf("lead %d,", trick->entame);
+    printf("npos %d,", trick->nextpos);
+    printf("leader %d,", trick->leader);
     for (j = ns; j < eo + 1; j++) {
-	printf("nbtrick_line[%d] %d ", j, pli->nbtrick_line[j]);
+	printf("nbtrick_line[%d] %d ", j, trick->nbtrick_line[j]);
     }
     printf("\n");
   }
@@ -514,30 +514,30 @@ void affiche_tab_cartes(void)
     }
 }
 
-void init_trick(trick_t * pli, int maniere)
+void init_trick(trick_t * trick, int maniere)
 {
     position_t i;
     ligne_t j;
     if (maniere == INIT) {
-	pli->atout = aucune;
-	pli->entame = aucun;
-	pli->leader = aucun;
-	pli->nextpos = aucun;
-	pli->nbtrick = 0;
-	pli->noj = 0;
+	trick->atout = aucune;
+	trick->entame = aucun;
+	trick->leader = aucun;
+	trick->nextpos = aucun;
+	trick->nbtrick = 0;
+	trick->noj = 0;
 	for (j = ns; j < eo + 1; j++) {
-	    pli->nbtrick_line[j] = 0;
+	    trick->nbtrick_line[j] = 0;
 	}
-	pli->lastcarte.nocarte = pdc;
-	pli->lastcarte.clcarte = aucune;
+	trick->lastcarte.nocarte = pdc;
+	trick->lastcarte.clcarte = aucune;
     }
-    pli->phcarte.nocarte = pdc;
-    pli->phcarte.clcarte = aucune;
+    trick->phcarte.nocarte = pdc;
+    trick->phcarte.clcarte = aucune;
     for (i = sud; i < est + 1; i++) {
-	pli->carte[i].nocarte = pdc;
-	pli->carte[i].clcarte = aucune;
-	pli->discard[i].nocarte = pdc;
-	pli->discard[i].clcarte = aucune;
+	trick->carte[i].nocarte = pdc;
+	trick->carte[i].clcarte = aucune;
+	trick->discard[i].nocarte = pdc;
+	trick->discard[i].clcarte = aucune;
     }
 }
 

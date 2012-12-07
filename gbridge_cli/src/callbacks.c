@@ -126,7 +126,7 @@ void click_bid (GtkButton *button,button_bid_t *button_bid) {
   couleur_t couleur;
   int contrat;
   if(button_bid->ihm_setup->debug) {
-    printf("Nombre de plis:%d\n",button_bid->ihm_bid->bid->nombre);
+    printf("Nombre de tricks:%d\n",button_bid->ihm_bid->bid->nombre);
     printf("couleur:%d\n",button_bid->ihm_bid->bid->couleur);
   }
   for(contrat=0;contrat<button_bid->ihm_bid->bid->nombre-1;contrat++){
@@ -306,10 +306,10 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
   position_t position;
   if(ihm_setup->status=='b'  ) 
     return FALSE;
-  if(NULL==ihm_setup->pli  ) 
+  if(NULL==ihm_setup->trick  ) 
     return FALSE;
-  // C'est la fin on a deja 13 plis 
-  if((ihm_setup->pli->nbtricks_line[1]+ihm_setup->pli->nbtricks_line[0] ) ==ihm_setup->nbcard ) {
+  // C'est la fin on a deja 13 tricks 
+  if((ihm_setup->trick->nbtricks_line[1]+ihm_setup->trick->nbtricks_line[0] ) ==ihm_setup->nbcard ) {
     //if(ihm_setup->read==FALSE  ) 
      // return TRUE;
       printf("The end \n");
@@ -326,7 +326,7 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
     ihm_setup->status='b'; 
   }
   else {
-        if(ihm_setup->pli->noj==0)
+        if(ihm_setup->trick->noj==0)
           trash_list(ihm_setup);
         gboolean found = FALSE;
 
@@ -336,8 +336,8 @@ gboolean button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer 
 
                 if(found == FALSE) {
 
-                  if((ihm_setup->pli->nextpos)%2 !=(position_t) ihm_setup->ligneia)
-                        found = find_moveable_card(ihm_setup->players[ihm_setup->pli->nextpos], event, ihm_setup);
+                  if((ihm_setup->trick->nextpos)%2 !=(position_t) ihm_setup->ligneia)
+                        found = find_moveable_card(ihm_setup->players[ihm_setup->trick->nextpos], event, ihm_setup);
                 }
 
                 if(found == TRUE)
@@ -412,7 +412,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_trick_t 
           recuperation_jeu(ihm_setup,(ihm_setup->contrat->declarant)%4);
           recuperation_jeu(ihm_setup,(ihm_setup->contrat->declarant+2)%4);
           draw_container_ihm(ihm_setup); 
-          ihm_setup->pli->nextpos=(ihm_setup->contrat->declarant+1)%4;
+          ihm_setup->trick->nextpos=(ihm_setup->contrat->declarant+1)%4;
  /* Blit */
            
         }
@@ -658,13 +658,13 @@ gboolean  button_release_event (GtkWidget *widget,
         widget=widget;
         ihm_trick_t *ihm_setup = (ihm_trick_t *)data;
         int ligne;
-        if(NULL==ihm_setup->pli)
+        if(NULL==ihm_setup->trick)
           return FALSE;
         imgcard_t *drop = NULL;
         if(event->button == 1)
         {
 
-          if( ihm_setup->pli->nextpos%2!=(position_t) ihm_setup->ligneia && ihm_setup->movecard) {
+          if( ihm_setup->trick->nextpos%2!=(position_t) ihm_setup->ligneia && ihm_setup->movecard) {
                         if(ihm_setup->copy)
                                 g_object_unref(ihm_setup->copy);
 
@@ -690,13 +690,13 @@ gboolean  button_release_event (GtkWidget *widget,
                         draw_container_ihm(ihm_setup);
 
                 }
-                if(ihm_setup->pli->nextpos%2==(position_t)ihm_setup->ligneia) {
+                if(ihm_setup->trick->nextpos%2==(position_t)ihm_setup->ligneia) {
                   do {
                 
                     ligne=game_turn(ihm_setup, NULL);
-                    printf("noj=%d\n",ihm_setup->pli->noj);
+                    printf("noj=%d\n",ihm_setup->trick->noj);
                   }
-                  while(ligne==ihm_setup->ligneia && (ihm_setup->pli->noj != 0));
+                  while(ligne==ihm_setup->ligneia && (ihm_setup->trick->noj != 0));
                  }
 
 
