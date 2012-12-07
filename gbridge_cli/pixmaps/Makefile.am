@@ -1,4 +1,5 @@
-EXTRA_DIST = 2C.xpm 2K.xpm 2P.xpm 2T.xpm 3C.xpm 3K.xpm 3P.xpm 3T.xpm 4C.xpm 4K.xpm 4P.xpm 4T.xpm 5C.xpm 5K.xpm 5P.xpm 5T.xpm \
+pixmapsdir = $(datarootdir)/@PACKAGE@/pixmaps
+pixmaps_DATA = 2C.xpm 2K.xpm 2P.xpm 2T.xpm 3C.xpm 3K.xpm 3P.xpm 3T.xpm 4C.xpm 4K.xpm 4P.xpm 4T.xpm 5C.xpm 5K.xpm 5P.xpm 5T.xpm \
 	6C.xpm 6K.xpm 6P.xpm 6T.xpm 7C.xpm 7K.xpm 7P.xpm 7T.xpm 8C.xpm 8K.xpm 8P.xpm 8T.xpm 9C.xpm 9K.xpm 9P.xpm 9T.xpm \
 	AC.xpm AK.xpm AP.xpm AT.xpm background.xpm back.xpm DC.xpm DK.xpm DP.xpm ench1C.xpm ench1K.xpm ench1N.xpm \
 	ench1P.xpm ench1T.xpm ench2C.xpm ench2K.xpm ench2N.xpm ench2P.xpm ench2T.xpm ench3C.xpm ench3K.xpm ench3N.xpm \
