@@ -658,15 +658,15 @@ int joue_coup(trick_t * pli, carte_t * carte, game_t * game)
 
 rettrick_t *check_trick(trick_t * pli)
 {
-    rettrick_t *retpli = malloc(sizeof(rettrick_t));
+    rettrick_t *rettrick = malloc(sizeof(rettrick_t));
     ligne_t lignej;
     lignej = (IALINE + 1) % 2;
-    retpli->score = pli->nbtrick_line[lignej] - pli->nbtrick_line[IALINE];
-    retpli->nbline[lignej] = pli->nbtrick_line[lignej];
-    retpli->nbline[IALINE] = pli->nbtrick_line[IALINE];
-    retpli->alpha_or_beta = 0;
+    rettrick->score = pli->nbtrick_line[lignej] - pli->nbtrick_line[IALINE];
+    rettrick->nbline[lignej] = pli->nbtrick_line[lignej];
+    rettrick->nbline[IALINE] = pli->nbtrick_line[IALINE];
+    rettrick->alpha_or_beta = 0;
     /* printf ("Voici le score dans check_trick: %d\n", score); */
-    return (retpli);
+    return (rettrick);
 
 }
 void define_leader(trick_t *pli) {

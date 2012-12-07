@@ -21,7 +21,7 @@ typedef struct _choice_color_t
   couleur_t toavoid;
 } choice_color_t;
 
-carte_t  *analyse_hand (game_t *game,trick_t *plic,couleur_t couleur);
+carte_t  *analyse_hand (game_t *game,trick_t *trick_cur,couleur_t couleur);
 void search_best_color(position_t position,hopestat_t **hopestat,choice_color_t *choice_color);
 couleur_t fit (main_t *mainjoueur, int position);
 position_t eval_contrat (game_t *game);

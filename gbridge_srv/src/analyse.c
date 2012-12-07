@@ -52,13 +52,13 @@ void changeeval(game_t * game, couleur_t couleureval)
     }
 }
 
-carte_t *analyse_hand(game_t * game, trick_t * plic, couleur_t couleur)
+carte_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
 {
 
     int index;
-    trick_t *plin = malloc(sizeof(trick_t));
-    memcpy(plin, plic, sizeof(trick_t));
-    plin->atout = aucune;
+    trick_t *trick_new = malloc(sizeof(trick_t));
+    memcpy(trick_new, trick_cur, sizeof(trick_t));
+    trick_new->atout = aucune;
     hopestat_t *hopestat = malloc(sizeof(hopestat_t));
     int sizemax;
     l_best_t *l_best = NULL;
@@ -72,7 +72,7 @@ carte_t *analyse_hand(game_t * game, trick_t * plic, couleur_t couleur)
 	    sizemax = game->tabjeu[index]->nbcrt;
     }
     changeeval(game, couleur);
-    position = plin->nextpos;
+    position = trick_new->nextpos;
     index = INDEX(position, couleur);
     hopestat->position = position;
     hopestat->couleur = couleur;
@@ -85,9 +85,9 @@ carte_t *analyse_hand(game_t * game, trick_t * plic, couleur_t couleur)
 	init_list_best(l_best);
     }
     nb_best = 0;
-    first_explore(plin, (sizemax * 4) - plin->noj, &nb_best, l_best, game);
+    first_explore(trick_new, (sizemax * 4) - trick_new->noj, &nb_best, l_best, game);
     if (nb_best != 0) {
-	best_card = best_choice(&nb_best, l_best, game, hopestat,plic);
+	best_card = best_choice(&nb_best, l_best, game, hopestat,trick_cur);
 
     } else {
 	free(best_card);
@@ -98,7 +98,7 @@ carte_t *analyse_hand(game_t * game, trick_t * plic, couleur_t couleur)
     l_best = NULL;
 
     changeeval(game, aucune);
-    free(plin);
+    free(trick_new);
     return (best_card);
 }
 

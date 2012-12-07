@@ -185,7 +185,7 @@ struct stack_box
 typedef struct stack_box *stackia_t;
 
 int max(int a,int b);
-void *duplicate_trick (void *data);
+void *dupXXcate_trick (void *data);
 void *copy_card (void *data);
 void init_tablist (void);
 void display_trick (trick_t * pli,gboolean display);
