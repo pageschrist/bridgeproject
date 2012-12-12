@@ -2,3 +2,6 @@ core*
 *.o
 donne*
 *~
+*log
+*.Po
+.deps

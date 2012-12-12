@@ -26,6 +26,7 @@ AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([bzero gethostbyname gettimeofday inet_ntoa memset socket strchr strdup uname])
+AC_DEFINE_UNQUOTED(TEST, "toto",[description])
 
 AC_CONFIG_FILES([
 	Makefile
