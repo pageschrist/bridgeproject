@@ -11,7 +11,7 @@
 extern coord_t tab_cards[cA + 1][spade + 1];
 void initialisation(void)
 {
-    couleur_t j;
+    color_t j;
     valeur_t k;
 
     for (j = club; j < aucune; j++) {
@@ -88,7 +88,7 @@ void defcard(int dividende, position_t position)
     int res = 0;
     int div;
     valeur_t valeur;
-    couleur_t couleur;
+    color_t couleur;
     while (res == 0) {
 	couleur = dividende / NBPCOULEURS;
 	valeur = dividende - (couleur * NBPCOULEURS);
@@ -141,7 +141,7 @@ void evalmain(game_t * game)
 {
     position_t position;
     valeur_t valeur;
-    couleur_t couleur;
+    color_t couleur;
     for (position = sud; position < aucun; position++) {
 	game->mainjoueur[position].nbpoints = 0;
 	for (couleur = club; couleur < aucune; couleur++) {
@@ -195,7 +195,7 @@ void evalmain(game_t * game)
 void envoi_jeu(position_t position, game_t * game)
 {
 
-    couleur_t couleur;
+    color_t couleur;
     card_t *card;
     char *affca;
     card = malloc(sizeof(card_t));
@@ -228,7 +228,7 @@ void fill_list_game(game_t * game)
 {
     position_t position;
     valeur_t valeur;
-    couleur_t couleur;
+    color_t couleur;
     int index, nbcrt, nbcrtref;
     init_tabjeu(game);
     for (couleur = club; couleur < spade + 1; couleur++) {

@@ -124,7 +124,7 @@ void init_tabjeu(game_t * game)
     game->tabjeu = malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1));
     game->tabjeuref =
 	malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1));
-    couleur_t couleur;
+    color_t couleur;
     for (position = sud; position < est + 1; position++) {
 	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
@@ -152,7 +152,7 @@ void clear_tabjeu(game_t * game)
 {
     position_t position;
     int index;
-    couleur_t couleur;
+    color_t couleur;
     for (position = sud; position < est + 1; position++) {
 	for (couleur = club; couleur < spade + 1; couleur++) {
 	    index = INDEX(position, couleur);
@@ -172,7 +172,7 @@ void clear_tabjeu(game_t * game)
       clear_cardplayed(game,FREE);
 }
 void clear_cardplayed(game_t * game,int type){
-  couleur_t color;
+  color_t color;
   valeur_t value;
   int indcard;
   if(FREE==type) 
@@ -188,7 +188,7 @@ void clear_cardplayed(game_t * game,int type){
 }
 
 void display_cardplayed(game_t *game) {
-  couleur_t color;
+  color_t color;
   valeur_t value;
   int indcard;
   char *resco;
@@ -208,7 +208,7 @@ void display_cardplayed(game_t *game) {
 
 }
 
-int sub_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
+int sub_index(tablist_t ** tmpjeu, position_t position, color_t couleur,
 	      valeur_t valeur)
 {
 
@@ -223,7 +223,7 @@ int sub_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
 }
 
 int
-find_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
+find_index(tablist_t ** tmpjeu, position_t position, color_t couleur,
 	   valeur_t valeur)
 {
 
@@ -242,7 +242,7 @@ find_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
 
 
 int
-remove_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
+remove_index(tablist_t ** tmpjeu, position_t position, color_t couleur,
 	     int pos_index)
 {
     int j = 0;
@@ -268,7 +268,7 @@ remove_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
 }
 
 int
-insert_index(tablist_t ** tmpjeu, position_t position, couleur_t couleur,
+insert_index(tablist_t ** tmpjeu, position_t position, color_t couleur,
 	     valeur_t valeur, int pos_index)
 {
 
@@ -356,7 +356,7 @@ int char_to_int(char *c)
 void affiche_tabjeuref(game_t * game, position_t position)
 {
 
-    couleur_t couleur;
+    color_t couleur;
     char *affp, *affco, *affca;
     int i;
     printf("\n%s ", affp = affichage(position, POSITION));
@@ -381,7 +381,7 @@ void affiche_tabjeuref(game_t * game, position_t position)
 void affiche_tabjeu_c(tablist_t ** t_jeu)
 {
 
-    couleur_t couleur;
+    color_t couleur;
     position_t position;
     char *affca, *affco, *affp;
     int i;
@@ -409,7 +409,7 @@ void affiche_tabjeu_c(tablist_t ** t_jeu)
 void init_cards(void)
 {
     valeur_t i;
-    couleur_t j;
+    color_t j;
     for (i = 0; i < cA + 1; i++) {
 	for (j = 0; j < spade + 1; j++) {
 	    tab_cards[i][j].nol = aucun;
@@ -500,7 +500,7 @@ void affiche_tab_cards(void)
     extern coord_t tab_cards[cA + 1][spade + 1];
     position_t i;
     valeur_t v;
-    couleur_t c;
+    color_t c;
     for (i = sud; i < est + 1; i++) {
 	for (c = club; c < spade + 1; c++) {
 	    for (v = c2; v < cA + 1; v++) {

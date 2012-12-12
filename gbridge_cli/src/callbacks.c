@@ -42,7 +42,7 @@ void enter_callback_random( GtkWidget *entry,
 void new_dist (GtkButton *button,ihm_trick_t *ihm_setup) {
   button=button;
   int contrat;
-  couleur_t couleur;
+  color_t couleur;
   free_ihm_setup(ihm_setup);
   reset_ihm_setup(ihm_setup);
   write_data (ihm_setup,NULL, 'n');
@@ -63,7 +63,7 @@ void new_dist (GtkButton *button,ihm_trick_t *ihm_setup) {
 {
     w=w;
     int contrat;
-    couleur_t couleur;
+    color_t couleur;
     struct stat *buf;
     buf=malloc(sizeof(struct stat));
     snprintf (ihm_setup->filename,MAXFILENAME,"%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION( (GtkFileSelection *)ihm_setup->File_S)));
@@ -123,7 +123,7 @@ void open_file (GtkButton *button,ihm_trick_t *ihm_setup) {
 
 void click_bid (GtkButton *button,button_bid_t *button_bid) {
   button=button;
-  couleur_t couleur;
+  color_t couleur;
   int contrat;
   if(button_bid->ihm_setup->debug) {
     printf("Nombre de tricks:%d\n",button_bid->ihm_bid->bid->nombre);
@@ -267,7 +267,7 @@ void clear_blink(ihm_trick_t *ihm_setup)
 gboolean mise_en_place ( GtkWidget *Drawing_area,ihm_trick_t *ihm_setup) {
   Drawing_area=Drawing_area;
   int contrat;
-  couleur_t couleur;
+  color_t couleur;
   if(ihm_setup->debug)
     printf("mise_en_place\n");
   alloc_ihm(ihm_setup);
@@ -360,7 +360,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_trick_t 
       if(ihm_setup->status=='b' && ihm_setup->read==TRUE) {
         ihm_setup->read=FALSE;
         int number,contrat,i;
-        couleur_t color,couleur;
+        color_t color,couleur;
         char *coulref="TKCPS";
         char *dis_bid=NULL;
         status = read_header(ihm_setup,ihm_setup->cur_bid,'u');
@@ -420,7 +420,7 @@ gboolean expose_comment( GtkWidget *Fenetre, GdkEventExpose *event, ihm_trick_t 
           number=ihm_setup->cur_bid[strlen(ihm_setup->cur_bid)-4]-48;
           for (i=0;i<(int)strlen(coulref);i++) {
             if(coulref[i]==ihm_setup->cur_bid[strlen(ihm_setup->cur_bid)-3])
-              color=(couleur_t) i;
+              color=(color_t) i;
       
           }
         

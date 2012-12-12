@@ -56,7 +56,7 @@ typedef enum
 { c2, c3, c4, c5, c6, c7, c8, c9, cX, cV, cD, cR, cA, pdc } valeur_t;
 
 typedef enum
-{ club, diamond, heart, spade, aucune } couleur_t;
+{ club, diamond, heart, spade, aucune } color_t;
 
 typedef enum
 { sud, ouest, nord, est, aucun } position_t;
@@ -78,7 +78,7 @@ typedef struct _coord_t
 typedef struct _card_t
 {
   valeur_t nocard;
-  couleur_t clcard;
+  color_t clcard;
 } card_t;
 
 typedef struct _main_t
@@ -100,10 +100,10 @@ typedef struct _trick_t
   int notrick;
   int nbtricks_line[eo + 1];
   int noj; //Numero du joueur qui joue
-  couleur_t atout;
+  color_t atout;
   position_t leader;
   gboolean eval;
-  couleur_t coloreval;
+  color_t coloreval;
 
 } trick_t;
 
@@ -127,7 +127,7 @@ typedef struct _imgcard_t
 {
   GdkPixmap *img;
   dim_t dim;
-  couleur_t couleur;
+  color_t couleur;
   valeur_t valeur;
   position_t position;
   gboolean draw;
@@ -145,7 +145,7 @@ typedef struct _movingcard_t
 
 typedef struct _contrat_t
 {
-  couleur_t atout;
+  color_t atout;
   valeur_t nbtricks;			/* decrit le nombre de tricks a realiser */
   position_t declarant;		/* donne le nom du declarant */
   int nom;
@@ -162,7 +162,7 @@ typedef struct _rectangle_t
 typedef struct _bid_t
 {
   int nombre;
-  couleur_t couleur;
+  color_t couleur;
   position_t position;
   gboolean passe;
   gboolean contre;
@@ -229,7 +229,7 @@ typedef struct _tablist
   valeur_t tabcoul[13];
   gboolean debug;               //position de la derniere card jouee
   int nbcrt;                    //nombre de card dans la couleur
-  couleur_t couleureval;
+  color_t couleureval;
 } tablist_t;
 
 typedef struct _button_bid_t
@@ -243,7 +243,7 @@ void bouge_card_jeu(position_t poscour,card_t  *card, int nl, int nc, int maxl) 
 void display_trick(trick_t *trick);
 char *affichage (int valeur,int type);
 
-char * contrat_to_char ( couleur_t atout); 
+char * contrat_to_char ( color_t atout); 
 char *affichage (int valeur, int type);
 void affiche_card (card_t *card);
 void display_trick( trick_t *ptrick);

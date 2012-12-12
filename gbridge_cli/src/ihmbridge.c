@@ -102,7 +102,7 @@ ihm_about(GtkWidget *Wdgt, guint value)
 void create_ihm (ihm_trick_t *ihm_setup) {
 
   char chaine[MAXCHAR];
-  couleur_t couleur;
+  color_t couleur;
   int contrat;
   button_bid_t **button_bid;
   button_bid_t **button_obid;

@@ -19,7 +19,7 @@ void set_moveable(GList *ptr, gboolean value)
 
 gboolean test_card(ihm_trick_t *ihm_setup,imgcard_t *imgcard) {
   position_t poscour;
-  couleur_t couleurentame;
+  color_t couleurentame;
 
   poscour=ihm_setup->trick->nextpos;
   if(ihm_setup->trick->noj==0)

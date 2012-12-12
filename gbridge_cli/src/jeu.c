@@ -128,7 +128,7 @@ void destroy_ihm_setup (ihm_trick_t *ihm_setup) {
 void init_game(ihm_trick_t *ihm_setup) {
    
   int contrat; 
-  couleur_t couleur;
+  color_t couleur;
   free_ihm_setup(ihm_setup);
   reset_ihm_setup(ihm_setup);
   write_data (ihm_setup,NULL, 'n');
@@ -154,7 +154,7 @@ void position_list(GList *ptr, int x, int y, enum eposition ep, float coef)
         int xref=x;
         int step,i;
         int num;
-        couleur_t couleurref=aucune;
+        color_t couleurref=aucune;
         int tab_coul[spade+1];
         imgcard_t *data_ptr;
         GList *ptrref;
@@ -415,7 +415,7 @@ recuperation_jeu (ihm_trick_t *ihm_setup, position_t position)
   gchar *cardname=NULL;
   GdkGC *gc;
   GtkStateType state = GTK_WIDGET_STATE(ihm_setup->Drawing_area);
-  couleur_t couleur;
+  color_t couleur;
   char model[] = "paris";
   resp=affichage(position,POSITION);
   cardname = (gchar*)g_malloc((strlen(ihm_setup->path)+20)*(sizeof(gchar)));

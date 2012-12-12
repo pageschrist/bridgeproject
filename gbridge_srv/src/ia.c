@@ -53,7 +53,7 @@ card_t *best_choice(int *nb_best, l_best_t * l_best, game_t * game,
     card_t *card = malloc(sizeof(card_t));
     unsigned int jline = (IALINE + 1) % 2;
 
-    couleur_t i;
+    color_t i;
     int score_ref;
     elem_best_t *elem_best = l_best->first;
     elem_best_t *disp_elem_best = l_best->first;
@@ -167,7 +167,7 @@ rettrick_t *cur_explore(int prof, trick_t * trick_cur, int prof_max,
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
-    couleur_t nocouleur;
+    color_t nocouleur;
     valeur_t nocard;
 
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */
@@ -278,7 +278,7 @@ rettrick_t *cur_explore_eval(int prof, trick_t * trick_cur, int prof_max,
     rettrick_t *ret;
     rettrick_t *retup;
     int best_score,  best_nbline[eo + 1];
-    couleur_t nocouleur;
+    color_t nocouleur;
     valeur_t nocard;
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */
     best_score =
@@ -397,7 +397,7 @@ void *new_explore(void *arg)
     int pos_index;
     trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score,  best_nbline[eo + 1];
-    couleur_t nocouleur;
+    color_t nocouleur;
     valeur_t nocard;
     //reconstitution des varaiables
     prof = thread_jeu->prof;
@@ -511,7 +511,7 @@ first_explore(trick_t * trick_cur, int prof_max, int *nb_best, l_best_t * l_best
     int pos_index;
     trick_t *trick_new;		/* nouveau trick renvoye par la liste des coups */
     int best_score;
-    couleur_t nocouleur;
+    color_t nocouleur;
     valeur_t nocard;
     best_t *best;
     positionc = trick_cur->nextpos;	/*C'est la nouvelle position */

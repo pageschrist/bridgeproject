@@ -12,7 +12,7 @@
 #include <gtk/gtk.h>		/* For Glib functions */
 #include "create_config.h"
 #include "objets.h"
-couleur_t atout;
+color_t atout;
 extern GHashTable *configHash;
 /*
 void

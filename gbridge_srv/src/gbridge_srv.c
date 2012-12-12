@@ -66,7 +66,7 @@ void signal_handler(int sig)
 void main_game(game_t * game)
 {
     gboolean bidstatus,diststatus=FALSE;
-    couleur_t couleur;
+    color_t couleur;
     position_t position;
     int index;
     hopestat_t **hopestat = NULL;
@@ -131,7 +131,7 @@ gboolean newgame(game_t * game, hopestat_t ** hopestat)
     int random = game->random, i;
     int prof = game->level * 4;
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     choice_color_t *choice_color=malloc(sizeof(choice_color_t));
     memset(choice_color,0,sizeof(choice_color_t));
     int index;

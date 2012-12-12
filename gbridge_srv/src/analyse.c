@@ -11,7 +11,7 @@
 
 void search_best_color(position_t position, hopestat_t ** hopestat,choice_color_t *choice_color)
 {
-    couleur_t color;
+    color_t color;
     int refdiff[spade+1]; //Any value
     int index;
     position_t pos;
@@ -39,9 +39,9 @@ void search_best_color(position_t position, hopestat_t ** hopestat,choice_color_
 }
 
 
-void changeeval(game_t * game, couleur_t couleureval)
+void changeeval(game_t * game, color_t couleureval)
 {
-    couleur_t couleur;
+    color_t couleur;
     position_t position;
     int index;
     for (couleur = club; couleur < spade + 1; couleur++) {
@@ -52,7 +52,7 @@ void changeeval(game_t * game, couleur_t couleureval)
     }
 }
 
-card_t *analyse_hand(game_t * game, trick_t * trick_cur, couleur_t couleur)
+card_t *analyse_hand(game_t * game, trick_t * trick_cur, color_t couleur)
 {
 
     int index;
@@ -119,7 +119,7 @@ hopestat_t **analyse_tabjeu(game_t * game, trick_t *cur_trick)
     else
       trick=cur_trick;
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     for (couleur = club; couleur < spade + 1; couleur++) {
 	sizemax[couleur] = 0;
 	for (position = sud; position < est + 1; position++) {
@@ -180,7 +180,7 @@ int small_condition(game_t * game, char *s_smallref)
 {
 
     int i, index, meml = 0, memr = 0, testcond = 0, sum = 0;
-    couleur_t couleur;
+    color_t couleur;
     char *ptr;
     char *s_sec;
     char *s_small = malloc(sizeof(char) * (strlen(s_smallref) + 1));
@@ -384,10 +384,10 @@ gboolean analyse_bid(game_t * game)
 
 
 /*Cette fonction essaie de trouver un fit en majeur, sinon elle teste l'arret a sans atout , sinon elle est essaie un fit en mineur, enfin elle retourne la couleur la plus longue */
-couleur_t fit(main_t * mainjoueur, int position)
+color_t fit(main_t * mainjoueur, int position)
 {
     int nbmaxcard = 0, i;
-    couleur_t refcouleur;
+    color_t refcouleur;
     if (mainjoueur[position].nbcards[spade] +
 	mainjoueur[position + 2].nbcards[spade] >= FIT)
 	return (spade);
@@ -430,7 +430,7 @@ couleur_t fit(main_t * mainjoueur, int position)
 position_t eval_contrat(game_t * game)
 {
     int nbpointsns, nbpointseo, pointsadditionnels, ref, refpts, jouepar;
-    couleur_t color, i;
+    color_t color, i;
     nbpointsns =
 	game->mainjoueur[nord].nbpoints + game->mainjoueur[sud].nbpoints;
     nbpointseo =

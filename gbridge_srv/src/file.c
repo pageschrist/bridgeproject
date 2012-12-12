@@ -31,7 +31,7 @@ valeur_t convert_char_card(char c ) {
     }
 }
 
-gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
+gboolean check_value(char *buffer,color_t couleur,int tabref[est+1][cA+1]) {
   size_t i;
   int n;
   if(strlen(buffer) <=0 )
@@ -59,7 +59,7 @@ void clear_buffile(game_t *game) {
 
 gboolean check_tabjeu(game_t *game) {
   position_t position;
-  couleur_t color;
+  color_t color;
   int index;
   int nbref[est+1];
   for (position=sud;position<est+1;position++) {
@@ -83,7 +83,7 @@ gboolean check_tabjeu(game_t *game) {
 gboolean file_parse (game_t *game) {
   char *bufref;
   position_t position;
-  couleur_t couleur=club;
+  color_t couleur=club;
   size_t j;
   int tabref[est+1][cA+1];
   int index;

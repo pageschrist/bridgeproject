@@ -82,7 +82,7 @@ gboolean check_order(ihm_trick_t *ihm_setup, char *buffer) {
 }
 
 
-gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
+gboolean check_value(char *buffer,color_t couleur,int tabref[est+1][cA+1]) {
   size_t i;
   int n;
   if(strlen(buffer) <=0 )
@@ -105,7 +105,7 @@ gboolean check_value(char *buffer,couleur_t couleur,int tabref[est+1][cA+1]) {
 
 gboolean check_parse (ihm_trick_t *ihm_setup ,char *transbuf) {
   position_t position;
-  couleur_t couleur=club;
+  color_t couleur=club;
   int tabref[est+1][cA+1];
   char *buf;
   char *pos="SONE";

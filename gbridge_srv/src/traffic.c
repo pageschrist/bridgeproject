@@ -56,7 +56,7 @@ char read_header(game_t * game, void *data, char type)
 {
     net_header_t header;
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     int index,errnoori;
     int ret;
     ret = read(game->sockslv_id, &header, sizeof(net_header_t));

@@ -19,7 +19,7 @@ void ftrace(void)
 }
  
 gboolean test_reprise(position_t position,tablist_t **t_jeu) {
-  couleur_t color;
+  color_t color;
   for (color=club;color<spade+1;color++) {
     if(color==t_jeu[0]->couleureval)
       continue;
@@ -47,7 +47,7 @@ gboolean test_reprise(position_t position,tablist_t **t_jeu) {
 
 }
 gboolean check_invert_lead(trick_t *trick,tablist_t **t_jeu) {
-  couleur_t coloreval=t_jeu[0]->couleureval; 
+  color_t coloreval=t_jeu[0]->couleureval; 
   if((trick->noj)%4==0) {
     if(t_jeu[INDEX(trick->nextpos,coloreval)]->nbcrt==0 && t_jeu[INDEX((trick->nextpos+2)%4,coloreval)]->nbcrt!=0) {
      
@@ -61,7 +61,7 @@ gboolean check_invert_lead(trick_t *trick,tablist_t **t_jeu) {
 
 }
 
-int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t highest_player) {
+int calc_dist(gboolean *cardplayed,color_t color,valeur_t highest, valeur_t highest_player) {
   int dist;
   valeur_t val;
 
@@ -74,7 +74,7 @@ int calc_dist(gboolean *cardplayed,couleur_t color,valeur_t highest, valeur_t hi
   }
   return(dist);
 }
-valeur_t highest_value(gboolean *cardplayed,couleur_t color) {
+valeur_t highest_value(gboolean *cardplayed,color_t color) {
   valeur_t value;
   for(value=cA;value>=c2+1;value--) {
     if( FALSE==cardplayed[INDCARD(color,value)])
@@ -86,7 +86,7 @@ void rotation(game_t * game, hopestat_t ** hopestat)
 {
     int i;
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     char trump, *res;
     int rot;
 
@@ -154,7 +154,7 @@ void rotation(game_t * game, hopestat_t ** hopestat)
 void dup_game(thread_jeu_t * thread_jeu, game_t * game)
 {
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     int index;
     if (NULL ==
 	(thread_jeu->t_jeu =
@@ -181,7 +181,7 @@ void dup_game(thread_jeu_t * thread_jeu, game_t * game)
 void destroy_jeu(thread_jeu_t * thread_jeu)
 {
     position_t position;
-    couleur_t couleur;
+    color_t couleur;
     int index;
     for (position = sud; position < est + 1; position++) {
 	for (couleur = club; couleur < spade + 1; couleur++) {
@@ -198,10 +198,10 @@ int
 list_all_coups_eval(position_t positionc, l_item_t *l_item, trick_t * trick,
 		    tablist_t ** tmpjeu)
 {
-    couleur_t couleurc = tmpjeu[0]->couleureval;
+    color_t couleurc = tmpjeu[0]->couleureval;
     int index, situation, nbcoups = 0;
     int k = 0;
-    couleur_t i;
+    color_t i;
     card_t phcard;
     int presence = NON, pos_index;
     if (positionc == trick->entame)
@@ -340,8 +340,8 @@ list_all_coups(position_t positionc, l_item_t *l_item, trick_t * trick,
     int index, situation, nbcoups = 0;
     int k = 0, sub,dist,kmem=0;
     valeur_t higher_value;
-    couleur_t couleurc;
-    couleur_t i;
+    color_t couleurc;
+    color_t i;
     card_t phcard;
     int presence = NON, pos_index;
     if (positionc == trick->entame)

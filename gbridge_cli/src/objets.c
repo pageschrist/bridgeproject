@@ -5,7 +5,7 @@
 #include "objets.h"
 #include "free.h"
 #include "client.h"
-char * contrat_to_char(couleur_t atout);
+char * contrat_to_char(color_t atout);
 extern GHashTable *configHash;
 card_t **tab_coord;
 void debugaff(void) {
@@ -14,7 +14,7 @@ void debugaff(void) {
  i=i+1;
 }
 
-char * contrat_to_char ( couleur_t atout) {
+char * contrat_to_char ( color_t atout) {
   char *type;
   type=malloc (3*sizeof(char));
   if (atout==club) 
@@ -133,7 +133,7 @@ void reset_ihm_setup( ihm_trick_t *ihm_setup) {
 #else
   ihm_setup->debug=FALSE;
 #endif
-  couleur_t couleur; 
+  color_t couleur; 
   position_t position; 
   ihm_setup->trick=malloc(sizeof(trick_t));
   ihm_setup->contrat=malloc(sizeof(contrat_t));
@@ -152,7 +152,7 @@ void reset_ihm_setup( ihm_trick_t *ihm_setup) {
 }
 
 void init_ihm_setup( ihm_trick_t *ihm_setup) {
-  couleur_t couleur; 
+  color_t couleur; 
   position_t position; 
 
 #ifdef DEBUG
