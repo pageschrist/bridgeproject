@@ -14,5 +14,5 @@ gbridge_srv_SOURCES = \
 		distribution.c distribution.h \
 		arbitre.c arbitre.h
 
-gbridge_srv_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS}
+gbridge_srv_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS} -DDATADIR=@datadir@/${PACKAGE_NAME}
 gbridge_srv_LDADD =-lm -lpthread ${GLIB_LIBS} ${GTK_LIBS}

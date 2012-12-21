@@ -21,5 +21,5 @@ gbridge_cli_SOURCES = \
 		
 
 
-gbridge_cli_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS}
+gbridge_cli_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS} -DDATADIR=@datadir@/${PACKAGE_NAME}
 gbridge_cli_LDADD =-lm  ${GLIB_LIBS} ${GTK_LIBS}
