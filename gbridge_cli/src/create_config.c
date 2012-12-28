@@ -15,17 +15,27 @@ create_config (void )
 
   FILE *pconf, *prconf;
   char *home;
-  char homeconf[1024];
-  char line[1024];
+  char buf[BUFSIZE];
+  int linenum;
+  char homeconf[BUFSIZE];
+  char bufconf[BUFSIZE];
+  char line[BUFSIZE];
   struct stat bufstat;
+  char *delim;
   home = getenv ("HOME");
-  sprintf (homeconf, "%s%s", home, FICHIERCONFHOME);
+  snprintf (homeconf,BUFSIZE, "%s%s", home, FICHIERCONFHOME);
+  if (NULL == (configHash = g_hash_table_new (g_str_hash, g_str_equal)))
+    {
+      perror ("g_hash_table_new");
+      exit (1);
+
+    }
   if (-1 == stat (homeconf, &bufstat))
     {
       printf ("%s n'existe pas on va le créer!\n", homeconf);
 
-
-      if (-1 == stat (FICHIERCONF, &bufstat))
+      snprintf(bufconf,BUFSIZE,"%s/%s",DATADIR,FICHIERCONF);
+      if (-1 == stat (bufconf, &bufstat))
 	{
 	  perror ("stat");
 	  exit (1);
@@ -35,13 +45,13 @@ create_config (void )
 	  perror ("fopen");
 	  exit (1);
 	}
-      if ((prconf = fopen (FICHIERCONF, "r")) == NULL)
+      if ((prconf = fopen (bufconf, "r")) == NULL)
 	{
 	  perror ("open");
 	  exit (1);
 	}
 
-      while (fgets (line, 1024, prconf))
+      while (fgets (line, BUFSIZE, prconf))
 	{
 	  if (fputs (line, pconf) == -1)
 	    {
@@ -52,12 +62,38 @@ create_config (void )
 	}
       fclose (prconf);
       fclose (pconf);
-      printf ("Validez les valeurs dans %s et relancer", homeconf);
+      printf ("Validate the values n  %s et restart", homeconf);
       exit (0);
 
 
     }
 
+    else {
+      if ((pconf = fopen (homeconf, "r")) == NULL)
+	{
+	  perror ("open");
+	  exit (1);
+	}
+      linenum = 1;
+      while (fgets (buf, MAX_LINE_SIZE, pconf)) {
+          skipcomment (buf);
+          skipspace (buf);
+          if (strlen (buf) >= 1) {
+	    delim = strchr (buf, '=');
+	    if (!delim) {
+	      printf ("Error, malformed line[%d]: %s\n", linenum, line);
+	      exit (1);
+	    }
+	    *delim = '\0';
+/*line a une forme maintenant clée\0valeur, strdup(line) nous donne la première partie */
+	    g_hash_table_insert (configHash, strdup(buf), strdup(delim + 1));
+
+	    linenum++;
+
+	}
+      }
+      fclose(pconf);
+    }
 }
 
 void
@@ -98,16 +134,11 @@ void fill_config (void )
 {
   FILE  *prconf;
   char buf[MAX_LINE_SIZE];
+  char bufconf[BUFSIZE];
 char *delim;
   struct stat bufstat;
   char line[MAX_LINE_SIZE];
   int linenum = 0; 
-  if (NULL == (configHash = g_hash_table_new (g_str_hash, g_str_equal)))
-    {
-      perror ("g_hash_table_new");
-      exit (1);
-
-    }
   if (-1 == stat (FICHIERCONF, &bufstat))
     {
       perror ("stat");
