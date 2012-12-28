@@ -52,6 +52,85 @@ void changeeval(game_t * game, color_t couleureval)
     }
 }
 
+/*
+void fill_game_tabeval(game_t *game,int sizemax,color_t coloreval) {
+  color_t res_color;
+  color_t color;
+  int res[est+1];
+  game->tabjeueval = malloc((sizeof(tablist_t *)) * (est + 1) * (spade + 1));
+  memset (game->tabjeueval,game->tabjeu,(sizeof(tablist_t *)) * (est + 1) * (spade + 1));
+  for (position = sud; position < est + 1; position++) {
+    index = INDEX(position, color);
+    res[position]=sizemax-game->tabjeueval[index]->nbcrt;
+  }
+  res_color=(color+1)%NBCOULEURS;
+  for (position = sud; position < est + 1; position++) {
+    for (color=club;color<spade+1;color++) {
+      index = INDEX(position, color);
+      if(color != coloreval) {
+        if(color== res_color) {
+         game->tabjeueval[index]->nbcrt=res[position]; 
+        }
+        else { 
+          game->tabjeueval[index]->nbcrt=0;
+        }
+      }
+    } 
+  }
+}
+*/
+card_t *analyse_hand_tmp(game_t * game, trick_t * trick_cur, color_t color)
+{
+
+    int index;
+    trick_t *trick_new = malloc(sizeof(trick_t));
+    memcpy(trick_new, trick_cur, sizeof(trick_t));
+    trick_new->eval = TRUE;
+    trick_new->coloreval = color;
+    hopestat_t *hopestat = malloc(sizeof(hopestat_t));
+    int sizemax;
+    l_best_t *l_best = NULL;
+    int nb_best = 0;
+    card_t *best_card = malloc(sizeof(card_t));
+    position_t position;
+    sizemax = 0;
+    for (position = sud; position < est + 1; position++) {
+	index = INDEX(position, color);
+	if (game->tabjeu[index]->nbcrt > sizemax)
+	    sizemax = game->tabjeu[index]->nbcrt;
+    }
+    changeeval(game, color);
+    position = trick_new->nextpos;
+    index = INDEX(position, color);
+    hopestat->position = position;
+    hopestat->couleur = color;
+    hopestat->aff = 0;
+    hopestat->best_card = NULL;;
+    if (NULL == (l_best = malloc(sizeof(l_best_t)))) {
+	fprintf(stderr, "Pb with malloc\n");
+	exit(EXIT_FAILURE);
+    } else {
+	init_list_best(l_best);
+    }
+    nb_best = 0;
+    first_explore(trick_new, (sizemax * 4) - trick_new->noj, &nb_best, l_best, game);
+    if (nb_best != 0) {
+	best_card = best_choice(&nb_best, l_best, game, hopestat,trick_cur);
+
+    } else {
+	free(best_card);
+	best_card = NULL;
+    }
+    clear_list(l_best);
+    free(l_best);
+    l_best = NULL;
+
+    changeeval(game, aucune);
+    free(trick_new);
+    return (best_card);
+}
+
+
 card_t *analyse_hand(game_t * game, trick_t * trick_cur, color_t couleur)
 {
 

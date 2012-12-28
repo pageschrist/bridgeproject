@@ -15,13 +15,15 @@ void create_config(void)
 
     FILE *pconf, *prconf, *bconf, *bhconf;
     char *home;
-    char hombconf[1024];
-    char bidhombconf[1024];
-    char line[1024];
+    char hombconf[BUFSIZE];
+    char bufconf[BUFSIZE];
+    char bidhombconf[BUFSIZE];
+    char line[BUFSIZE];
     struct stat bufstat;
     home = getenv("HOME");
-    sprintf(hombconf, "%s%s", home, FICHIERCONFHOME);
-    sprintf(bidhombconf, "%s%s", home, BIDCONFHOME);
+    snprintf(bufconf,BUFSIZE,"%s/%s",DATADIR,FICHIERCONF);
+    snprintf(hombconf, BUFSIZE,"%s/%s", home, FICHIERCONFHOME);
+    snprintf(bidhombconf, BUFSIZE,"%s/%s", home, BIDCONFHOME);
     if (-1 == stat(hombconf, &bufstat)) {
 	printf("%s doesn't exist, we must create it!\n", hombconf);
 
@@ -34,12 +36,12 @@ void create_config(void)
 	    perror("fopen");
 	    exit(1);
 	}
-	if ((prconf = fopen(FICHIERCONF, "r")) == NULL) {
+	if ((prconf = fopen(bufconf, "r")) == NULL) {
 	    perror("open");
 	    exit(1);
 	}
 
-	while (fgets(line, 1024, prconf)) {
+	while (fgets(line, BUFSIZE, prconf)) {
 	    if (fputs(line, pconf) == -1) {
 		perror("fputs");
 		exit(1);
@@ -69,7 +71,7 @@ void create_config(void)
 	    exit(1);
 	}
 
-	while (fgets(line, 1024, bconf)) {
+	while (fgets(line, BUFSIZE, bconf)) {
 	    if (fputs(line, bhconf) == -1) {
 		perror("fputs");
 		exit(1);
@@ -119,7 +121,7 @@ void fill_config(void)
     FILE *prconf;
     char buf[MAX_LINE_SIZE];
     char *delim;
-    char hombconf[1024], *home;
+    char hombconf[BUFSIZE], *home;
     struct stat bufstat;
     char line[MAX_LINE_SIZE];
     int linenum = 0;
