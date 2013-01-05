@@ -28,7 +28,7 @@ void create_config(void)
 	printf("%s doesn't exist, we must create it!\n", hombconf);
 
 
-	if (-1 == stat(FICHIERCONF, &bufstat)) {
+	if (-1 == stat(bufconf, &bufstat)) {
 	    perror("stat");
 	    exit(1);
 	}
