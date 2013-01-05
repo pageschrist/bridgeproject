@@ -10,7 +10,7 @@
 #define PORT 9999; 
 #define FICHIERCONF "gbridge_srv.conf"
 #ifndef DATADIR
-#define DATADIR "/usr/share/gbridge_srv"
+#define DATADIR "/usr/share/gbridge_srv/config"
 #else
 
 #endif
