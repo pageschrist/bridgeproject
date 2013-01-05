@@ -22,8 +22,8 @@ void create_config(void)
     struct stat bufstat;
     home = getenv("HOME");
     snprintf(bufconf,BUFSIZE,"%s/%s",DATADIR,FICHIERCONF);
-    snprintf(hombconf, BUFSIZE,"%s/%s", home, FICHIERCONFHOME);
-    snprintf(bidhombconf, BUFSIZE,"%s/%s", home, BIDCONFHOME);
+    snprintf(hombconf, BUFSIZE,"%s%s", home, FICHIERCONFHOME);
+    snprintf(bidhombconf, BUFSIZE,"%s%s", home, BIDCONFHOME);
     if (-1 == stat(hombconf, &bufstat)) {
 	printf("%s doesn't exist, we must create it!\n", hombconf);
 
