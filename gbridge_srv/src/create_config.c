@@ -21,7 +21,7 @@ void create_config(void)
     char line[BUFSIZE];
     struct stat bufstat;
     home = getenv("HOME");
-    snprintf(bufconf,BUFSIZE,"%s/%s",DATADIR,FICHIERCONF);
+    snprintf(bufconf,BUFSIZE,"%s/config/%s",DATADIR,FICHIERCONF);
     snprintf(hombconf, BUFSIZE,"%s%s", home, FICHIERCONFHOME);
     snprintf(bidhombconf, BUFSIZE,"%s%s", home, BIDCONFHOME);
     if (-1 == stat(hombconf, &bufstat)) {
