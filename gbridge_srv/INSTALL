@@ -12,6 +12,13 @@ without warranty of any kind.
 Basic Installation
 ==================
 
+   First step:
+aclocal
+autoheader
+automake -a
+autoconf
+   These commands  create the file as expected
+
    Briefly, the shell commands `./configure; make; make install' should
 configure, build, and install this package.  The following
 more-detailed instructions are generic; see the `README' file for
