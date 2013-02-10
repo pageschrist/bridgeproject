@@ -34,7 +34,7 @@ create_config (void )
     {
       printf ("%s n'existe pas on va le créer!\n", homeconf);
 
-      snprintf(bufconf,BUFSIZE,"%s/%s",DATADIR,FICHIERCONF);
+      snprintf(bufconf,BUFSIZE,"%s/config/%s",DATADIR,FICHIERCONF);
       if (-1 == stat (bufconf, &bufstat))
 	{
 	  perror ("stat");
