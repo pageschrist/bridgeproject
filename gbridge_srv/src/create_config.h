@@ -15,7 +15,7 @@
 
 #endif
 
-#define BIDCONF "bid_srv.conf"
+#define BIDCONF "bids_srv.conf"
 #define FICHIERCONFHOME "/.gbridge_srv.conf"
 #define BIDCONFHOME "/.bids_srv.conf"
 
