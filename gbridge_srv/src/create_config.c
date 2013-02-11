@@ -17,11 +17,13 @@ void create_config(void)
     char *home;
     char hombconf[BUFSIZE];
     char bufconf[BUFSIZE];
+    char bidconf[BUFSIZE];
     char bidhombconf[BUFSIZE];
     char line[BUFSIZE];
     struct stat bufstat;
     home = getenv("HOME");
     snprintf(bufconf,BUFSIZE,"%s/config/%s",DATADIR,FICHIERCONF);
+    snprintf(bidconf, BUFSIZE,"%s/config/%s", DATADIR, BIDCONF);
     snprintf(hombconf, BUFSIZE,"%s%s", home, FICHIERCONFHOME);
     snprintf(bidhombconf, BUFSIZE,"%s%s", home, BIDCONFHOME);
     if (-1 == stat(hombconf, &bufstat)) {
@@ -58,7 +60,7 @@ void create_config(void)
     if (-1 == stat(bidhombconf, &bufstat)) {
 	printf("%s doesn't exist, we must create it!\n", bidhombconf);
 
-	if (-1 == stat(BIDCONF, &bufstat)) {
+	if (-1 == stat(bidconf, &bufstat)) {
 	    perror("stat");
 	    exit(1);
 	}
@@ -66,7 +68,7 @@ void create_config(void)
 	    perror("fopen");
 	    exit(1);
 	}
-	if ((bconf = fopen(BIDCONF, "r")) == NULL) {
+	if ((bconf = fopen(bidconf, "r")) == NULL) {
 	    perror("open");
 	    exit(1);
 	}
