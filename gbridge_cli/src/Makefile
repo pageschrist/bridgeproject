@@ -205,7 +205,7 @@ gbridge_cli_SOURCES = \
 		outils.c outils.h \
 		traffic.c traffic.h 
 
-gbridge_cli_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS}
+gbridge_cli_CPPFLAGS = ${GLIB_CFLAGS} ${GTK_CFLAGS} -DDATADIR="\"${datarootdir}/${PACKAGE_NAME}\""
 gbridge_cli_LDADD = -lm  ${GLIB_LIBS} ${GTK_LIBS}
 all: all-am
 
