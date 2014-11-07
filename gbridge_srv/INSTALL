@@ -13,10 +13,11 @@ Basic Installation
 ==================
 
    First step:
+yum install glib2-devel 
 aclocal
 autoheader
-automake -a
-autoconf
+autoconf  
+automake -add-missing
    These commands  create the file as expected
 
    Briefly, the shell commands `./configure; make; make install' should
