@@ -52,7 +52,7 @@ void create_config(void)
 	}
 	fclose(prconf);
 	fclose(pconf);
-	printf("Validate the values in %s and restart", hombconf);
+	printf("Validate the values in %s and restart\n", hombconf);
 	exit(0);
 
 
