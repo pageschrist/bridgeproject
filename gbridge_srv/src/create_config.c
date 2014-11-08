@@ -82,7 +82,7 @@ void create_config(void)
 	}
 	fclose(bconf);
 	fclose(bhconf);
-	printf("Check the values in %s and restart", bidhombconf);
+	printf("Check the values in %s and restart\n", bidhombconf);
 	exit(0);
 
 
